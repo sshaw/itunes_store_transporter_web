@@ -1,0 +1,117 @@
+- title @job
+
+%div[@job]
+  .page-heading
+    -# Padrino UJS does not use a form so any JS redirect fails!
+    -# Can't delete a running job -yet
+    %div(style="float:right;padding-top:6px")
+      -#= form_tag url(:job_delete, @job.id) do        
+      -# - if @job.done?
+      -#   = link_to "Resubmit", url_for(:job_resubmit, @job.id), :class => "btn btn-mini", :remote => true, :method => "post"
+      -# - if !@job.running?
+      -#   = link_to "Delete", url_for(:job_delete, @job.id), :class => "btn btn-danger btn-mini", :remote => true, :confirm => "Delete job?", :method => "delete"
+
+    %h2
+      = state_label(@job.state) + @job.to_s
+
+    %ul.nav.nav-tabs
+      %li.active
+        = link_to "Overview", "#overview", :data => {:toggle => "tab"}
+      %li
+        = link_to "Results", "#results", :data => {:toggle => "tab"}
+      %li
+        = link_to "Output", "#output", :data => {:toggle => "tab"}
+
+  .tab-content
+    #overview.tab-pane.active
+      %table.table.table-bordered.table-condensed
+        %tbody
+          - sort_options(@job).each do |option|
+            %tr
+              %th
+                = optionize(option)
+              %td
+                &= option == :rate ? number_with_delimiter(@job.options[option]) + " Kbps" : @job.options[option]
+          %tr
+            %th
+              Created
+            %td
+              &= l @job.created_at, :format => :short
+
+          %tr
+            %th
+              Updated
+            %td
+              &= l @job.updated_at, :format => :short
+
+    #results.tab-pane
+      - if @job.failure?
+        %ul 
+          - if @job.exceptions.is_a?(ITunes::Store::Transporter::ExecutionError)
+            - @job.exceptions.errors.each do |m|                
+              %li
+                &= m
+
+          - else
+            %li
+              &= @job.exceptions
+
+      - elsif @job.result.present?
+        = render_job_result(@job)
+
+      - else
+        %p 
+          No results.
+
+    #output.tab-pane
+      - if @job.output.present?
+        .actions
+          = link_to content_tag(:i, "", :class => "icon-resize-full") + "View", url_for(:job_output, @job.id, :format => :log)
+          = link_to content_tag(:i, "", :class => "icon-download-alt") + "Download", url_for(:job_output, @job.id)
+
+        %pre
+          &= @job.output
+
+      - else
+        %p
+          No output.
+
+:javascript
+
+  iTMS.jobID = #{@job.id};
+  iTMS.jobState = '#{@job.state}';
+  iTMS.jobOffset = #{@job.output.bytesize};
+
+  function trackJob() {
+    iTMS.jobStatus(iTMS.jobID, function(st) {
+
+      state = st.state;
+      if(state != iTMS.jobState) {
+        var e = $('.job-state', '#job_' + iTMS.jobID);
+        e.removeClass('label-' + iTMS.jobState);
+        e.addClass('label-' + state);
+        e.text(state.replace(/^(\w)/, function(chr) { return chr.toUpperCase(); }));
+        iTMS.jobState = state;
+      }
+
+      if(state != iTMS.QUEUED) {
+        iTMS.tailJobLog(iTMS.jobID, iTMS.jobOffset, function(data) {
+          if(data) {
+            if(iTMS.jobOffset == 0)
+              $('#output').html('<pre>');
+
+            $('#output pre').append(data);
+            iTMS.jobOffset += data.length;
+          }
+        });
+      }
+
+      if(state == iTMS.RUNNING || state == iTMS.QUEUED)
+        setTimeout(trackJob, 5000);
+      else
+        iTMS.jobResults(iTMS.jobID, function(data) { $('#results').html(data) })      
+    });
+  }
+
+  // check 1st...
+  trackJob();

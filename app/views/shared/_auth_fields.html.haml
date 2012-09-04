@@ -1,0 +1,16 @@
+
+#auth-fields
+  -# margin like .form-horizontal .control-group .controls
+  %div{:style => "margin:0 0 18px 160px"}
+    = link_to "Edit usernames and password", "#"
+
+  #usernames-and-password{:style => "#{"display:none" unless show_auth_fields?(auth_fields.object)}"}
+    = auth_fields.text_field :username
+    = auth_fields.text_field :password
+    = auth_fields.text_field :shortname
+
+:javascript
+  $('#auth-fields div a').click(function(e) { 
+    e.preventDefault();
+    $('#usernames-and-password').toggle();
+  });

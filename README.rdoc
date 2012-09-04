@@ -1,0 +1,17 @@
+= iTunes::Store::Transporter::Web
+
+GUI for the iTunes Store’s Transporter (iTMSTransporter) 
+
+== Overview
+
+=== Job Queue
+
+http://lucas.cis.temple.edu/~sshaw/itmsweb/index.png
+
+=== Job Info
+
+http://lucas.cis.temple.edu/~sshaw/itmsweb/show.png
+
+=== Create a Job
+
+http://lucas.cis.temple.edu/~sshaw/itmsweb/upload.png

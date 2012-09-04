@@ -1,0 +1,40 @@
+!!! 5
+%html{:lang => "en"}
+  %head
+    %meta{:charset => "utf-8"}
+    %meta{"http-equiv" => "X-UA-Compatible", :content => "IE=edge"}
+
+    %title      
+      = title
+      
+    = stylesheet_link_tag "bootstrap.min", "main"
+    = stylesheet_link_tag "/jqueryFileTree/jqueryFileTree"
+    = javascript_include_tag "jquery", "jquery-ujs", "bootstrap.min", "application"
+    = javascript_include_tag "/jqueryFileTree/jqueryFileTree"
+
+    = yield_content :head
+    
+  %body
+    .navbar.navbar-fixed-top
+      .navbar-inner
+        .container          
+          = link_to "iTunes Store Transporter: Web", "/", :class => "brand"
+
+          .nav
+            %span.sep
+              = link_to "Jobs", url(:jobs)
+
+            = link_to "Upload", url(:upload)
+            = link_to "Verify", url(:verify)
+            = link_to "Lookup", url(:lookup)
+            = link_to "Status", url(:status)
+            = link_to "Schema", url(:schema)
+            = link_to "Providers", url(:providers)
+            = link_to "Config", url(:config)
+
+    .container
+      %noscript
+        = alert("Hey! This site requires JavaScript. Without it, things won't work.")
+
+      = flash_messages
+      = yield

@@ -1,0 +1,35 @@
+%h2
+  Upload
+
+= form_for @options, :upload, :class => "form-horizontal" do |f|
+  = f.file_browser_field :package, :data => { :title => "Package" }
+  
+  = f.rate_field :rate
+  = f.select_transport :transport
+  = f.check_box :delete, :label => "Delete on success", :value => "true", :uncheck_value => "false", :help_block => "This will delete the package and all of its files"
+
+  = f.file_browser_field :success, :label => "On success, move to", :prompt => "Select Directory", :data => { :title => "Success Directory" }
+  = f.file_browser_field :failure, :label => "On failure, move to", :prompt => "Select Directory", :data => { :title => "Failure Directory" }
+
+  = partial "shared/auth_fields", :object => f
+
+  = f.actions do 
+    = f.submit "Upload"
+
+= partial "shared/file_browser"
+    
+:javascript
+  $(document).ready(function() {    
+    //$('#package').popover();
+    $('#open_file_browser_for_package').fileBrowser({title: 'Select Your Package', type: 'directory'}, function(file) { 
+      iTMS.fileSelected('package', file);
+    });
+  
+    $('#open_file_browser_for_success').fileBrowser({title: 'Select Success Directory', type: 'directory'}, function(file) { 
+      iTMS.fileSelected('success', file);
+    });
+
+    $('#open_file_browser_for_failure').fileBrowser({title: 'Select Failure Directory', type: 'directory'}, function(file) { 
+      iTMS.fileSelected('failure', file);
+    });
+  });

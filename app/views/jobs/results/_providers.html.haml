@@ -1,0 +1,24 @@
+%table.table.table-condensed(style="width:55%")
+  %thead
+    %tr
+      %th
+        \#
+      %th
+        Long Name
+      %th
+        Short Name 
+
+  %tbody
+    - job.result.each_with_index do |p, i|
+      %tr
+        %td
+          = i+1
+        %td
+          &= p[:longname]
+        %td
+          &= p[:shortname]
+
+
+
+  
+  

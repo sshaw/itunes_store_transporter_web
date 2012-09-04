@@ -1,0 +1,13 @@
+%tr[job]{:class => job.state}
+  %td
+    = link_to state_label(job.state), url_for(:job, :id => job.id)
+  %td
+    = link_to job.type, url_for(:job, :id => job.id)
+  %td
+    = job.target.present? ? link_to(job.target, url_for(:job, :id => job.id)) : "&mdash;"
+  %td
+    = l job.created_at
+  %td
+    = l job.updated_at
+  %td
+    -# actions...

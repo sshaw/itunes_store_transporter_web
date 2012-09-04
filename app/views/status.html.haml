@@ -1,0 +1,10 @@
+%h2
+  Status 
+
+- bootstrap_form_for @options, :status, :class => "form-horizontal" do |f|    
+  = f.text_field :vendor_id, :label => "Vendor ID:"
+
+  = partial "shared/auth_fields", :object => f
+
+  = f.actions do 
+    = f.submit "Check Status"

@@ -1,0 +1,11 @@
+%h2 
+  Providers
+
+%p 
+  Retrieve a list of providers that you're authorized to upload content for.
+
+= form_for @options, :providers, :class => "form-horizontal" do |f|
+  = partial "shared/auth_fields", :object => f
+
+  = f.actions do 
+    = f.submit "List Providers"

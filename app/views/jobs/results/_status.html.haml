@@ -1,0 +1,24 @@
+.section
+  - job.result.each do |k, v|
+    - next if k == :status
+
+    %span(style="padding-right:8px;")
+      %strong
+        &= "#{optionize(k)}:"
+      &= v
+
+
+- job.result[:status].each_with_index do |status, i|
+  .numbered-section
+    .number
+      - pos = job.result[:status].size - i
+      = link_to "##{pos}", "#status#{pos}", :name => "status#{pos}"
+
+    .section
+      %table.table.table-bordered.table-condensed
+        - status.each do |k, v|
+          %tr
+            %th
+              &= k.to_s.titleize
+            %td
+              &= v

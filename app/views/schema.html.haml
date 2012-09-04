@@ -1,0 +1,12 @@
+%h2 
+  Schema
+
+= form_for @options, :schema, :class => "form-horizontal" do |f|
+  = f.select :version_name, :options => %w[film tv]
+  = f.text_field :version_number
+  = f.select :type, :options => %w[transitional strict]
+
+  = partial "shared/auth_fields", :object => f
+
+  = f.actions do 
+    = f.submit "Retrieve Schema"
