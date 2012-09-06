@@ -44,7 +44,7 @@ class ConfigControllerTest < CapybaraTestCase
         # We should make sure this is a file...
         find("#selected_path").set(@options[:path])    
         click_button "Save"
-        @config = AppConfig.instance
+        @config = AppConfig.first_or_initialize
       end
             
       should "display a saved message" do 

@@ -16,7 +16,7 @@ module FormActions
   end
   
   def set_defaults(optz = options)
-    config = AppConfig.instance
+    config = AppConfig.first_or_initialize
     config.update_attributes(optz)
     config
   end

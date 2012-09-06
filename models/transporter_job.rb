@@ -1,7 +1,8 @@
 require "fileutils"
 require "delayed_job"
-require "itunes/store/transporter"
-# Delayed::Worker.read_ahead set to one so that other workdrs can pull jos instead of one taking 5 from the gate
+require "itunes/store/transporter/errors"
+
+# Delayed::Worker.read_ahead set to one so that other workdrs can pull jobs instead of one taking 5 from the gate
 
 class TransporterJob < ActiveRecord::Base  
   STATES = [:queued, :running, :success, :failure]
@@ -131,9 +132,7 @@ class TransporterJob < ActiveRecord::Base
   end
 
   def remove_log
-    if log && File.file?(log)
-      FileUtils.rm_f(log)
-    end
+    FileUtils.rm_f(log) if log && File.file?(log)
   end
   
   def itms
@@ -143,6 +142,6 @@ class TransporterJob < ActiveRecord::Base
   end
   
   def config
-    @confg ||= AppConfig.instance
+    @confg ||= AppConfig.first_or_initialize
   end
 end

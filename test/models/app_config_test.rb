@@ -12,19 +12,7 @@ class AppConfigTest < Test::Unit::TestCase
 
   context "#path" do
     should "have a default" do
-      assert !AppConfig.new.path.empty?
-    end
-  end
-
-  context "#instance" do
-    setup { @config = AppConfig.instance }
-
-    should "return an instance of AppConfig" do
-      assert_kind_of AppConfig, @config
-    end
-
-    should "always return the same instance" do
-      assert_equal AppConfig.instance, AppConfig.instance
+      assert AppConfig.new.path.present?
     end
   end
 end

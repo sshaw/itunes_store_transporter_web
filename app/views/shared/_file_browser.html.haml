@@ -1,6 +1,6 @@
 #file-browser.modal{:style => "display:none"}
   .modal-header
-    = link_to "&times;", :class => "close", :"data-dismiss" => "modal"
+    = link_to "&times;", :class => "close", :data => { :dismiss => "modal" }
     
     %h3.title 
       Open
@@ -10,4 +10,4 @@
       
   .modal-footer
     = button_tag "Select", :class => "btn btn-primary"
-    = button_tag "Close", :class => "btn", :"data-dismiss" => "modal"
+    = button_tag "Close", :class => "btn", :data => { :dismiss => "modal" }

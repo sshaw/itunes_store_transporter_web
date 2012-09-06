@@ -112,7 +112,7 @@ module TransporterJobTestMethods
           # when no configured location...
           should "create a log filename under the configured location" do
             log = subject.send(:log)
-            config = AppConfig.instance
+            config = AppConfig.first_or_initialize
             assert log.present?, "logname created"
             assert log.start_with?(config.output_log_directory), "starts with '#{config.output_log_directory}'"
           end

@@ -7,10 +7,6 @@ class AppConfig < ActiveRecord::Base
   self.table_name = "config"
   cattr_accessor :output_log_directory
 
-  def self.instance
-    first || new
-  end
-
   def path
     self[:path] || ITunes::Store::Transporter::Shell.default_path        
   end  

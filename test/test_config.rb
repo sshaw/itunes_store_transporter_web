@@ -12,7 +12,7 @@ require 'transporter_job_test_methods'
 
 Capybara.app = Padrino.application
 
-config = AppConfig.instance
+config = AppConfig.first_or_initialize
 config.output_log_directory = Dir.tmpdir
 config.save!
 

@@ -1,6 +1,6 @@
 class SchemaJob < TransporterJob
   def target 
-    "#{options[:version]}-#{options[:type]}"
+    options[:version] && options[:type] ? "#{options[:version]}-#{options[:type]}" : super
   end
 
   protected

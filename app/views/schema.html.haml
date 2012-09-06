@@ -1,6 +1,9 @@
 %h2 
   Schema
 
+%p 
+  Retrieve a schema that can be used to validate your package's metadata.
+
 = form_for @options, :schema, :class => "form-horizontal" do |f|
   = f.select :version_name, :options => %w[film tv]
   = f.text_field :version_number

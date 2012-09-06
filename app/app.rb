@@ -23,7 +23,7 @@ class ItunesStoreTransporterWeb < Padrino::Application
   end
 
   before :except => %r|^/job| do 
-    @config = AppConfig.instance
+    @config = AppConfig.first_or_initialize
   end
 
   [:lookup, :providers, :schema, :status, :upload, :verify].each do |route|
