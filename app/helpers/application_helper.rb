@@ -7,7 +7,7 @@ ItunesStoreTransporterWeb.helpers do
   end
 
   def alert(message, type=:error)
-    content_tag(:div, link_to("&times;", "#", :class => "close", :"data-dismiss" => "alert") + message, :class => "alert alert-#{type}")
+    content_tag(:div, link_to("&times;", "#", :class => "close", :data => { :dismiss => "alert" }) << message, :class => "alert alert-#{type}")
   end
 
   def flash_messages
@@ -20,11 +20,12 @@ ItunesStoreTransporterWeb.helpers do
   end
 
   def show_auth_fields?(form)
-    [:username, :password, :shortname].any? { |f| form.errors[f].any? || form.options[f].blank? }   
+    [:username, :password, :shortname].any? { |f| form.errors[f].any? || form.marshal_dump[f].blank? }   
   end
 
   # On Windows treat a volume+root as the basename 
   def basename(path)
+    return unless path
     path =~ %r|\A\w:\\\z| ? path : File.basename(path)
   end
 end

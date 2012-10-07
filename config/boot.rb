@@ -25,8 +25,6 @@ end
 #
 Padrino.after_load do
   require 'will_paginate/active_record'
-  require 'bootstrap_forms'
-
   Padrino.require_dependencies(Padrino.root("app/forms/*.rb"))
 end
 

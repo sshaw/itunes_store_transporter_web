@@ -1,4 +1,3 @@
-
 #auth-fields
   -# margin like .form-horizontal .control-group .controls
   %div{:style => "margin:0 0 18px 160px"}
@@ -9,8 +8,3 @@
     = auth_fields.text_field :password
     = auth_fields.text_field :shortname
 
-:javascript
-  $('#auth-fields div a').click(function(e) { 
-    e.preventDefault();
-    $('#usernames-and-password').toggle();
-  });

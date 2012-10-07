@@ -121,6 +121,12 @@ module TransporterJobTestMethods
             assert_equal :queued, subject.state
           end
 
+          #should "save the job
+
+          should "be in the job queue" do
+            assert Delayed::Job.exists?(subject.job_id)
+          end
+
           should "save the options" do
             assert_equal @options, subject.options
           end
@@ -156,7 +162,7 @@ module TransporterJobTestMethods
             end
           end
         end
-
+        
         context "when successful" do
           subject { runjob(self.class.described_type) }
 
@@ -198,6 +204,23 @@ module TransporterJobTestMethods
           end
         end
 
+        context "when deleted" do
+          setup do
+            @job = self.class.described_type.create! 
+            @log = @job.send(:log)
+            File.open(@log, "w") { |io| io.write("data") }
+            @job.destroy
+          end
+          
+          should "be removed from the job queue" do 
+            assert !Delayed::Job.exists?(@job.job_id)
+          end
+
+          should "delete the job's log file" do 
+            assert !File.exists?(@log)
+          end
+        end
+        
         context "when an exception is raised" do
           subject do
             runjob self.class.described_type do

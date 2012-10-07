@@ -26,7 +26,7 @@ module Options
       private
       def check_package_suffix
         unless package.to_s.end_with?(".itmsp")
-          errors[:package] << "must end with .itmsp"
+          errors[:package] << 'must end with ".itmsp"'
         end
       end
     end

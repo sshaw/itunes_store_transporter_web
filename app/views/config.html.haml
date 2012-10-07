@@ -10,7 +10,6 @@
   = f.text_field :shortname
 
   -# Padrino will always append ':'
-  -# If not an int, 0 will show up in the text box  
   = f.rate_field :rate
   = f.select_transport :transport
 
@@ -18,10 +17,4 @@
     = f.submit "Save"  
 
 = partial "shared/file_browser"
-    
-:javascript
-  $(document).ready(function() {    
-    $('#open_file_browser_for_path').fileBrowser({title: 'iTMSTransporter Location'}, function(file) { 
-      iTMS.fileSelected('path', file);
-    })
-  });
+

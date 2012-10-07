@@ -3,6 +3,8 @@ require "delayed_job"
 require "itunes/store/transporter/errors"
 
 # Delayed::Worker.read_ahead set to one so that other workdrs can pull jobs instead of one taking 5 from the gate
+# Delayed::Worker.max_attempts = 1
+# Delayed::Worker.max_run_time defaults to 4.hours
 
 class TransporterJob < ActiveRecord::Base  
   STATES = [:queued, :running, :success, :failure]
@@ -21,6 +23,8 @@ class TransporterJob < ActiveRecord::Base
 
   after_create  :enqueue_delayed_job
   after_destroy :dequeue_delayed_job, :remove_log
+
+  scope :completed, where(:state => [:success, :failure])
 
   def command
     self.class.to_s.split(/::/)[-1].sub(/Job/, "")
@@ -45,8 +49,8 @@ class TransporterJob < ActiveRecord::Base
     self[:state].to_sym if !self[:state].blank?
   end
 
-  def done?
-    !queued? && !running?
+  def completed?
+    success? || failure?
   end
 
   # An ID to denote the job's target. E.g., package name, apple id, ...  
@@ -88,7 +92,7 @@ class TransporterJob < ActiveRecord::Base
   end
 
   def failure
-    # diff between this and error?
+    failure!
   end  
 
   def to_s
@@ -100,8 +104,8 @@ class TransporterJob < ActiveRecord::Base
   end
 
   protected
-  def enqueue_delayed_job
-    job = Delayed::Job.enqueue(self) 
+  def enqueue_delayed_job    
+    job = Delayed::Job.enqueue(self) #, :priority => -5
     update_column :job_id, job.id
   end
 

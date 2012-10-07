@@ -2,7 +2,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../test_config.rb')
 
 class SchemaControllerTest < CapybaraTestCase
   context "looking up a schema" do
-    setup { visit "/schema" }
+    setup { visit app.url(:schema) }
 
     context "version number" do
       should "be required" do
@@ -33,7 +33,7 @@ class SchemaControllerTest < CapybaraTestCase
       setup do
         # apple_id too
         @options = options.merge(:type => "strict")
-        visit "/schema"
+        visit app.url(:schema)
         fill_in_auth
         select "film", :form => "Version name"
         select @options[:type], :from => "Type"

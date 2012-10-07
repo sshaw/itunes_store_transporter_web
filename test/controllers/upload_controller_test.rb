@@ -1,13 +1,14 @@
 require File.expand_path(File.dirname(__FILE__) + '/../test_config.rb')
 
 class UploadControllerTest < CapybaraTestCase
-  #Capybara.javascript_driver = :selenium
-
   context "uploading a package" do
-    setup { visit "/upload" }
-
+    setup do
+      Capybara.current_driver = :webkit
+      visit app.url(:upload)
+    end
+    
     context "the package" do
-      should_eventually "have a file dialog" do
+      should "have a file dialog" do
         click_on "Select Package"
         assert find("div.modal", :visible => true).has_content?("Select Your Package")
       end
@@ -69,7 +70,7 @@ class UploadControllerTest < CapybaraTestCase
     context "with default settings" do
       setup do
         @config = set_defaults(options.merge(:rate => 100, :transport => "Signiant"))
-        visit "/upload"        
+        visit app.url(:upload)        
       end
           
       [:rate, :transport, :username, :password, :shortname].each do |opt|
@@ -90,7 +91,7 @@ class UploadControllerTest < CapybaraTestCase
                                :failure   => "failuredir",
                                :package   => "package.itmsp")
 
-      visit "/upload" #url(:upload)
+      visit app.url(:upload)
       [:success, :failure].each do |opt|
         find_by_id("selected_#{opt}").set(@options[opt])
       end

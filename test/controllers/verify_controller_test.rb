@@ -3,7 +3,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../test_config.rb')
 class VerifyControllerTest < CapybaraTestCase  
   context "verifying a package" do    
     context "the package" do
-      setup { visit "/verify" }
+      setup { visit app.url(:verify) }
 
       should_eventually "have a file dialog" do
         click_on "Select Package"
@@ -24,7 +24,7 @@ class VerifyControllerTest < CapybaraTestCase
     context "with default settings" do 
       setup do 
         @config = set_defaults
-        visit "/verify"
+        visit app.url(:verify)
       end
       
       [:username, :password, :shortname].each do |opt|
@@ -38,7 +38,7 @@ class VerifyControllerTest < CapybaraTestCase
       setup do 
         @options = options.merge(:package => "package.itmsp", :verify_assets => true)
         
-        visit "/verify" 
+        visit app.url(:verify) 
         fill_in_package @options[:package]
         check "Verify assets"
         click_button "Verify"

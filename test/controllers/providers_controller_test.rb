@@ -4,7 +4,7 @@ class ProvidersControllerTest < CapybaraTestCase
   context "listing providers" do
     context "a valid submission" do
       setup do
-        visit "/providers"
+        visit app.url(:providers)
         fill_in_auth
         click_button "List Providers"
 

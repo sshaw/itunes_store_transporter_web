@@ -2,29 +2,58 @@ require File.expand_path(File.dirname(__FILE__) + '/../test_config.rb')
 require "tempfile"
 
 class JobsControllerTest < CapybaraTestCase
+#  include ApplicationHelper
+
   context "viewing the job list" do
     setup do
-      @lookup = LookupJob.create! :options => options.merge(:vendor_id => "123")
+      Capybara.current_driver = :webkit
+      @lookup = LookupJob.create! :options => options.merge(:vendor_id => "vendor_id_123")
+      @lookup.success!
       @schema = SchemaJob.create! :options => options.merge(:type => "strict", :version => "film123")
       visit "/"
     end
-    
+
     should "display all the jobs" do
       assert has_content?(@lookup.target)
       assert has_content?(@schema.target)
     end
-    
+
+    context "when the Delete link is clicked" do
+      setup do
+        within("#job_#{@lookup.id}") { click_link("Delete") }
+      end
+
+      should "remove the job from the page" do
+        assert has_no_content?(@lookup.target)
+      end
+    end
+
     should "link to the job" do
       click_link(@lookup.target)
-      assert "/jobs/#{@lookup.id}", current_path
-    end    
+      assert_equal app.url(:job, @lookup.id), current_path
+    end
+
+    context "when the Resubmit link is clicked" do
+      setup do
+        within("#job_#{@lookup.id}") { click_link("Resubmit") }
+        #save_page
+      end
+
+      should "redirect to the resubmitted job's page" do
+        assert_equal app.url(:job, TransporterJob.last.id), current_path
+      end
+
+      should "display a resubmitted message" do
+        assert has_content?("Job resubmited")
+      end
+    end
   end
 
   context "viewing a lookup job" do
     setup do
       Capybara.current_driver = :webkit
       @job = LookupJob.create! :options => options.merge(:vendor_id => "ID123")
-      visit "/jobs/#{@job.id}"
+      visit app.url(:job, @job.id)
     end
 
     # --->
@@ -35,7 +64,7 @@ class JobsControllerTest < CapybaraTestCase
     should "display the job's target" do
       assert has_content?(@job.target)
     end
-    
+
     should "display the job's overview" do
       assert overview_visible?
     end
@@ -48,9 +77,21 @@ class JobsControllerTest < CapybaraTestCase
       assert !output_visible?
     end
 
+    context "when the Delete link is clicked" do
+      setup { click_link "Delete" }
+
+      should "redirect to the jobs page" do
+        assert_equal app.url(:jobs), current_path
+      end
+
+      should "display a 'job deleted' message" do
+        assert has_content?("Job deleted.")
+      end
+    end
+
     context "when the Results link is clicked" do
       setup { click_link "Results" }
-      
+
       should "display the results" do
         assert results_visible?
       end
@@ -79,73 +120,75 @@ class JobsControllerTest < CapybaraTestCase
         assert !overview_visible?
       end
     end
-    # <--- 
-    
+    # <---
+
     context "with results" do
       setup do
         @job = LookupJob.new :options => options.merge(:vendor_id => "ID123")
         @job.result = "<x>123</x>"
         @job.save!
-        visit "/jobs/#{@job.id}"
+        visit app.url(:job, @job.id)
         click_link "Results"
       end
 
-      should "display the result" do 
+      should "display the result" do
         assert has_content?(@job.result)
       end
 
-      context "when the Download link is clicked" do       
-        should "download the result" do  
+      context "when the Download link is clicked" do
+        should "download the result" do
           find("#results").click_link("Download")
           assert has_content?(@job.result)
         end
       end
-      
-      context "when the View link is clicked" do       
-        should "view the result" do  
-          find("#results").click_link("View")        
-          assert_equal "/jobs/#{@job.id}/metadata.xml", current_path
+
+      context "when the View link is clicked" do
+        should "view the result" do
+          find("#results").click_link("View")          
+          assert_equal app.url(:job_metadata, @job.id, :format => "xml"), current_path
           assert has_xpath?("//x[text()='123']")
         end
       end
     end
   end
 
-  # context "GET to results" do
-  #   setup do
-  #     @job = ProvidersJob.new(:options => options)
-  #     @job.save!
-  #     get "/jobs/#{@job.id}/result"
-  #   end
+  context "GET to results" do
+    setup do
+      @job = LookupJob.new(:options => options)
+      @job.result = "<x>123</x>"
+      @job.save!
+      get "/jobs/#{@job.id}/results"
+    end
 
-  #   should "return the job's result section" do
-  #     # no asscess...
-  #     assert_equal render_job_result(@job), last_response.body
-  #   end
-  # end
+    should "return the job's result section" do
+      #"#{Padrino.root}/app/views/jobs/results/_lookup.html.haml"
+      #assert_equal render_partial "jobs/results/#{job.type.downcase}", :locals => { :job => job }, last_response.body
+      #assert_equal render_job_result(@job), last_response.body
+    end
+  end
 
   context "GET to status" do
     setup do
       @job = ProvidersJob.create!(:options => options)
       get "/jobs/#{@job.id}/status"
     end
-    
+
     should "return the status of the job" do
       assert_equal @job.attributes.slice("state").to_json, last_response.body
     end
   end
-  
+
   context "GET to output" do
     setup do
       @tmp = Tempfile.new ""
       @tmp.write "data"
       @tmp.flush
 
-      job = ProvidersJob.create!(:options => options)     
+      job = ProvidersJob.create!(:options => options)
       stub(job).log { @tmp.path }
       stub(TransporterJob).find { job }
 
-      @url = "/jobs/#{job.id}/output"
+      @url = app.url(:job_output, job.id)
     end
 
     context "when the URL has no .log suffix" do
@@ -185,11 +228,11 @@ class JobsControllerTest < CapybaraTestCase
   protected
   def overview_visible?
     find("#overview").visible?
-  end 
-  
+  end
+
   def results_visible?
     find("#results").visible?
-  end 
+  end
 
   def output_visible?
     find("#output").visible?

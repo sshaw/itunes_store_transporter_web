@@ -4,7 +4,7 @@ module MessageMatchers
   end
 
   def package_name_invalid?
-    has_content?("Package must end with .itmsp")
+    has_content?('Package must end with ".itmsp"')
   end
   
   def rate_not_number?

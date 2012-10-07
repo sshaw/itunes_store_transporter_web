@@ -1,13 +1,17 @@
 %tr[job]{:class => job.state}
   %td
-    = link_to state_label(job.state), url_for(:job, :id => job.id)
+    = link_to state_label(job.state), url(:job, :id => job.id)
   %td
-    = link_to job.type, url_for(:job, :id => job.id)
+    = link_to job.type, url(:job, :id => job.id)
   %td
-    = job.target.present? ? link_to(job.target, url_for(:job, :id => job.id)) : "&mdash;"
+    = target(job)
   %td
     = l job.created_at
   %td
     = l job.updated_at
-  %td
-    -# actions...
+  %td(style="text-align:right")
+    - if job.completed?
+      = link_to "Resubmit", url(:job_resubmit, job.id), :class => "btn btn-mini", :method => "post"
+
+    - if !job.running?      
+      = link_to "Delete", url(:job_delete, job.id, :format => "js"), :class => "btn btn-danger btn-mini", :confirm => "Delete job?", :remote => true, :method => "delete"

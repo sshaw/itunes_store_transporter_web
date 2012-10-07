@@ -14,10 +14,3 @@
     = f.submit "Verify"
 
 = partial "shared/file_browser"
-    
-:javascript
-  $(document).ready(function() {
-    $('#open_file_browser_for_package').fileBrowser({title: 'Select Your Package', type: 'directory'}, function(file) { 
-      iTMS.fileSelected('package', file);
-    });
-  });

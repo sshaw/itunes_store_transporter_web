@@ -1,6 +1,8 @@
-module Ls       
+require "rbconfig"
+
+module Ls
   def self.find(root, options = {})
-    files = []    
+    files = []
     root  = root.to_s
     return files unless File.directory?(root) && File.readable?(root)
 
@@ -10,18 +12,22 @@ module Ls
       path = File.join(root, name)
       type = File.stat(path).ftype rescue nil
       if type != "directory"
-        next if options["type"] && options["type"] != type
-        next if options["name"] && name !~ (Regexp.new(options["name"].to_s) rescue nil)
+        next if options[:type] && options[:type] != type
+        next if options[:name] && name !~ (Regexp.new(options[:name].to_s) rescue nil)
       end
 
-      files << path 
+      files << path
     end
     files
   end
 
-  ROOT = if true
-    find("/")
-  else 
+  def self.unix?
+    RbConfig::CONFIG["host_os"] !~ /mswin|mingw/
+  end
+  
+  ROOT = if unix?
+    find("/", :type => "directory")
+  else
     require "win32ole"
     drives = []
     fs = ::WIN32OLE.new("Scripting.FileSystemObject")

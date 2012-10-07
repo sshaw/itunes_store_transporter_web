@@ -4,7 +4,6 @@ require "options"
 class JobForm < OpenStruct
   include ActiveModel::Validations
   validates_presence_of :username, :password
-  alias :options :marshal_dump
 end
 
 class UploadForm < JobForm
@@ -35,7 +34,7 @@ class LookupForm < JobForm
 
   def marshal_dump
     options = super.except(:package_id, :package_id_value)
-    options[package_id.to_sym] = package_id_value
+    options[package_id.to_sym] = package_id_value if package_id.respond_to?(:to_sym)
     options
   end
 end

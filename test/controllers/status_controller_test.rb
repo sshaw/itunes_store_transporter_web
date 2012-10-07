@@ -4,7 +4,7 @@ class StatusControllerTest < CapybaraTestCase
   context "looking up a job's status" do 
 
     should "require a vendor id" do 
-      visit "/status"
+      visit app.url(:status)
       click_button "Check Status"
       assert has_content?("Vendor ID can't be blank")
     end

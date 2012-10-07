@@ -1,6 +1,6 @@
 class StatusJob < TransporterJob
   def target 
-    options[:vendor_id]
+    options[:vendor_id] || super
   end
 
   protected

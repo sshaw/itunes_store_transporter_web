@@ -3,7 +3,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../test_config.rb')
 class LookupControllerTest < CapybaraTestCase
   context "looking up metadata" do 
     context "the identifier field" do
-      setup { visit "/lookup" }
+      setup { visit app.url(:lookup) }
       
       should "be required" do
         click_button "Lookup"
@@ -21,7 +21,7 @@ class LookupControllerTest < CapybaraTestCase
       setup do       
         @options = options.merge(:vendor_id => "VID")
 
-        visit "/lookup"
+        visit app.url(:lookup)
         fill_in_auth
         select "Vendor ID", :from => "lookup_form[package_id]"
         fill_in "lookup_form[package_id_value]", :with => @options[:vendor_id]

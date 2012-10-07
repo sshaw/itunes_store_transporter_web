@@ -22,7 +22,7 @@ class Test::Unit::TestCase
   include TransporterJobTestMethods  
 
   def app
-    Padrino.application
+    ItunesStoreTransporterWeb
   end
 end
 
@@ -34,6 +34,7 @@ class CapybaraTestCase < Test::Unit::TestCase
   def teardown
     Capybara.reset_sessions!
     Capybara.use_default_driver
+    TransporterJob.delete_all
   end
 
   def self.should_create_the_job

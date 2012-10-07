@@ -3,7 +3,7 @@ require "options"
 
 class ConfigControllerTest < CapybaraTestCase
   context "configuring the transporter" do
-    setup { visit "/config" }
+    setup { visit app.url(:config) }
 
     [:username, :password, :shortname].each do |opt|
       context "the #{opt}" do 
@@ -37,7 +37,7 @@ class ConfigControllerTest < CapybaraTestCase
     context "a valid submission" do 
       setup do       
         @options = options.merge(:rate => 100, :transport => "Aspera", :path => "MyTransporter")
-        visit "/config"
+        visit app.url(:config)
         fill_in_auth
         select @options[:transport], :from => "Transport"
         fill_in "Rate", :with => @options[:rate]

@@ -20,19 +20,4 @@
     = f.submit "Upload"
 
 = partial "shared/file_browser"
-    
-:javascript
-  $(document).ready(function() {    
-    //$('#package').popover();
-    $('#open_file_browser_for_package').fileBrowser({title: 'Select Your Package', type: 'directory'}, function(file) { 
-      iTMS.fileSelected('package', file);
-    });
-  
-    $('#open_file_browser_for_success').fileBrowser({title: 'Select Success Directory', type: 'directory'}, function(file) { 
-      iTMS.fileSelected('success', file);
-    });
-
-    $('#open_file_browser_for_failure').fileBrowser({title: 'Select Failure Directory', type: 'directory'}, function(file) { 
-      iTMS.fileSelected('failure', file);
-    });
-  });
+   

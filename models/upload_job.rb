@@ -1,6 +1,6 @@
 class UploadJob < TransporterJob
   def target
-    File.basename(options[:package]) if options[:package]
+     options[:package] ? File.basename(options[:package]) : super
   end
 
   protected
