@@ -5,6 +5,7 @@
   Retrieve a list of providers that you're authorized to deliver for.
 
 = form_for @options, :providers, :class => "form-horizontal" do |f|
+  = f.select_priority
   = partial "shared/auth_fields", :object => f
 
   = f.actions do 

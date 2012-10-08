@@ -30,11 +30,11 @@ ItunesStoreTransporterWeb.helpers do
     job.target.present? ? link_to(job.target, url(:job, :id => job.id)) : "&mdash;"
   end
 
-  # Some options end with "_id", titleize() removes "_id"
   def format_option_name(option)
     option = option.to_s
     name = option.titleize
 
+    # Some options end with "_id", titleize() removes "_id"
     if option.end_with?("_id")
       name << " ID"
     elsif option == "failure" || option == "success"
@@ -76,6 +76,6 @@ ItunesStoreTransporterWeb.helpers do
   def sort_by(column)
     dir = params[:direction] == "asc" ? "desc" : "asc"
     arr = dir == "asc" ? "&darr;" : "&uarr;" if params[:order] == column
-    "#{arr} #{link_to(column.titleize, url(:jobs, params.merge("order" => column, "direction" => dir)))}"
+    "#{link_to(column.titleize, url(:jobs, params.merge("order" => column, "direction" => dir)))} #{arr}"
   end
 end

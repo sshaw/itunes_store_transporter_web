@@ -6,6 +6,8 @@
   %td
     = target(job)
   %td
+    = job.priority.to_s.titleize
+  %td
     = l job.created_at
   %td
     = l job.updated_at

@@ -20,7 +20,8 @@ ItunesStoreTransporterWeb.helpers do
   end
 
   def show_auth_fields?(form)
-    [:username, :password, :shortname].any? { |f| form.errors[f].any? || form.marshal_dump[f].blank? }   
+    options = form.marshal_dump[:options]
+    [:username, :password, :shortname].any? { |f| form.errors[f].any? || options[f].blank? }   
   end
 
   # On Windows treat a volume+root as the basename 

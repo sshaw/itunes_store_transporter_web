@@ -8,6 +8,7 @@
   = f.select :version_name, :options => %w[film tv]
   = f.text_field :version_number
   = f.select :type, :options => %w[transitional strict]
+  = f.select_priority
 
   = partial "shared/auth_fields", :object => f
 

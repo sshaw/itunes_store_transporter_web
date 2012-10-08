@@ -41,7 +41,7 @@ class ItunesStoreTransporterWeb < Padrino::Application
 
       @options = form.new(params["#{route}_form"])
       if @options.valid?
-        @job = job.create!(:options => @options.marshal_dump)
+        @job = job.create!(@options.marshal_dump)
         flash[:success] = "#{name} job added to the queue."
         redirect url(:job, :id => @job.id)
       else

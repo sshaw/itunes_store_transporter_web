@@ -9,9 +9,9 @@
   = f.text_field :password
   = f.text_field :shortname
 
-  -# Padrino will always append ':'
-  = f.rate_field :rate
-  = f.select_transport :transport
+  -# If \D value will be 0
+  = f.rate_field
+  = f.select_transport
 
   = f.actions do
     = f.submit "Save"  

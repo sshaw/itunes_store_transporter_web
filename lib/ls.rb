@@ -22,7 +22,7 @@ module Ls
   end
 
   def self.unix?
-    RbConfig::CONFIG["host_os"] !~ /mswin|mingw/
+    RbConfig::CONFIG["host_os"] !~ /mswin|mingw/i
   end
   
   ROOT = if unix?

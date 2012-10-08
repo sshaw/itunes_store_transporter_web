@@ -6,12 +6,14 @@ require "itunes/store/transporter/errors"
 # Delayed::Worker.max_attempts = 1
 # Delayed::Worker.max_run_time defaults to 4.hours
 
-class TransporterJob < ActiveRecord::Base  
+class TransporterJob < ActiveRecord::Base
   STATES = [:queued, :running, :success, :failure]
   STATES.each do |s|
     define_method("#{s}!") { update_attribute(:state, s) }
     define_method("#{s}?") { state == s }
   end
+
+  PRIORITY = Hash.new(0).merge!(:high => -1, :normal => 0, :low => 1)
 
   attr_protected :state
 
@@ -29,7 +31,11 @@ class TransporterJob < ActiveRecord::Base
   def command
     self.class.to_s.split(/::/)[-1].sub(/Job/, "")
   end
-  
+
+  def output?
+    (log && File.size?(log)).to_i > 0
+  end
+
   def output(offset = 0)
     data = ""
     if log && File.exists?(log)
@@ -40,12 +46,12 @@ class TransporterJob < ActiveRecord::Base
     end
     data
   end
-  
+
   def type
     self[:type].sub(/Job$/, "") if self[:type]
   end
 
-  def state    
+  def state
     self[:state].to_sym if !self[:state].blank?
   end
 
@@ -53,7 +59,7 @@ class TransporterJob < ActiveRecord::Base
     success? || failure?
   end
 
-  # An ID to denote the job's target. E.g., package name, apple id, ...  
+  # An ID to denote the job's target. E.g., package name, apple id, ...
   def target
     ""
   end
@@ -68,32 +74,36 @@ class TransporterJob < ActiveRecord::Base
   # def execute
   # end
 
-  def perform    
-    save! if new_record? #changed? check of already ran
+  def perform
+    save! if new_record? #changed? check if already ran
     options[:log] = log
     running!
-    update_attribute(:result, run)    
+    update_attribute(:result, run)
   ensure
     options.delete(:log)
   end
 
   # job is Delayed::Backend::ActiveRecord::Job
-  def enqueue(job)    
+  def enqueue(job)
     queued!
   end
 
   def success(job)
     success!
   end
-  
-  def error(job, exception) 
+
+  def error(job, exception)
     failure!
     update_attribute(:exceptions, exception)
   end
 
   def failure
     failure!
-  end  
+  end
+
+  def priority
+    self[:priority].respond_to?(:to_sym) ? self[:priority].to_sym : :normal
+  end
 
   def to_s
     return "" unless type
@@ -104,8 +114,15 @@ class TransporterJob < ActiveRecord::Base
   end
 
   protected
-  def enqueue_delayed_job    
-    job = Delayed::Job.enqueue(self) #, :priority => -5
+  def numeric_priority
+    # Lower number == higher priority
+    priority == :next ?
+      (Delayed::Job.minimum(:priority) || 0) - 1 :
+      PRIORITY[priority]
+  end
+
+  def enqueue_delayed_job
+    job = Delayed::Job.enqueue(self, :priority => numeric_priority)
     update_column :job_id, job.id
   end
 
@@ -122,9 +139,9 @@ class TransporterJob < ActiveRecord::Base
     case val
       when String
         val == "true" || val == "1" ? true : false
-      when Fixnum 
+      when Fixnum
         val == 1 ? true : false
-      else 
+      else
         val
     end
   end
@@ -138,13 +155,13 @@ class TransporterJob < ActiveRecord::Base
   def remove_log
     FileUtils.rm_f(log) if log && File.file?(log)
   end
-  
+
   def itms
     @itms ||= ITunes::Store::Transporter.new(:path => config.path,
-                                             :print_stdout => true, 
-                                             :print_stderr => true)    
+                                             :print_stdout => true,
+                                             :print_stderr => true)
   end
-  
+
   def config
     @confg ||= AppConfig.first_or_initialize
   end

@@ -30,6 +30,12 @@
                 = format_option_name(option)
               %td
                 = format_option_value(option, @job.options[option])
+
+          %tr
+            %th
+              Priority
+            %td
+              &= @job.priority.to_s.titleize
           %tr
             %th
               Created
@@ -62,7 +68,7 @@
           No results.
 
     #output.tab-pane
-      - if @job.output.present?
+      - if @job.output?
         .actions
           = link_to content_tag(:i, "", :class => "icon-resize-full") << "View", url(:job_output, @job.id, :format => :log)
           = link_to content_tag(:i, "", :class => "icon-download-alt") << "Download", url(:job_output, @job.id)
