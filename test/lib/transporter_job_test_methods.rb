@@ -23,6 +23,10 @@ module TransporterJobTestMethods
       job.reload
       job
     end
+
+    def priority(id)
+      Delayed::Job.find(id).priority
+    end
   end
 
   module ClassMethods
@@ -43,8 +47,8 @@ module TransporterJobTestMethods
     end
 
     def should_have_the_target_name_when_stringified
-      context "#to_s" do 
-        should "contain target name" do 
+      context "#to_s" do
+        should "contain target name" do
           assert subject.to_s =~ /\b#{subject.target}\b/
         end
       end
@@ -58,6 +62,8 @@ module TransporterJobTestMethods
         end
 
         should_not allow_mass_assignment_of :state
+        should_not allow_mass_assignment_of :job_id
+
         should "be a TransporterJob" do
           assert subject.is_a? TransporterJob
         end
@@ -82,6 +88,7 @@ module TransporterJobTestMethods
           end
         end
 
+
         context "#output" do
           setup do
             @output = "ABC"
@@ -98,6 +105,55 @@ module TransporterJobTestMethods
           context "with a valid offset" do
             should "return the data at the given offset" do
               assert_equal @output[1..-1], subject.output(1)
+            end
+          end
+        end
+
+        context "job priority" do
+          context ":low" do
+            setup do
+              subject.priority = :low
+              subject.save!
+            end
+
+            should "create a job queue priority of 1" do
+              assert_equal 1, priority(subject.job_id)
+            end
+          end
+
+          context ":normal" do
+            setup do
+              subject.priority = :normal
+              subject.save!
+            end
+
+            should "create a job queue priority of 0" do
+              assert_equal 0, priority(subject.job_id)
+            end
+          end
+
+          context ":high" do
+            setup do
+              subject.priority = :high
+              subject.save!
+            end
+
+            should "create a job queue priority of -1" do
+              assert_equal -1, priority(subject.job_id)
+            end
+          end
+
+          context ":next" do
+            setup do
+              subject.priority = :next
+              subject.save!
+              @higher = self.class.described_type.create!(:options  => subject.options,
+                                                          :priority => :next)
+            end
+
+            should "create a job with the highest priority" do
+              assert_equal -1, priority(subject.job_id)
+              assert_equal -2, priority(@higher.job_id)
             end
           end
         end
@@ -121,14 +177,16 @@ module TransporterJobTestMethods
             assert_equal :queued, subject.state
           end
 
-          #should "save the job
-
           should "be in the job queue" do
             assert Delayed::Job.exists?(subject.job_id)
           end
 
           should "save the options" do
             assert_equal @options, subject.options
+          end
+
+          should "have a priority of :normal" do
+            assert_equal :normal, subject.priority
           end
         end
 
@@ -162,7 +220,7 @@ module TransporterJobTestMethods
             end
           end
         end
-        
+
         context "when successful" do
           subject { runjob(self.class.described_type) }
 
@@ -206,21 +264,21 @@ module TransporterJobTestMethods
 
         context "when deleted" do
           setup do
-            @job = self.class.described_type.create! 
+            @job = self.class.described_type.create!
             @log = @job.send(:log)
             File.open(@log, "w") { |io| io.write("data") }
             @job.destroy
           end
-          
-          should "be removed from the job queue" do 
+
+          should "be removed from the job queue" do
             assert !Delayed::Job.exists?(@job.job_id)
           end
 
-          should "delete the job's log file" do 
+          should "delete the job's log file" do
             assert !File.exists?(@log)
           end
         end
-        
+
         context "when an exception is raised" do
           subject do
             runjob self.class.described_type do

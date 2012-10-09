@@ -15,7 +15,7 @@ class TransporterJob < ActiveRecord::Base
 
   PRIORITY = Hash.new(0).merge!(:high => -1, :normal => 0, :low => 1)
 
-  attr_protected :state
+  attr_protected :state, :job_id
 
   serialize :result
   serialize :options, Hash
