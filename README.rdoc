@@ -16,15 +16,15 @@ http://sshaw.github.com/itunes_store_transporter_web/images/upload-browse.png
 
 http://sshaw.github.com/itunes_store_transporter_web/images/upload-overview.png
 
-== Check Package Status
+=== Check Package Status
 
 http://sshaw.github.com/itunes_store_transporter_web/images/status-results.png
 
-== Retrieve Metadata
+=== Retrieve Metadata
 
 http://sshaw.github.com/itunes_store_transporter_web/images/lookup-results.png
 
-== Verify Packages
+=== Verify Packages
 
 http://sshaw.github.com/itunes_store_transporter_web/images/verify.png
 
