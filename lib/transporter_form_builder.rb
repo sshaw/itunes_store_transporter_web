@@ -19,6 +19,7 @@ class TransporterFormBuilder < BootstrapForms::FormBuilder
     select name, options
   end
 
+  # TODO: reevaluate :prompt & :label defaults
   def file_browser_field(name, options = {})
     prompt = options.delete(:prompt) || "Select #{name.to_s.titleize}"
 

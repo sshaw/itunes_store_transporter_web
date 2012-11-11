@@ -6,12 +6,26 @@ GUI for the iTunes Store’s Transporter (iTMSTransporter)
 
 === Job Queue
 
-http://lucas.cis.temple.edu/~sshaw/itmsweb/index.png
+http://sshaw.github.com/itunes_store_transporter_web/images/jobs.png
 
-=== Job Info
+=== Upload Packages
 
-http://lucas.cis.temple.edu/~sshaw/itmsweb/show.png
+http://sshaw.github.com/itunes_store_transporter_web/images/upload.png
 
-=== Create a Job
+http://sshaw.github.com/itunes_store_transporter_web/images/upload-browse.png
 
-http://lucas.cis.temple.edu/~sshaw/itmsweb/upload.png
+http://sshaw.github.com/itunes_store_transporter_web/images/upload-overview.png
+
+== Check Package Status
+
+http://sshaw.github.com/itunes_store_transporter_web/images/status-results.png
+
+== Retrieve Metadata
+
+http://sshaw.github.com/itunes_store_transporter_web/images/lookup-results.png
+
+== Verify Packages
+
+http://sshaw.github.com/itunes_store_transporter_web/images/verify.png
+
+<b>...and more!</b>

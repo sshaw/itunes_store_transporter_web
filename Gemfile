@@ -14,8 +14,8 @@ gem "delayed_job", "~> 3.0.0"
 gem "delayed_job_active_record"
 gem "coderay"
 gem "will_paginate", "~> 3.0"
-gem "itunes_store_transporter", :git => "git://github.com/sshaw/itunes_store_transporter"
-gem "padrino_bootstrap_forms", :require => "bootstrap_forms", :git => "git://github.com/sshaw/padrino_bootstrap_forms"
+gem "itunes_store_transporter", "~> 0.0.2"
+gem "padrino_bootstrap_forms", :require => "bootstrap_forms"
 
 # Or Individual Gems
 %w(core gen helpers).each do |g|

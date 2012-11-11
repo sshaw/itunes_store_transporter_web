@@ -8,6 +8,7 @@ class ItunesStoreTransporterWeb < Padrino::Application
 
   enable :sessions
   set :default_builder, TransporterFormBuilder
+  set :haml, :ugly => true
 
   error ActiveRecord::RecordNotFound do
     "Not Found"
