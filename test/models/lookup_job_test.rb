@@ -5,13 +5,13 @@ class LookupJobTest < Test::Unit::TestCase
   should_have_the_command_name("Lookup")
 
   context "using a vendor id" do 
-    subject { LookupJob.new :options => options }    
+    subject { LookupJob.create! :options => options }    
     should_have_the_target_name("VID")
     should_have_the_target_name_when_stringified
   end
 
   context "using an apple id" do 
-    subject { LookupJob.new :options => { :apple_id => "AID" } }
+    subject { LookupJob.create! :options => { :apple_id => "AID" } }
     should_have_the_target_name("AID")
     should_have_the_target_name_when_stringified
   end

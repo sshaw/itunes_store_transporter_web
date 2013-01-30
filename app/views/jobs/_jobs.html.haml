@@ -1,0 +1,22 @@
+%table.table
+  %thead
+    %tr
+      %th
+        = sort_by("state")
+      %th
+        = sort_by("type")
+      %th
+        Target
+      %th
+        = sort_by("priority")
+      %th
+        = sort_by("created_at")
+      %th{:colspan => 2}
+        = sort_by("updated_at")
+  %tbody
+    = render_partial "jobs/job", :collection => jobs
+
+  = will_paginate jobs
+
+:javascript
+  iTMS.updateJobs();

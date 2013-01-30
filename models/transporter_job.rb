@@ -1,5 +1,6 @@
 require "fileutils"
 require "delayed_job"
+require "itunes/store/transporter"
 require "itunes/store/transporter/errors"
 
 # Delayed::Worker.read_ahead set to one so that other workdrs can pull jobs instead of one taking 5 from the gate
@@ -21,12 +22,16 @@ class TransporterJob < ActiveRecord::Base
   serialize :options, Hash
   serialize :exceptions, ITunes::Store::Transporter::TransporterError
 
-  before_save :typecast_options
+  before_save :typecast_options, :assign_target
 
   after_create  :enqueue_delayed_job
   after_destroy :dequeue_delayed_job, :remove_log
 
   scope :completed, where(:state => [:success, :failure])
+
+  def self.search(params)
+    where(build_search_query(params))
+  end
 
   def command
     self.class.to_s.split(/::/)[-1].sub(/Job/, "")
@@ -57,11 +62,6 @@ class TransporterJob < ActiveRecord::Base
 
   def completed?
     success? || failure?
-  end
-
-  # An ID to denote the job's target. E.g., package name, apple id, ...
-  def target
-    ""
   end
 
   # Mixin...
@@ -122,6 +122,7 @@ class TransporterJob < ActiveRecord::Base
   end
 
   def enqueue_delayed_job
+    # TX
     job = Delayed::Job.enqueue(self, :priority => numeric_priority)
     update_column :job_id, job.id
   end
@@ -129,6 +130,14 @@ class TransporterJob < ActiveRecord::Base
   def dequeue_delayed_job
     # what if running... raise error?
     Delayed::Job.delete(job_id) if queued?
+  end
+
+  def assign_target
+    self.target = _target
+  end
+
+  def _target
+    # An ID to denote the job's target. E.g., package name, apple id, ...
   end
 
   def typecast_options
@@ -164,5 +173,17 @@ class TransporterJob < ActiveRecord::Base
 
   def config
     @confg ||= AppConfig.first_or_initialize
+  end
+  
+  def self.build_search_query(where)
+    q = {}
+    [:priority, :target, :type, :state].each { |k| q[k] = where[k] if where[k].present? }
+
+    d = []
+    d << where[:updated_at_from].to_date if where[:updated_at_from].present?
+    d << where[:updated_at_to].to_date + 1.day if where[:updated_at_to].present?
+    q[:updated_at] = d.size == 1 ? d.shift : Range.new(*d) if d.any?
+
+    q
   end
 end

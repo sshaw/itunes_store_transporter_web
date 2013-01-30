@@ -1,6 +1,6 @@
 require "ostruct"
 require "options"
-  
+
 class JobForm < OpenStruct
   include ActiveModel::Validations
   validates_presence_of :username, :password

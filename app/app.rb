@@ -20,7 +20,11 @@ class ItunesStoreTransporterWeb < Padrino::Application
   end
 
   configure :production do
+    # Directory will not be created
     AppConfig.output_log_directory = Padrino.root("var/lib/output")
+    # For server based (i.e., non-local) configs
+    # AppConfig.allow_select_transporter_path = false
+    # AppConfig.file_browser_root_directory = "/mnt/nas" # or %w[/mnt/nas01 /mnt/nas02]
   end
 
   before :except => %r|^/job| do
@@ -66,15 +70,20 @@ class ItunesStoreTransporterWeb < Padrino::Application
   end
 
   post :browse do
-    @files = params[:dir].present? ?
-      Ls.find(params[:dir], :type => params[:type]) :
-      Ls::ROOT
+    @files = FsUtil.ls(params[:dir], 
+                       :type => params[:type],
+                       :root => @config.file_browser_root_directory)
     render :browse, :layout => false
   end
 
-  get :jobs, :provides => [:html, :js] do
+  get :jobs, :provides => [:html, :js] do    
     @jobs = TransporterJob.order(order_by).paginate(paging_options)
     render "jobs/index"
+  end
+
+  get "/jobs/search", :provides => [:html, :js] do    
+    @jobs = TransporterJob.search(params).order(order_by).paginate(paging_options)
+    render "jobs/search"
   end
 
   get "/jobs/:id/status", :provides => :json do
@@ -106,6 +115,7 @@ class ItunesStoreTransporterWeb < Padrino::Application
 
   post :job_resubmit, :map => "/jobs/:id/resubmit" do
     job = TransporterJob.completed.find(params[:id])
+    # Any Updated AppConfig options should be added...
     job = job.class.new(:options => job.options.dup)
     job.save!
     flash[:success] = "Job resubmitted."

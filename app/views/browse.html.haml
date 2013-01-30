@@ -2,10 +2,10 @@
   - @files.each do |file|
     - next unless File.directory?(file)    
     %li.directory.collapsed
-      = link_to basename(file), "#", :rel => file
+      = link_to FsUtil.basename(file), "#", :rel => file
     
   - @files.each do |file|
     - next unless File.file?(file)
-    - ext = File.extname(file).tr(".", "") || 'txt'
+    - ext = File.extname(file).tr(".", "") || "txt"
     %li.file{:class => "ext_#{ext}"}
-      = link_to File.basename(file), "#", :rel => file      
+      = link_to FsUtil.basename(file), "#", :rel => file      

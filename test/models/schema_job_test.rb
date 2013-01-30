@@ -1,7 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../test_config.rb')
 
 class SchemaJobTest < Test::Unit::TestCase  
-  subject { SchemaJob.new :options => options }
+  subject { SchemaJob.create! :options => options }
 
   should_behave_like_a_transporter_job
   should_have_the_command_name("Schema")

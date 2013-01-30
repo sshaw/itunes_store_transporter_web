@@ -4,7 +4,9 @@
   
 = form_for @config, :config, :class => "form-horizontal" do |f|    
 
-  = f.file_browser_field :path, :label => "Transporter", :data => { :title => "Transporter" }
+  - if @config.allow_select_transporter_path
+    = f.file_browser_field :path, :label => "Transporter", :data => { :title => "Transporter" }
+
   = f.text_field :username
   = f.text_field :password
   = f.text_field :shortname

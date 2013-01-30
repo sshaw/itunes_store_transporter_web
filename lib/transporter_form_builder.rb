@@ -33,7 +33,7 @@ class TransporterFormBuilder < BootstrapForms::FormBuilder
     options[:label] << ":" # Conform to Padrino label quirk
     options[:help_block] = link_to(prompt, "#", :id => "open_file_browser_for_#{options[:id]}")
 
-    uneditable_input(name, options) + hidden_field(name, :id => "selected_#{options[:id]}", :value => value)
+    uneditable_input(name, options) << hidden_field(name, :id => "selected_#{options[:id]}", :value => value)
   end
 
   def rate_field(*args)

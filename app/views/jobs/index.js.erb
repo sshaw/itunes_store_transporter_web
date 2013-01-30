@@ -1,1 +1,1 @@
-$('div.jobs table tbody').html('<%= js_escape_html(render_partial "jobs/job", :collection => @jobs) %>');
+$('div.jobs table tbody').html('<%= js_escape_html(partial "jobs/job", :collection => @jobs) %>');

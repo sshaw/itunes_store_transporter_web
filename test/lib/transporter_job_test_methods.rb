@@ -109,6 +109,8 @@ module TransporterJobTestMethods
           end
         end
 
+        # If we're already saved we can't update job priority!
+        # just use has_one and proxy to job.priority
         context "job priority" do
           context ":low" do
             setup do

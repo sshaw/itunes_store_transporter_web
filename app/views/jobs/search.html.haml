@@ -1,0 +1,10 @@
+%h2
+  Search: 
+  %span{:style => "font-weight:normal;font-size:0.9em"}  
+    = current_search_query
+
+.jobs
+  - if @jobs.none?
+    %p No jobs found.
+  - else
+    = render_partial "jobs/jobs", :object => @jobs

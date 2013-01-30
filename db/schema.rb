@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 5) do
+ActiveRecord::Schema.define(:version => 6) do
 
   create_table "config", :force => true do |t|
     t.string  "username",         :limit => 64
@@ -49,6 +49,7 @@ ActiveRecord::Schema.define(:version => 5) do
     t.datetime "updated_at",                                      :null => false
     t.integer  "job_id"
     t.string   "priority",    :limit => 10, :default => "normal", :null => false
+    t.string   "target"
   end
 
 end

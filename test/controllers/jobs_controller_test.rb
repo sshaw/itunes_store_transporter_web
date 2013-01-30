@@ -237,5 +237,4 @@ class JobsControllerTest < CapybaraTestCase
   def output_visible?
     find("#output").visible?
   end
-
 end

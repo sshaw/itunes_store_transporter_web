@@ -1,5 +1,5 @@
-ItunesStoreTransporterWeb.helpers do  
-  def title(t = nil)    
+ItunesStoreTransporterWeb.helpers do
+  def title(t = nil)
     @title ||= "iTunes Store Transporter"
     return @title unless t
     @title = "#{t} - #{@title}" if t
@@ -13,7 +13,7 @@ ItunesStoreTransporterWeb.helpers do
   def flash_messages
     [:success, :info, :error].inject("") do |html, message|
       if !flash[message].blank?
-        html << alert(flash[message], message)
+	html << alert(flash[message], message)
       end
       html
     end
@@ -21,12 +21,6 @@ ItunesStoreTransporterWeb.helpers do
 
   def show_auth_fields?(form)
     options = form.marshal_dump[:options]
-    [:username, :password, :shortname].any? { |f| form.errors[f].any? || options[f].blank? }   
-  end
-
-  # On Windows treat a volume+root as the basename 
-  def basename(path)
-    return unless path
-    path =~ %r|\A\w:\\\z| ? path : File.basename(path)
+    [:username, :password, :shortname].any? { |f| form.errors[f].any? || options[f].blank? }
   end
 end

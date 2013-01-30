@@ -6,18 +6,18 @@ class UploadControllerTest < CapybaraTestCase
       Capybara.current_driver = :webkit
       visit app.url(:upload)
     end
-    
+
     context "the package" do
       should "have a file dialog" do
         click_on "Select Package"
         assert find("div.modal", :visible => true).has_content?("Select Your Package")
       end
-      
+
       should "be required" do
         click_upload
         assert package_blank?
       end
-      
+
       should "end in .itmsp" do
         # type=hidden
         fill_in_package("some_thang")
@@ -25,42 +25,42 @@ class UploadControllerTest < CapybaraTestCase
         assert package_name_invalid?
       end
     end
-    
+
     context "the rate" do
       should "be a number" do
         fill_in "Rate", :with => "A"
         click_upload
         assert rate_not_number?
       end
-      
+
       should "be greater than 0" do
         fill_in "Rate", :with => 0
         click_upload
         assert rate_gt_zero?
       end
     end
-    
+
     context "the transport field" do
       should "contain the default" do
         assert has_selector?("select option[value='']")
       end
-      
+
       should "contain Aspera" do
         assert has_selector?("select option[value=Aspera]")
       end
-      
+
       should "contain DAV" do
         assert has_selector?("select option[value=DAV]")
       end
-      
+
       should "contain Signiant" do
         assert has_selector?("select option[value=Signiant]")
       end
     end
-  
+
     [:username, :password, :shortname].each do |opt|
-      context "the #{opt}" do 
-        should "be required" do          
+      context "the #{opt}" do
+        should "be required" do
           click_button "Upload"
           assert has_content?("#{opt.capitalize} required")
         end
@@ -70,17 +70,47 @@ class UploadControllerTest < CapybaraTestCase
     context "with default settings" do
       setup do
         @config = set_defaults(options.merge(:rate => 100, :transport => "Signiant"))
-        visit app.url(:upload)        
+        visit app.url(:upload)
       end
-          
+
       [:rate, :transport, :username, :password, :shortname].each do |opt|
         should "set the #{opt} field to the default" do
           assert_equal @config[opt].to_s, find_field("upload_form[#{opt}]").value
         end
       end
     end
+
+    context "username and password fields" do
+      context "without defaults" do
+        should "be visible" do
+          assert find_field("upload_form[username]").visible?
+          assert find_field("upload_form[password]").visible?
+          assert find_field("upload_form[shortname]").visible?
+        end
+      end
+
+      context "with defaults" do
+        setup { set_defaults }
+
+        should "not be visible" do
+          assert !find_field("upload_form[username]").visible?
+          assert !find_field("upload_form[password]").visible?
+          assert !find_field("upload_form[shortname]").visible?          
+        end        
+
+        context "when the 'Edit...' link is clicked" do 
+          setup { click_link("Edit usernames and password") } 
+
+          should "be visible" do
+            assert find_field("upload_form[username]").visible?
+            assert find_field("upload_form[password]").visible?
+            assert find_field("upload_form[shortname]").visible?
+          end
+        end       
+      end
+    end    
   end
-    
+
   context "with all the required fields" do
     setup do
       # should check if file ex on sever

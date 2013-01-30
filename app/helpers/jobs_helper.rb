@@ -1,23 +1,23 @@
 ItunesStoreTransporterWeb.helpers do
   JOB_OPTION_ORDER = Hash.new(100).merge(# Upload
-                                         :package    => 1,
-                                         :transport  => 2,
-                                         :rate       => 3,
-                                         :success    => 4,
-                                         :failure    => 4,
-                                         :delete     => 5,
-                                         # Verify
-                                         :verify_assets => 2,
-                                         # Lookup
-                                         :vendor_id  => 1,
-                                         :apple_id   => 1,
-                                         # Schema
-                                         :version    => 1,
-                                         :type       => 2,
-                                         # ====>
-                                         :username   => 90,
-                                         :shortname  => 91,
-                                         :password   => 92)
+					 :package    => 1,
+					 :transport  => 2,
+					 :rate       => 3,
+					 :success    => 4,
+					 :failure    => 4,
+					 :delete     => 5,
+					 # Verify
+					 :verify_assets => 2,
+					 # Lookup
+					 :vendor_id  => 1,
+					 :apple_id   => 1,
+					 # Schema
+					 :version    => 1,
+					 :type       => 2,
+					 # ====>
+					 :username   => 90,
+					 :shortname  => 91,
+					 :password   => 92)
 
   def sort_options(job)
     options = job.options.keys.sort_by { |key| JOB_OPTION_ORDER[key] }
@@ -56,6 +56,33 @@ ItunesStoreTransporterWeb.helpers do
     end
   end
 
+  def current_search_query
+    terms = []
+    [:priority, :state, :target, :type].each do |name|
+      next if params[name].blank?
+      term = case name
+	when :type
+	  params[name].sub(/Job$/, "")
+	when :target
+          %Q("#{params[name]}")
+	else
+	  params[name].capitalize
+	end
+      terms << "#{name} #{term}"
+    end
+
+    updated = [:_updated_at_from, :_updated_at_to].inject([]) { |q, key| q << params[key] if params[key].present?; q }
+    if updated.any?
+      if updated.size > 1
+	terms << "updated #{updated[0]} to #{updated[1]}"
+      else
+	terms << "updated #{updated[0]}"
+      end
+    end
+
+    truncate terms.join(" "), :length => 75
+  end
+
   def render_job_result(job)
     render_partial "jobs/results/#{job.type.downcase}", :locals => { :job => job }
   end
@@ -73,9 +100,17 @@ ItunesStoreTransporterWeb.helpers do
     link_to(content_tag(:i, "", :class => "icon-download-alt") << "Download", url(:job_metadata, id))
   end
 
+  def job_state_options
+    TransporterJob::STATES.map { |state| [ state.to_s.capitalize, state ] }
+  end
+
+  def job_type_options
+    %w[LookupJob ProvidersJob SchemaJob StatusJob UploadJob VerifyJob VersionJob].map { |type| [ type.sub(/Job$/, ""), type ] }
+  end
+
   def sort_by(column)
     dir = params[:direction] == "asc" ? "desc" : "asc"
     arr = dir == "asc" ? "&darr;" : "&uarr;" if params[:order] == column
-    "#{link_to(column.titleize, url(:jobs, params.merge("order" => column, "direction" => dir)))} #{arr}"
+    "#{link_to(column.titleize, current_path(params.merge("order" => column, "direction" => dir)))} #{arr}"
   end
 end
