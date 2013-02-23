@@ -1,10 +1,13 @@
+- content_for(:title) do
+  Lookup Metadata
+
 %h2
   Lookup Metadata
 
-%p 
-  Retrieve the metadata for a previously uploaded package. 
+%p
+  Retrieve the metadata for a previously uploaded package.
 
-- form_for @options, :lookup, :class => "form-horizontal" do |f|      
+- form_for @options, :lookup, :class => "form-horizontal" do |f|
   .control-group{:class => @options.errors.include?(:package_id_value) ? "error" : ""}
     %label.control-label.select-label
       = select_tag "lookup_form[package_id]", :options => [["Vendor ID", :vendor_id], ["Apple ID", :apple_id]]
@@ -16,5 +19,5 @@
 
   = partial "shared/auth_fields", :object => f
 
-  = f.actions do 
+  = f.actions do
     = f.submit "Lookup"

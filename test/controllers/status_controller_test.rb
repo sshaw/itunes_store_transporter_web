@@ -1,34 +1,31 @@
 require File.expand_path(File.dirname(__FILE__) + '/../test_config.rb')
 
-class StatusControllerTest < CapybaraTestCase
-  context "looking up a job's status" do 
-
-    should "require a vendor id" do 
-      visit app.url(:status)
-      click_button "Check Status"
-      assert has_content?("Vendor ID can't be blank")
-    end
-    
-    context "a valid submission" do
+class StatusControllerTest < Test::Unit::TestCase
+  context "POST to status" do
+    context "with valid parameters" do
       setup do
-        # apple_id too
         @options = options.merge(:vendor_id => "VID")
-        visit "/status"
-        fill_in_auth
-        fill_in "Vendor ID", :with => @options[:vendor_id]
-        click_button "Check Status"
-        
+        post app.url(:status), :status_form => @options
+        follow_redirect!
         @job = StatusJob.last
       end
 
-      should_create_the_job
-      
-      [:username, :password, :shortname, :vendor_id].each do |opt|
-        should "set the #{opt} option" do    
-          assert_equal @options[opt], @job.options[opt]
-        end
+      should "set the job's options" do
+        assert_not_nil @job, "job created"
+        assert_equal @options, @job.options
       end
-    end    
+      
+      should_create_the_job
+    end
+
+    context "without valid parameters" do
+      setup { post app.url(:status) }
+      should_return_success
+    end
+  end
+
+  context "GET to status" do
+    setup { get app.url(:status) }
+    should_return_success
   end
 end
-

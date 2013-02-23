@@ -1,4 +1,4 @@
-- title @job
+- content_for(:title) { @job }
 
 %div[@job]
   .page-heading
@@ -103,7 +103,7 @@
             if(iTMS.jobOffset == 0)
               $('#output').html('<pre>');
 
-            $('#output pre').append(data);
+            $('#output pre').append(document.createTextNode(data));
             iTMS.jobOffset += data.length;
           });
 

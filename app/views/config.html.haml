@@ -1,6 +1,8 @@
-- title "Configuration"
+- content_for(:title) do
+  Configuration
 
-%h2 Configuration
+%h2 
+  Configuration
   
 = form_for @config, :config, :class => "form-horizontal" do |f|    
 
@@ -17,6 +19,4 @@
 
   = f.actions do
     = f.submit "Save"  
-
-= partial "shared/file_browser"
 

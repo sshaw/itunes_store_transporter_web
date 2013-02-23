@@ -1,62 +1,105 @@
 require File.expand_path(File.dirname(__FILE__) + '/../test_config.rb')
-require "options"
 
 class ConfigControllerTest < CapybaraTestCase
-  context "configuring the transporter" do
-    setup { visit app.url(:config) }
+  context "when the Select Path link is clicked" do
+    setup do
+      Capybara.current_driver = :webkit
+      visit app.url(:config)
+      click_link "Select Path"
+    end
 
-    [:username, :password, :shortname].each do |opt|
-      context "the #{opt}" do 
-        should "not be required" do          
-          click_button "Save"
-          assert has_no_content?("#{opt.capitalize} required")
-        end
+    should "display the transporter location dialog" do
+      assert find(".modal").visible?
+    end
+
+    context "when the Close button is clicked" do
+      setup { click_link "Close" }
+
+      should "close the dialog" do
+        assert !find(".modal").visible?
       end
     end
 
-    context "the rate" do
-      should "be a number" do
-        fill_in "Rate", :with => "A"
-        click_button "Save"
-        assert rate_not_number?
+    context "when the X link is clicked" do
+      setup { click_link "&times" }
+
+      should "close the dialog" do
+        assert !find(".modal").visible?
+      end
+    end
+
+    context "browsing a directory in the dialog" do
+      setup do
+        @element = first("div.listing li.directory a")
+        2.times { @element.click }
+        #mock(FsUtil).ls(@dir, is_a(Hash))
+        #mock(FsUtil).ls
+      end
+
+      # should "fetch the listing" do
+      #   assert_received(FsUtil) { |fs| fs.ls } #(@dir, is_a(Hash)) }
+      # end
+
+      should "display the directory's listing" do
+        # should setup a test dir structure
+        assert has_selector?(:xpath, "#{@element.path}/following-sibling::ul")
       end
       
-      should "be greater than 0" do
-        fill_in "Rate", :with => 0
-        click_button "Save"
-        assert rate_gt_zero?
-      end
+      # should "cache the fetched listing" do
+      # end
     end
-
-    context "the transport field" do
-      should "contain all the options" do 
-        assert has_select?("Transport", :options => ["Transporter's Default"] + Options::TRANSPORTS)
+    
+    context "choosing a directory in the dialog" do
+      setup do
+        @element = first("div.listing li.directory a")
+        @element.click
+        click_link "Select"
       end
+      
+      should "display the selected directory" do
+        # check text of #path for rel
+        #assert has_selector?("#path[data-content='#{@element[:rel]}']")
+        assert_equal @element[:rel], find("#selected_path").value
+      end     
     end
-
-    context "a valid submission" do 
-      setup do       
+  end
+  
+  context "POST to status" do
+    context "with valid parameters" do
+      setup do
         @options = options.merge(:rate => 100, :transport => "Aspera", :path => "MyTransporter")
-        visit app.url(:config)
-        fill_in_auth
-        select @options[:transport], :from => "Transport"
-        fill_in "Rate", :with => @options[:rate]
-        # We should make sure this is a file...
-        find("#selected_path").set(@options[:path])    
-        click_button "Save"
+        post app.url(:config), :app_config => @options
+        follow_redirect!
         @config = AppConfig.first_or_initialize
       end
-            
-      should "display a saved message" do 
-        assert has_content?("Configuration saved")
+
+      should "redirect back to the config page" do
+        assert_equal app.url(:config), last_request.path
       end
 
-      [:username, :password, :shortname, :rate, :transport, :path].each do |opt|
-        should "set the #{opt} option" do    
-          assert_equal @options[opt], @config[opt]
-        end
+      should "display a configuration saved message" do
+        assert_equal flash[:success], "Configuration saved."
       end
-    end    
+
+      should "save the configuration" do
+        @options.each { |k,v| assert_equal v, @config[k.to_s], "option #{k}" }
+      end
+    end
+
+    context "without valid parameters" do
+      setup { post app.url(:config) }
+
+      should "redisplay the config page" do
+        assert_equal app.url(:config), last_request.path
+      end
+    end
+  end
+
+  context "GET to config" do
+    setup { get app.url(:config) }
+
+    should "return success" do
+      assert last_response.ok?
+    end
   end
 end
-

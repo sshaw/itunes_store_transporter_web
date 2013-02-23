@@ -12,6 +12,7 @@ class AppConfig < ActiveRecord::Base
   cattr_accessor :allow_select_transporter_path
   self.allow_select_transporter_path = true
 
+  # DB column name is path
   def path
     self[:path] || ITunes::Store::Transporter::Shell.default_path
   end  

@@ -17,10 +17,10 @@ iTMS.updateJobs = function() {
     url = url.join('?');
     
     intId = setInterval(function() {
-      $.get(url, function() {
-        if($('tr.queued, tr.running').size() == 0)
-          clearInterval(intId);
-      });
+	$.get(url, function() {
+            if($('tr.queued, tr.running').size() == 0)
+		clearInterval(intId);
+	});
     }, 5000);
 }
 
@@ -32,11 +32,11 @@ $(document).ready(function() {
     $('#open_file_browser_for_package').fileBrowser({title: 'Select Your Package', type: 'directory'}, function(file) {
 	iTMS.fileSelected('package', file);
     });
-
+    
     $('#open_file_browser_for_success').fileBrowser({title: 'Select Success Directory', type: 'directory'}, function(file) {
 	iTMS.fileSelected('success', file);
     });
-
+    
     $('#open_file_browser_for_failure').fileBrowser({title: 'Select Failure Directory', type: 'directory'}, function(file) {
 	iTMS.fileSelected('failure', file);
     });
@@ -45,12 +45,12 @@ $(document).ready(function() {
 	e.preventDefault();
 	$('#usernames-and-password').toggle();
     });
-
+    
     $('#clear_search_fields_link').click(function(e) {
 	e.preventDefault();
-	$(this).find('select,input[type!=submit][type!=button][type!=reset]').val('');
+	$(this).parents('form').find('select,input[type!=submit][type!=button][type!=reset]').val('');
     });
-
+    
     var dateOptions = { dateFormat: 'mm/dd/yy', altFormat: 'yy-mm-dd', changeMonth: true, changeYear: true, maxDate: 0, showOtherMonths: true, selectOtherMonths: true };
     dateOptions['altField'] = '#updated_at_to';
     $('#_updated_at_to').datepicker(dateOptions);

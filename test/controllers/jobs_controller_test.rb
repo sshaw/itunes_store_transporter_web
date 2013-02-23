@@ -2,7 +2,54 @@ require File.expand_path(File.dirname(__FILE__) + '/../test_config.rb')
 require "tempfile"
 
 class JobsControllerTest < CapybaraTestCase
-#  include ApplicationHelper
+  context "when the search link is clicked" do
+    setup do
+      Capybara.current_driver = :webkit
+      visit "/"
+      click_link "Search"
+    end
+
+    should "display the search form" do
+      assert find("#search").visible?
+    end
+
+    context "when the clear link is clicked" do
+      setup do
+        select "Queued", :from => "state"
+        select "Lookup", :from => "type"
+        select "Normal", :from => "priority"
+        fill_in "target", :with => "12345"
+        fill_in "_updated_at_from", :with => "1/1/71"
+        fill_in "_updated_at_to", :with => "1/1/72"
+        click_link "Clear"
+      end
+
+      should "clear all the form fields" do
+        within("#search") do
+          all("select,input[type=text]").each { |e| assert e.value.empty?, "field '#{e[:name]}' not cleared" }
+        end
+      end
+    end
+
+    context "when the start date field receives the focus" do
+      setup { find_field("_updated_at_from").trigger("focus") }
+
+      should "display the calendar" do
+        assert find(".ui-datepicker").visible?
+      end
+    end
+
+    context "when the Search button is clicked" do
+      setup do
+        fill_in "target", :with => "12345"
+        click_button "Search"
+      end
+
+      should "submit the form" do
+        assert_equal "/jobs/search", current_path
+      end
+    end
+  end
 
   context "viewing the job list" do
     setup do
@@ -76,6 +123,7 @@ class JobsControllerTest < CapybaraTestCase
     should "not display the job's resuts" do
       assert !output_visible?
     end
+    # <---
 
     context "when the Delete link is clicked" do
       setup { click_link "Delete" }
@@ -144,7 +192,7 @@ class JobsControllerTest < CapybaraTestCase
 
       context "when the View link is clicked" do
         should "view the result" do
-          find("#results").click_link("View")          
+          find("#results").click_link("View")
           assert_equal app.url(:job_metadata, @job.id, :format => "xml"), current_path
           assert has_xpath?("//x[text()='123']")
         end

@@ -3,18 +3,16 @@
   %head
     %meta{:charset => "utf-8"}
     %meta{"http-equiv" => "X-UA-Compatible", :content => "IE=edge"}
-    %meta{:name => "viewport", :content => "width=device-width, initial-scale=1.0"}    
-    %title      
-      = title
-      
-    = stylesheet_link_tag "bootstrap.min", "jquery-ui-1.9.2.custom.min.css", "main"
-    -# , "bootstrap-responsive.min.css", 
-    = stylesheet_link_tag "/jqueryFileTree/jqueryFileTree"
-    = javascript_include_tag "jquery", "jquery-ujs", "jquery-ui-1.9.2.custom.min.js", "bootstrap.min", "application"
-    = javascript_include_tag "/jqueryFileTree/jqueryFileTree"
-
-    = yield_content :head
-    
+    %title
+      - if content_for?(:title) 
+        &= yield_content(:title)
+        \-
+          
+      iTunes Store Transporter
+    -# Capybara chokes on jQuery UI min.css
+    = stylesheet_link_tag "bootstrap.min", "jquery-ui-1.9.2.custom", "/jqueryFileTree/jqueryFileTree", "main"
+    = javascript_include_tag "jquery", "jquery-ujs", "jquery-ui-1.9.2.custom.min.js", "bootstrap.min", "/jqueryFileTree/jqueryFileTree", "application"
+     
   %body
     .navbar.navbar-fixed-top
       .navbar-inner

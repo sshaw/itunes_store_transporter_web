@@ -75,7 +75,6 @@ class TransporterJob < ActiveRecord::Base
   # end
 
   def perform
-    save! if new_record? #changed? check if already ran
     options[:log] = log
     running!
     update_attribute(:result, run)
@@ -93,8 +92,8 @@ class TransporterJob < ActiveRecord::Base
   end
 
   def error(job, exception)
-    failure!
-    update_attribute(:exceptions, exception)
+    #p "====> FAILURE => #{exception}"
+    update_attributes({:state => :failure, :exceptions => exception}, :without_protection => true)
   end
 
   def failure
@@ -122,9 +121,11 @@ class TransporterJob < ActiveRecord::Base
   end
 
   def enqueue_delayed_job
-    # TX
-    job = Delayed::Job.enqueue(self, :priority => numeric_priority)
-    update_column :job_id, job.id
+    connection.transaction do 
+      # Uh, why not just has_one..?
+      job = Delayed::Job.enqueue(self, :priority => numeric_priority)
+      update_column :job_id, job.id
+    end    
   end
 
   def dequeue_delayed_job

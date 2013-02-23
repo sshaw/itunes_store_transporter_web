@@ -7,7 +7,7 @@ class JobForm < OpenStruct
 
   def marshal_dump
     data = { :options => super.dup }
-    data[:priority] = data[:options].delete(:priority)
+    data[:priority] = data[:options].delete(:priority) if data[:options].include?(:priority)
     data
   end
 end
