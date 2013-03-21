@@ -12,7 +12,7 @@
     $.fn.fileBrowser = function(o, handler) {
         if( !o ) var o = {};
         if( o.root == undefined ) o.root = '';
-        if( o.script == undefined ) o.script = '/browse';
+        if( o.script == undefined ) o.script = 'browse';
         if( o.title == undefined ) o.title = 'Select a File';
         if( o.expandSpeed == undefined ) o.expandSpeed= 500;
         if( o.collapseSpeed == undefined ) o.collapseSpeed= 500;
