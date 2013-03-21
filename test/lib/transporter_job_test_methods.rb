@@ -88,7 +88,6 @@ module TransporterJobTestMethods
           end
         end
 
-
         context "#output" do
           setup do
             @output = "ABC"

@@ -9,7 +9,6 @@ gem 'sinatra-flash', :require => 'sinatra/flash'
 gem 'haml'
 gem 'activerecord', :require => "active_record"
 
-
 gem "daemons"
 gem "delayed_job", "~> 3.0.0"
 gem "delayed_job_active_record"
@@ -34,3 +33,5 @@ group :test do
   gem 'capybara', '~> 1.1.2'
   gem 'capybara-webkit', '~> 0.12.1'
 end
+
+gem "tee"

@@ -1,43 +1,47 @@
 require "rbconfig"
 
 module FsUtil
-  def self.ls(path, options = {})
-    roots = options[:root] ? Array(options[:root]) : DEFAULT_ROOT_DIRECTORY
-    return roots if path.empty?
+  extend self
+
+  def ls(path, options = {})
+    roots = options[:root] ? Array(options[:root]) : root_directory
+    return roots if path.to_s.empty?
 
     # Make sure path starts with one of the roots, checking the longest one first.
-    root = roots.sort_by { |i| -i.size }.find { |i| path.start_with?(i) }    
-    return roots unless root and !path.include?("..") and File.directory?(path) and File.readable?(path)    
+    root = roots.sort_by { |i| -i.size }.find { |i| path.start_with?(i) }
+    return roots unless root and !path.include?("..") and File.directory?(path) and File.readable?(path)
 
     find(path, options)
   end
 
-  def self.basename(path)
+  def basename(path)
     return unless path
     # On Windows, treat volume+root as the basename
     path =~ %r|\A\w:\\\z| ? path : File.basename(path)
   end
 
-  def self.find(path, options)
+  private
+  def root_directory
+    DEFAULT_ROOT_DIRECTORY
+  end
+
+  def find(path, options)
     files = []
-    
+
     Dir.foreach(path) do |name|
       next if name =~ %r|\A\.\.?|
-      
+
       file = File.join(path, name)
-      type = File.stat(path).ftype rescue nil
+      type = File.stat(file).ftype rescue nil
       if type != "directory"
-        next if options[:type] && options[:type] != type
-        next if options[:name] && name !~ (Regexp.new(options[:name].to_s) rescue nil)
+	next if options[:type] && options[:type] != type
+	next if options[:name] && name !~ (Regexp.new(options[:name].to_s) rescue nil)
       end
-      
+
       files << file
     end
     files
-  end    
-  
-  #class scope!
-  #private :find
+  end
 
   DEFAULT_ROOT_DIRECTORY =
     if RbConfig::CONFIG["host_os"] !~ /mswin|mingw/i

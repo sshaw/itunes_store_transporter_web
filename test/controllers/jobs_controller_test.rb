@@ -2,6 +2,8 @@ require File.expand_path(File.dirname(__FILE__) + '/../test_config.rb')
 require "tempfile"
 
 class JobsControllerTest < CapybaraTestCase
+  should_toggle_auth_fields(app.url(:jobs))
+
   context "when the search link is clicked" do
     setup do
       Capybara.current_driver = :webkit
@@ -15,19 +17,19 @@ class JobsControllerTest < CapybaraTestCase
 
     context "when the clear link is clicked" do
       setup do
-        select "Queued", :from => "state"
-        select "Lookup", :from => "type"
-        select "Normal", :from => "priority"
-        fill_in "target", :with => "12345"
-        fill_in "_updated_at_from", :with => "1/1/71"
-        fill_in "_updated_at_to", :with => "1/1/72"
-        click_link "Clear"
+	select "Queued", :from => "state"
+	select "Lookup", :from => "type"
+	select "Normal", :from => "priority"
+	fill_in "target", :with => "12345"
+	fill_in "_updated_at_from", :with => "1/1/71"
+	fill_in "_updated_at_to", :with => "1/1/72"
+	click_link "Clear"
       end
 
       should "clear all the form fields" do
-        within("#search") do
-          all("select,input[type=text]").each { |e| assert e.value.empty?, "field '#{e[:name]}' not cleared" }
-        end
+	within("#search") do
+	  all("select,input[type=text]").each { |e| assert e.value.empty?, "field '#{e[:name]}' not cleared" }
+	end
       end
     end
 
@@ -35,18 +37,18 @@ class JobsControllerTest < CapybaraTestCase
       setup { find_field("_updated_at_from").trigger("focus") }
 
       should "display the calendar" do
-        assert find(".ui-datepicker").visible?
+	assert find(".ui-datepicker").visible?
       end
     end
 
     context "when the Search button is clicked" do
       setup do
-        fill_in "target", :with => "12345"
-        click_button "Search"
+	fill_in "target", :with => "12345"
+	click_button "Search"
       end
 
       should "submit the form" do
-        assert_equal "/jobs/search", current_path
+	assert_equal app.url(:search), current_path
       end
     end
   end
@@ -67,11 +69,11 @@ class JobsControllerTest < CapybaraTestCase
 
     context "when the Delete link is clicked" do
       setup do
-        within("#job_#{@lookup.id}") { click_link("Delete") }
+	within("#job_#{@lookup.id}") { click_link("Delete") }
       end
 
       should "remove the job from the page" do
-        assert has_no_content?(@lookup.target)
+	assert has_no_content?(@lookup.target)
       end
     end
 
@@ -82,16 +84,16 @@ class JobsControllerTest < CapybaraTestCase
 
     context "when the Resubmit link is clicked" do
       setup do
-        within("#job_#{@lookup.id}") { click_link("Resubmit") }
-        #save_page
+	within("#job_#{@lookup.id}") { click_link("Resubmit") }
+	#save_page
       end
 
       should "redirect to the resubmitted job's page" do
-        assert_equal app.url(:job, TransporterJob.last.id), current_path
+	assert_equal app.url(:job, TransporterJob.last.id), current_path
       end
 
       should "display a resubmitted message" do
-        assert has_content?("Job resubmited")
+	assert has_content?("Job resubmited")
       end
     end
   end
@@ -129,11 +131,11 @@ class JobsControllerTest < CapybaraTestCase
       setup { click_link "Delete" }
 
       should "redirect to the jobs page" do
-        assert_equal app.url(:jobs), current_path
+	assert_equal app.url(:jobs), current_path
       end
 
       should "display a 'job deleted' message" do
-        assert has_content?("Job deleted.")
+	assert has_content?("Job deleted.")
       end
     end
 
@@ -141,15 +143,15 @@ class JobsControllerTest < CapybaraTestCase
       setup { click_link "Results" }
 
       should "display the results" do
-        assert results_visible?
+	assert results_visible?
       end
 
       should "not display the overview" do
-        assert !overview_visible?
+	assert !overview_visible?
       end
 
       should "not display the output" do
-        assert !output_visible?
+	assert !output_visible?
       end
     end
 
@@ -157,45 +159,45 @@ class JobsControllerTest < CapybaraTestCase
       setup { click_link "Output" }
 
       should "display the output" do
-        assert output_visible?
+	assert output_visible?
       end
 
       should "not display the results" do
-        assert !results_visible?
+	assert !results_visible?
       end
 
       should "not display the overview" do
-        assert !overview_visible?
+	assert !overview_visible?
       end
     end
     # <---
 
     context "with results" do
       setup do
-        @job = LookupJob.new :options => options.merge(:vendor_id => "ID123")
-        @job.result = "<x>123</x>"
-        @job.save!
-        visit app.url(:job, @job.id)
-        click_link "Results"
+	@job = LookupJob.new :options => options.merge(:vendor_id => "ID123")
+	@job.result = "<x>123</x>"
+	@job.save!
+	visit app.url(:job, @job.id)
+	click_link "Results"
       end
 
       should "display the result" do
-        assert has_content?(@job.result)
+	assert has_content?(@job.result)
       end
 
       context "when the Download link is clicked" do
-        should "download the result" do
-          find("#results").click_link("Download")
-          assert has_content?(@job.result)
-        end
+	should "download the result" do
+	  find("#results").click_link("Download")
+	  assert has_content?(@job.result)
+	end
       end
 
       context "when the View link is clicked" do
-        should "view the result" do
-          find("#results").click_link("View")
-          assert_equal app.url(:job_metadata, @job.id, :format => "xml"), current_path
-          assert has_xpath?("//x[text()='123']")
-        end
+	should "view the result" do
+	  find("#results").click_link("View")
+	  assert_equal app.url(:job_metadata, @job.id, :format => "xml"), current_path
+	  assert has_xpath?("//x[text()='123']")
+	end
       end
     end
   end
@@ -243,8 +245,8 @@ class JobsControllerTest < CapybaraTestCase
       setup { get @url }
 
       should "return the output as an attachement" do
-        assert last_response.headers["Content-Disposition"] =~ /attachment;/
-        assert_equal "data", last_response.body
+	assert last_response.headers["Content-Disposition"] =~ /attachment;/
+	assert_equal "data", last_response.body
       end
     end
 
@@ -252,11 +254,11 @@ class JobsControllerTest < CapybaraTestCase
       setup { get "#{@url}.log" }
 
       should "have a response type of text/plain" do
-        assert_equal "text/plain;charset=utf-8", last_response.headers["Content-Type"]
+	assert_equal "text/plain;charset=utf-8", last_response.headers["Content-Type"]
       end
 
       should "return all the output" do
-        assert_equal "data", last_response.body
+	assert_equal "data", last_response.body
       end
     end
 
@@ -264,11 +266,11 @@ class JobsControllerTest < CapybaraTestCase
       setup { get "#{@url}.log", :offset => 2 }
 
       should "have a response type of text/plain" do
-        assert_equal "text/plain;charset=utf-8", last_response.headers["Content-Type"]
+	assert_equal "text/plain;charset=utf-8", last_response.headers["Content-Type"]
       end
 
       should "return the output starting at the offset" do
-        assert_equal "ta", last_response.body
+	assert_equal "ta", last_response.body
       end
     end
   end

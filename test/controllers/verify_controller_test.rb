@@ -1,6 +1,8 @@
 require File.expand_path(File.dirname(__FILE__) + '/../test_config.rb')
 
 class VerifyControllerTest < CapybaraTestCase
+  should_toggle_auth_fields(app.url(:verify))
+
   context "POST to verify" do
     context "with valid parameters" do
       setup do

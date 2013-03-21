@@ -103,7 +103,8 @@
             if(iTMS.jobOffset == 0)
               $('#output').html('<pre>');
 
-            $('#output pre').append(document.createTextNode(data));
+            $('#output pre').append(document.createTextNode(data))
+                            .animate({ scrollTop: $('#output pre')[0].scrollHeight });
             iTMS.jobOffset += data.length;
           });
 

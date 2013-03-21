@@ -1,6 +1,8 @@
 require File.expand_path(File.dirname(__FILE__) + '/../test_config.rb')
 
 class UploadControllerTest < CapybaraTestCase
+  should_toggle_auth_fields(app.url(:upload))
+
   context "uploading a package" do
     setup do
       Capybara.current_driver = :webkit

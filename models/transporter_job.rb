@@ -3,10 +3,6 @@ require "delayed_job"
 require "itunes/store/transporter"
 require "itunes/store/transporter/errors"
 
-# Delayed::Worker.read_ahead set to one so that other workdrs can pull jobs instead of one taking 5 from the gate
-# Delayed::Worker.max_attempts = 1
-# Delayed::Worker.max_run_time defaults to 4.hours
-
 class TransporterJob < ActiveRecord::Base
   STATES = [:queued, :running, :success, :failure]
   STATES.each do |s|
@@ -45,8 +41,8 @@ class TransporterJob < ActiveRecord::Base
     data = ""
     if log && File.exists?(log)
       File.open(log, "r") do |f|
-        f.seek(offset.to_i)
-        data = f.read
+	f.seek(offset.to_i)
+	data = f.read
       end
     end
     data
@@ -76,6 +72,7 @@ class TransporterJob < ActiveRecord::Base
 
   def perform
     options[:log] = log
+    p "=> ===== #{log}"
     running!
     update_attribute(:result, run)
   ensure
@@ -121,11 +118,11 @@ class TransporterJob < ActiveRecord::Base
   end
 
   def enqueue_delayed_job
-    connection.transaction do 
+    connection.transaction do
       # Uh, why not just has_one..?
       job = Delayed::Job.enqueue(self, :priority => numeric_priority)
       update_column :job_id, job.id
-    end    
+    end
   end
 
   def dequeue_delayed_job
@@ -148,11 +145,11 @@ class TransporterJob < ActiveRecord::Base
   def to_bool(val)
     case val
       when String
-        val == "true" || val == "1" ? true : false
+	val == "true" || val == "1" ? true : false
       when Fixnum
-        val == 1 ? true : false
+	val == 1 ? true : false
       else
-        val
+	val
     end
   end
 
@@ -168,14 +165,14 @@ class TransporterJob < ActiveRecord::Base
 
   def itms
     @itms ||= ITunes::Store::Transporter.new(:path => config.path,
-                                             :print_stdout => true,
-                                             :print_stderr => true)
+					     :print_stdout => true,
+					     :print_stderr => true)
   end
 
   def config
     @confg ||= AppConfig.first_or_initialize
   end
-  
+
   def self.build_search_query(where)
     q = {}
     [:priority, :target, :type, :state].each { |k| q[k] = where[k] if where[k].present? }

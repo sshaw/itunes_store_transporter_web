@@ -16,7 +16,7 @@
   %tbody
     = render_partial "jobs/job", :collection => jobs
 
-  = will_paginate jobs
+= will_paginate jobs
 
 :javascript
   iTMS.updateJobs();

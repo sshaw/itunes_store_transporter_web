@@ -22,8 +22,8 @@
         if( o.loadMessage == undefined ) o.loadMessage = 'Loading...';
 
         var q, params = {};
-        if( o.type == undefined ) params['type'] = o.type;
-        if( o.name == undefined ) params['name'] = o.name;
+        if( o.type != undefined ) params['type'] = o.type;
+        if( o.name != undefined ) params['name'] = o.name;
 
         q = $.param(params);
         if(q) o.script += '?' + q;

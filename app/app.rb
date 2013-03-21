@@ -22,7 +22,7 @@ class ItunesStoreTransporterWeb < Padrino::Application
   configure :production do
     # Directory will not be created
     AppConfig.output_log_directory = Padrino.root("var/lib/output")
-    # For server based (i.e., non-local) configs
+    # For server based (i.e., non-local) configs:
     # AppConfig.allow_select_transporter_path = false
     # AppConfig.file_browser_root_directory = "/mnt/nas" # or %w[/mnt/nas01 /mnt/nas02]
   end
@@ -46,11 +46,11 @@ class ItunesStoreTransporterWeb < Padrino::Application
 
       @options = form.new(params["#{route}_form"])
       if @options.valid?
-        @job = job.create!(@options.marshal_dump)
-        flash[:success] = "#{name} job added to the queue."
-        redirect url(:job, :id => @job.id)
+	@job = job.create!(@options.marshal_dump)
+	flash[:success] = "#{name} job added to the queue."
+	redirect url(:job, :id => @job.id)
       else
-        render route
+	render route
       end
     end
   end
@@ -70,18 +70,18 @@ class ItunesStoreTransporterWeb < Padrino::Application
   end
 
   post :browse do
-    @files = FsUtil.ls(params[:dir], 
-                       :type => params[:type],
-                       :root => @config.file_browser_root_directory)
+    @files = FsUtil.ls(params[:dir],
+		       :type => params[:type],
+		       :root => @config.file_browser_root_directory)
     render :browse, :layout => false
   end
 
-  get :jobs, :provides => [:html, :js] do    
+  get :jobs, :provides => [:html, :js] do
     @jobs = TransporterJob.order(order_by).paginate(paging_options)
     render "jobs/index"
   end
 
-  get "/jobs/search", :provides => [:html, :js] do    
+  get :search, "/jobs/search", :provides => [:html, :js] do
     @jobs = TransporterJob.search(params).order(order_by).paginate(paging_options)
     render "jobs/search"
   end

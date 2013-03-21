@@ -1,6 +1,8 @@
 require File.expand_path(File.dirname(__FILE__) + '/../test_config.rb')
 
 class ProvidersControllerTest < Test::Unit::TestCase
+  should_toggle_auth_fields(app.url(:providers))
+
   context "POST to providers" do
     context "with valid parameters" do
       setup do

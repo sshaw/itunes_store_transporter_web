@@ -48,7 +48,7 @@ class LookupForm < JobForm
 end
 
 class StatusForm < JobForm
-  # Without a custom message, the ID is dropped from vendor id
+  # Without a custom message, the ID is dropped from vendor id when show in the form
   validates_presence_of :vendor_id, :message => "ID can't be blank"
 end
 

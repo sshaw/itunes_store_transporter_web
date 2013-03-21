@@ -17,5 +17,9 @@ end
 #end
 
 desc "Run application test suite"
-task 'test' => test_tasks.map { |f| "test:#{f}" }
+#task 'test' => test_tasks.map { |f| "test:#{f}" }
+task :test do
+  test_tasks.map { |f| Rake::Task["test:#{f}"].invoke }
+end
+
 # [ar:setup, ar:drop]
