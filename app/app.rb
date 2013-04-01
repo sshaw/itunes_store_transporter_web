@@ -21,7 +21,7 @@ class ItunesStoreTransporterWeb < Padrino::Application
 
   configure :production do
     # Directory will not be created
-    AppConfig.output_log_directory = Padrino.root("var/lib/output")
+    # AppConfig.output_log_directory = Padrino.root("var/lib/output")
     # For server based (i.e., non-local) configs:
     # AppConfig.allow_select_transporter_path = false
     # AppConfig.file_browser_root_directory = "/mnt/nas" # or %w[/mnt/nas01 /mnt/nas02]
@@ -32,7 +32,7 @@ class ItunesStoreTransporterWeb < Padrino::Application
   end
 
   [:lookup, :providers, :schema, :status, :upload, :verify].each do |route|
-    name = route.capitalize
+    name = route.to_s.capitalize
 
     get route do
       form = "#{name}Form".constantize

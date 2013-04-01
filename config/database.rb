@@ -1,7 +1,6 @@
 ActiveRecord::Base.configurations[:development] = {
   :adapter => 'sqlite3',
   :database => Padrino.root('db', 'itunes_store_transporter_web_development.db')
-
 }
 
 ActiveRecord::Base.configurations[:production] = {
@@ -13,7 +12,6 @@ ActiveRecord::Base.configurations[:production] = {
 ActiveRecord::Base.configurations[:test] = {
   :adapter => 'sqlite3',
   :database => Padrino.root('db', 'itunes_store_transporter_web_test.db')
-
 }
 
 # Setup our logger

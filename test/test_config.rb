@@ -1,4 +1,4 @@
-$: << File.expand_path(File.dirname(__FILE__) + "/lib")
+$: << File.expand_path(File.dirname(__FILE__) + "/support")
 
 PADRINO_ENV = 'test' unless defined?(PADRINO_ENV)
 require File.expand_path(File.dirname(__FILE__) + "/../config/boot")
@@ -32,7 +32,7 @@ class Test::Unit::TestCase
   def app
     self.class.app
   end
-  
+
   def options
     { :username  => "sshaw",
       :password  => "--><--",

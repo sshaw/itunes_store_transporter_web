@@ -1,5 +1,5 @@
-source :rubygems
-#ruby '1.9.2'
+source "https://rubygems.org"
+#ruby "1.9.2"
 
 # Project requirements
 gem 'rake'
@@ -32,6 +32,5 @@ group :test do
   gem 'rack-test', :require => 'rack/test'
   gem 'capybara', '~> 1.1.2'
   gem 'capybara-webkit', '~> 0.12.1'
+  gem 'capybara-screenshot'
 end
-
-gem "tee"

@@ -34,19 +34,63 @@ http://sshaw.github.com/itunes_store_transporter_web/images/verify.png
 
 <b>...and more!</b>
 
+== Requirements
+
+* {RubyGems}[http://rubygems.org/pages/download]
+* {Bundler}[http://gembundler.com]
+* A database driver
+
+With the exception of RubyGems {the install script}[rdoc-ref:README@Installation] will attempt to install everything for you.
+It requires connection to the Internet.
+
+In most cases the database driver must be compiled against an underlying database library.
+<strong>You must install the underlying library yourself</strong>. The installer will only attempt to install the
+Ruby portion which will fail if the underlying library is not found.
+
 == Installation
 
-...
+  unzip itunes_store_transporter_web-VERSION.zip
+  cd itunes_store_transporter_web-VERSION
+  ruby ./setup.rb
+
+To start the webserver 
+
+  ./bin/itmsweb start
 
 == Configuration
 
-=== Website
-
 In this section +ROOT+ refers to the directory containing the website.
 
-Configuration options are set in +ROOT/app/app.rb+. All options must be placed within the +configure+ block:
+=== Database
 
- configure do
+The database configuration used by website and the worker process is located at +ROOT/config/database.yml+.
+
+=== Webserver
+
+==== Starting/stopping
+  
+  cd ROOT
+  ./bin/itmsweb start  # start the server on 0.0.0.0 port 3000
+  ./bin/itmsweb stop
+
+Usage:
+
+  itmsweb [start|stop|restart]
+
+  -h HOST     # Bind to HOST address
+  -p PORT     # Use PORT, default: 3000
+  -d          # Run daemonized in the background
+  -a HANDLER  # Rack Handler (default: autodetect)
+
+==== Logging
+
+Errors are logged to +ROOT/log/production.log+.
+
+=== Website
+
+Configuration options are set in +ROOT/app/app.rb+. All options must be placed within the <code>configure :production</code> block:
+
+ configure :production do
    # Set an option here
    # Set another one here
  end
@@ -60,7 +104,7 @@ used instead.
 This can be changed by setting +AppConfig.file_browser_root_directory+ to
 the path of the desired root directory. A list of root directories can also be used:
 
-  configure do
+  configure :production do
     # Other options...
     AppConfig.file_browser_root_directory = "/mnt/nas"
     # or
@@ -74,23 +118,23 @@ the file browser will deault to displaying *all* the files under that directory.
 If multiple root directories are used the browser will default to displaying the names
 of these directories, *not* their contents.
 
-==== Preventing users from changing the Transporter path 
+==== Preventing users from changing the Transporter path
 
 By default the +iTMSTransporter+ path can be set by visiting the config page. For client/server (i.e., non-local)
 setups it might be desirable to prevent users from changing it. This can be done
 by setting the +AppConfig.allow_select_transporter_path+ option to +false+. This prevents
-the config page from displaying the +iTMSTransporter+ path dialog. 
+the config page from displaying the +iTMSTransporter+ path dialog.
 
-It's best to set this option *after* setting the appropriate path, as there is currently 
-no concept of users and roles so when this is set to +false+ *no* *one* will be able to change the path. 
+It's best to set this option *after* setting the appropriate path, as there is currently
+no concept of users and roles so when this is set to +false+ *no* *one* will be able to change the path.
 
 ==== iTMSTransporter output logs
 
 Everytime a worker process runs +iTMSTransporter+ its output is saved and made available through the website.
-By default the output logs are saved in +ROOT/var/lib/output+. This can be changed by setting +AppConfig.output_log_directory+ 
+By default the output logs are saved in +ROOT/var/lib/output+. This can be changed by setting +AppConfig.output_log_directory+
 to the desired directory:
 
-  configure do
+  configure :production do
     # Other options...
     AppConfig.output_log_directory = "/mnt/log/itunes"
   end

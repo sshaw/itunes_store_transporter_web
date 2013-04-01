@@ -95,10 +95,13 @@ ItunesStoreTransporterWeb.helpers do
     content_tag :span, state.to_s.titleize, :class => "job-state label label-#{state}"
   end
 
-  def xml_actions(id)
-    link_to(content_tag(:i, "", :class => "icon-resize-full")  << "View", url(:job_metadata, id, :format => :xml)) << "\n" <<
-    link_to(content_tag(:i, "", :class => "icon-download-alt") << "Download", url(:job_metadata, id))
+  def link_to_download(url)
+    link_to content_tag(:i, "", :class => "icon-download-alt") << "Download", url
   end
+  
+  def link_to_view(url)
+    link_to content_tag(:i, "", :class => "icon-resize-full")  << "View", url
+ end
 
   def job_state_options
     TransporterJob::STATES.map { |state| [ state.to_s.capitalize, state ] }

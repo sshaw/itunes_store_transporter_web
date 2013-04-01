@@ -1,5 +1,6 @@
-#Require File.expand_path(File.dirname(__FILE__) + '/../test_config.rb')
-require File.expand_path(File.dirname(__FILE__) + '/test_config.rb')
+#require File.expand_path(File.dirname(__FILE__) + '/../test_config.rb')
+require File.expand_path(File.dirname(__FILE__) + '/../test_config.rb')
+#require File.expand_path(File.dirname(__FILE__) + '/test_config.rb')
 
 class FsUtilTest < Test::Unit::TestCase
   context "#ls" do
@@ -89,8 +90,8 @@ class FsUtilTest < Test::Unit::TestCase
   end
 
   context "#basename" do
-    it "returns the file's basename" do
-      assert_equal FsUtil.basename("/a/b/c")
+    should "return the file's basename" do
+      assert_equal "c", FsUtil.basename("/a/b/c")
     end
  
     # On Win File.basename doesn't act like this

@@ -1,5 +1,8 @@
-.actions
-  = xml_actions(job.id)  
+- content_for :results do
+  .actions
+    = link_to_view url(:job_schema, job.id, :format => :xml)
+    = link_to_download url(:job_schema, job.id)
 
-= highlite(job.result, :xml)
+  = highlite(job.result, :xml)
 
+= partial "jobs/results/result"

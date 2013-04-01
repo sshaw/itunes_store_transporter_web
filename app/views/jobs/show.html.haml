@@ -49,23 +49,7 @@
               = l @job.updated_at, :format => :short
 
     #results.tab-pane
-      - if @job.failure?
-        %ul
-          - if @job.exceptions.is_a?(ITunes::Store::Transporter::ExecutionError)
-            - @job.exceptions.errors.each do |m|
-              %li
-                &= m
-
-          - else
-            %li
-              &= @job.exceptions
-
-      - elsif @job.result.present?
-        = render_job_result(@job)
-
-      - else
-        %p
-          No results.
+      = render_job_result(@job)
 
     #output.tab-pane
       - if @job.output?
@@ -87,7 +71,7 @@
   function trackJob() {
     var e = $('.job-state', '#job_#{@job.id}'), intId = setInterval(function() {
 
-      $.get('/jobs/#{@job.id}/status', function(st) {
+      $.get('#{ url("/jobs/#{@job.id}/status") }', function(st) {
         state = st.state;
         if(state != iTMS.jobState) {
           e.removeClass('label-' + iTMS.jobState);
@@ -97,7 +81,7 @@
         }
 
         if(state != iTMS.QUEUED) {
-          $.get('/jobs/#{@job.id}/output', {offset: iTMS.jobOffset}, function(data) {
+          $.get('#{ url("/jobs/#{@job.id}/output") }', {offset: iTMS.jobOffset}, function(data) {
             if(!data) return;
 
             if(iTMS.jobOffset == 0)
@@ -110,7 +94,7 @@
 
           if(state != iTMS.RUNNING) {
             clearInterval(intId);
-            $.get('/jobs/#{@job.id}/results', function(data) { $('#results').html(data) });
+            $.get('#{ url("/jobs/#{@job.id}/results") }', function(data) { $('#results').html(data) });
           }
         }
       });

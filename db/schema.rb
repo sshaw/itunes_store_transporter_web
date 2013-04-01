@@ -39,16 +39,16 @@ ActiveRecord::Schema.define(:version => 7) do
   end
 
   create_table "transporter_jobs", :force => true do |t|
-    t.string   "state",           :limit => 16
+    t.string   "state",       :limit => 16
     t.string   "options"
     t.text     "result"
     t.string   "exceptions"
-    t.string   "output_log_file"
-    t.string   "type",            :limit => 32
-    t.datetime "created_at",                                          :null => false
-    t.datetime "updated_at",                                          :null => false
+    t.string   "output_file"
+    t.string   "type",        :limit => 32
+    t.datetime "created_at",                                      :null => false
+    t.datetime "updated_at",                                      :null => false
     t.integer  "job_id"
-    t.string   "priority",        :limit => 10, :default => "normal", :null => false
+    t.string   "priority",    :limit => 10, :default => "normal", :null => false
     t.string   "target"
   end
 
