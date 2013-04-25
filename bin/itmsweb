@@ -1,13 +1,15 @@
 #!/bin/bash
 
-start() 
+start()
 {
+    # -i must be an absolute path
     "$padrino" start -e production $@ -c "$root"
 }
 
 stop()
 {
-    "$padrino" stop -c "$root" 
+    # start uses -i for PID but stop uses -p, we try to use -i here too 
+    "$padrino" stop -c "$root"
 }
 
 root=${0%bin*}
@@ -15,6 +17,11 @@ root=${0%bin*}
 [ "$root" == "$0" ] && root=".."
 
 padrino="${root}bin/padrino"
+if [ ! -x "$padrino" ]; then
+    echo $padrino is missing, please run the install script first: ruby setup.rb
+    exit 1
+fi
+
 # padrino stop -i PID doesn't work so use default for now
 # pidfile="${root}var/run/itmsweb.pid"
 command=${1:-start}; shift
@@ -30,8 +37,3 @@ case $command in
     *)
 	echo "unknown command '$command'"
 esac
-
-
-
-
-

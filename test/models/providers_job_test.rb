@@ -2,7 +2,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../test_config.rb')
 
 class ProvidersJobTest < Test::Unit::TestCase
   should_behave_like_a_transporter_job
-  should_have_the_target_name("")
+  should_have_the_target_name(nil)
   should_have_the_command_name("Providers")
 
   context "#perform" do

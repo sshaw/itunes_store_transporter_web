@@ -40,7 +40,8 @@ module TransporterJobTestMethods
 
     def should_have_the_target_name(name)
       context "#target" do
-        should "be named #{name}" do
+        should "be named '#{name}'" do
+          subject.save!
           assert_equal name, subject.target
         end
       end
@@ -55,27 +56,21 @@ module TransporterJobTestMethods
     end
 
     def should_behave_like_a_transporter_job
+      should_not allow_mass_assignment_of :state
+      should_not allow_mass_assignment_of :target
+      should_not allow_mass_assignment_of :job_id
+
       context "a job" do
         teardown do
           TransporterJob.destroy_all
           Delayed::Job.destroy_all
         end
 
-        should_not allow_mass_assignment_of :state
-        should_not allow_mass_assignment_of :job_id
-
-        should "be a TransporterJob" do
-          assert subject.is_a? TransporterJob
-        end
-
         described_type::STATES.each do |st|
-          context "#{st}!" do
-            setup do
+          context "##{st}!" do
+            should "set the state to #{st}" do
               subject.save!
               subject.send("#{st}!")
-            end
-
-            should "set the state to #{st}" do
               assert_equal st, subject.state
               assert subject.send("#{st}?"), "#{st}?"
             end
@@ -110,7 +105,7 @@ module TransporterJobTestMethods
 
         # If we're already saved we can't update job priority!
         # just use has_one and proxy to job.priority
-        context "job priority" do
+        context "priority" do
           context ":low" do
             setup do
               subject.priority = :low

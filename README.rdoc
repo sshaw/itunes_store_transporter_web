@@ -36,12 +36,13 @@ http://sshaw.github.com/itunes_store_transporter_web/images/verify.png
 
 == Requirements
 
+* Ruby 1.9
 * {RubyGems}[http://rubygems.org/pages/download]
 * {Bundler}[http://gembundler.com]
 * A database driver
 
 With the exception of RubyGems {the install script}[rdoc-ref:README@Installation] will attempt to install everything for you.
-It requires connection to the Internet.
+It requires a connection to the Internet.
 
 In most cases the database driver must be compiled against an underlying database library.
 <strong>You must install the underlying library yourself</strong>. The installer will only attempt to install the

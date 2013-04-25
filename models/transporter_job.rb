@@ -12,7 +12,7 @@ class TransporterJob < ActiveRecord::Base
 
   PRIORITY = Hash.new(0).merge!(:high => -1, :normal => 0, :low => 1)
 
-  attr_protected :state, :job_id
+  attr_protected :state, :target, :job_id
 
   serialize :result
   serialize :options, Hash
@@ -71,8 +71,8 @@ class TransporterJob < ActiveRecord::Base
   # end
 
   def perform
+    save! if new_record?
     options[:log] = log
-    p "=> ===== #{log}"
     running!
     update_attribute(:result, run)
   ensure
@@ -98,6 +98,7 @@ class TransporterJob < ActiveRecord::Base
   end
 
   def priority
+    #p "====> #{self[:priority]}"
     self[:priority].respond_to?(:to_sym) ? self[:priority].to_sym : :normal
   end
 
@@ -112,6 +113,7 @@ class TransporterJob < ActiveRecord::Base
   protected
   def numeric_priority
     # Lower number == higher priority
+    #p "-------> #{priority}"
     priority == :next ?
       (Delayed::Job.minimum(:priority) || 0) - 1 :
       PRIORITY[priority]
