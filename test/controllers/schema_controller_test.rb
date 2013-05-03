@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../test_config.rb')
 
-class SchemaControllerTest < Test::Unit::TestCase
+class SchemaControllerTest < CapybaraTestCase
   should_toggle_auth_fields(app.url(:schema))
   
   context "POST to schema" do

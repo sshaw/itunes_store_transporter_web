@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../test_config.rb')
 
-class ProvidersControllerTest < Test::Unit::TestCase
+class ProvidersControllerTest < CapybaraTestCase
   should_toggle_auth_fields(app.url(:providers))
 
   context "POST to providers" do

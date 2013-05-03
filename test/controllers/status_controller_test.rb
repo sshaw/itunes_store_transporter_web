@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../test_config.rb')
 
-class StatusControllerTest < CapybaraTestCase #Test::Unit::TestCase
+class StatusControllerTest < CapybaraTestCase
   should_toggle_auth_fields(app.url(:status))
   
   context "POST to status" do

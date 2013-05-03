@@ -2,58 +2,9 @@ require File.expand_path(File.dirname(__FILE__) + '/../test_config.rb')
 require "tempfile"
 
 class JobsControllerTest < CapybaraTestCase
-  should_toggle_auth_fields(app.url(:jobs))
+  should_have_a_search_dialog("/")
 
-  context "when the search link is clicked" do
-    setup do
-      Capybara.current_driver = :webkit
-      visit "/"
-      click_link "Search"
-    end
-
-    should "display the search form" do
-      assert find("#search").visible?
-    end
-
-    context "when the clear link is clicked" do
-      setup do
-	select "Queued", :from => "state"
-	select "Lookup", :from => "type"
-	select "Normal", :from => "priority"
-	fill_in "target", :with => "12345"
-	fill_in "_updated_at_from", :with => "1/1/71"
-	fill_in "_updated_at_to", :with => "1/1/72"
-	click_link "Clear"
-      end
-
-      should "clear all the form fields" do
-	within("#search") do
-	  all("select,input[type=text]").each { |e| assert e.value.empty?, "field '#{e[:name]}' not cleared" }
-	end
-      end
-    end
-
-    context "when the start date field receives the focus" do
-      setup { find_field("_updated_at_from").trigger("focus") }
-
-      should "display the calendar" do
-	assert find(".ui-datepicker").visible?
-      end
-    end
-
-    context "when the Search button is clicked" do
-      setup do
-	fill_in "target", :with => "12345"
-	click_button "Search"
-      end
-
-      should "submit the form" do
-	assert_equal app.url(:search), current_path
-      end
-    end
-  end
-
-  context "viewing the job list" do
+  context "viewing the list of jobs" do
     setup do
       Capybara.current_driver = :webkit
       @lookup = LookupJob.create! :options => options.merge(:vendor_id => "vendor_id_123")
@@ -67,155 +18,147 @@ class JobsControllerTest < CapybaraTestCase
       assert has_content?(@schema.target)
     end
 
-    context "when the Delete link is clicked" do
+    context "when a job's Delete link is clicked" do
       setup do
-	within("#job_#{@lookup.id}") { click_link("Delete") }
+        within("#job_#{@lookup.id}") { click_on "Delete" }
       end
 
       should "remove the job from the page" do
-	assert has_no_content?(@lookup.target)
+        assert has_no_selector?("#job_#{@lookup.id}")
       end
     end
 
-    should "link to the job" do
-      click_link(@lookup.target)
-      assert_equal app.url(:job, @lookup.id), current_path
-    end
-
-    context "when the Resubmit link is clicked" do
+    context "when a job's Resubmit link is clicked" do
       setup do
-	within("#job_#{@lookup.id}") { click_link("Resubmit") }
-	#save_page
+        within("#job_#{@lookup.id}") { click_on "Resubmit" }
+        sleep 1
       end
 
       should "redirect to the resubmitted job's page" do
-	assert_equal app.url(:job, TransporterJob.last.id), current_path
+        assert_equal app.url(:job, TransporterJob.last.id), current_path
       end
 
       should "display a resubmitted message" do
-	assert has_content?("Job resubmited")
+        assert has_content?("Job resubmitted")
       end
     end
   end
 
-  context "viewing a lookup job" do
+  context "viewing a job" do
     setup do
       Capybara.current_driver = :webkit
       @job = LookupJob.create! :options => options.merge(:vendor_id => "ID123")
       visit app.url(:job, @job.id)
     end
 
-    # --->
-    should "display the job's state" do
-      assert has_content?(@job.state.capitalize)
+    tabs = %w[Overview Results Output]
+    tabs.each do |show|
+      hide = tabs.dup
+      hide.delete(show)
+      
+      context "when the #{show} tab is clicked" do
+        setup { click_on show }
+        
+        should "display the job #{show}" do
+          assert find("##{show.downcase}").visible?
+        end
+        
+        hide.each do |tab|
+          should "hide the job #{tab}" do
+            assert !find("##{tab.downcase}").visible?
+          end
+        end
+      end
     end
-
-    should "display the job's target" do
-      assert has_content?(@job.target)
-    end
-
-    should "display the job's overview" do
-      assert overview_visible?
-    end
-
-    should "not display the job's output" do
-      assert !output_visible?
-    end
-
-    should "not display the job's resuts" do
-      assert !output_visible?
-    end
-    # <---
-
-    context "when the Delete link is clicked" do
-      setup { click_link "Delete" }
+    
+    context "when the Delete is clicked" do
+      setup { click_on "Delete" }
 
       should "redirect to the jobs page" do
-	assert_equal app.url(:jobs), current_path
+        assert_equal app.url(:jobs), current_path
       end
 
       should "display a 'job deleted' message" do
-	assert has_content?("Job deleted.")
+        assert has_content?("Job deleted.")
       end
     end
 
-    context "when the Results link is clicked" do
-      setup { click_link "Results" }
-
-      should "display the results" do
-	assert results_visible?
-      end
-
-      should "not display the overview" do
-	assert !overview_visible?
-      end
-
-      should "not display the output" do
-	assert !output_visible?
+    %w[View Download].each do |action|
+      should "not allow one to #{action} the job's output" do
+        assert has_no_selector?("a", :text => action)
       end
     end
 
-    context "when the Output link is clicked" do
-      setup { click_link "Output" }
-
-      should "display the output" do
-	assert output_visible?
-      end
-
-      should "not display the results" do
-	assert !results_visible?
-      end
-
-      should "not display the overview" do
-	assert !overview_visible?
-      end
-    end
-    # <---
-
-    context "with results" do
+    context "when complete" do
       setup do
-	@job = LookupJob.new :options => options.merge(:vendor_id => "ID123")
-	@job.result = "<x>123</x>"
-	@job.save!
-	visit app.url(:job, @job.id)
-	click_link "Results"
+        @tmp = Tempfile.new ""
+        @tmp.write "data"
+        @tmp.flush
+
+        @job = LookupJob.new :options => options.merge(:vendor_id => "ID123")
+        @job.result = "<x>123</x>"
+        @job.save!
+
+        stub(@job).log { @tmp.path }
+        stub(TransporterJob).find { @job }
+
+        visit app.url(:job, @job.id)
       end
 
-      should "display the result" do
-	assert has_content?(@job.result)
+      context "the job's results" do
+        setup { click_on "Results" }
+
+        should "be displayed" do
+          assert has_content?(@job.result)
+        end
+
+        should "be downloadable" do
+          find("#results").click_on("Download")
+          assert has_content?(@job.result)
+        end
+
+        should "allow one to view it outside of the job page" do
+          find("#results").click_on("View")
+          assert_equal app.url(:job_metadata, @job.id, :format => "xml"), current_path
+          assert has_xpath?("//x[text()='123']")
+        end
       end
 
-      context "when the Download link is clicked" do
-	should "download the result" do
-	  find("#results").click_link("Download")
-	  assert has_content?(@job.result)
-	end
-      end
+      context "the job's output" do
+        setup { click_on "Output" }
 
-      context "when the View link is clicked" do
-	should "view the result" do
-	  find("#results").click_link("View")
-	  assert_equal app.url(:job_metadata, @job.id, :format => "xml"), current_path
-	  assert has_xpath?("//x[text()='123']")
-	end
+        should "be displayed" do
+          assert has_content?(@job.output)
+        end
+
+        should "be downloadable" do
+          find("#output").click_on("Download")
+          assert has_content?(@job.output)
+        end
+
+        should "allow one to view it outside of the job page" do
+          find("#output").click_on("View")
+          assert_equal app.url(:job_output, @job.id, :format => "log"), current_path
+          assert has_content?(@job.output)
+        end
       end
     end
   end
 
-  context "GET to results" do
-    setup do
-      @job = LookupJob.new(:options => options)
-      @job.result = "<x>123</x>"
-      @job.save!
-      get "/jobs/#{@job.id}/results"
-    end
+  # context "GET to results" do
+  #   setup do
+  #     @job = LookupJob.new(:options => options)
+  #     @job.result = "<x>123</x>"
+  #     @job.save!
 
-    should "return the job's result section" do
-      #"#{Padrino.root}/app/views/jobs/results/_lookup.html.haml"
-      #assert_equal render_partial "jobs/results/#{job.type.downcase}", :locals => { :job => job }, last_response.body
-      #assert_equal render_job_result(@job), last_response.body
-    end
-  end
+  #     get "/jobs/#{@job.id}/results"
+  #   end
+
+  #   should "return the job's result section" do
+  #     #"#{Padrino.root}/app/views/jobs/results/_lookup.html.haml"
+  #     assert_equal render_partial("jobs/results/#{@job.type.downcase}", :locals => { :job => @job }), last_response.body
+  #   end
+  # end
 
   context "GET to status" do
     setup do
@@ -245,8 +188,8 @@ class JobsControllerTest < CapybaraTestCase
       setup { get @url }
 
       should "return the output as an attachement" do
-	assert last_response.headers["Content-Disposition"] =~ /attachment;/
-	assert_equal "data", last_response.body
+        assert last_response.headers["Content-Disposition"] =~ /attachment;/
+        assert_equal "data", last_response.body
       end
     end
 
@@ -254,11 +197,11 @@ class JobsControllerTest < CapybaraTestCase
       setup { get "#{@url}.log" }
 
       should "have a response type of text/plain" do
-	assert_equal "text/plain;charset=utf-8", last_response.headers["Content-Type"]
+        assert_equal "text/plain;charset=utf-8", last_response.headers["Content-Type"]
       end
 
       should "return all the output" do
-	assert_equal "data", last_response.body
+        assert_equal "data", last_response.body
       end
     end
 
@@ -266,25 +209,12 @@ class JobsControllerTest < CapybaraTestCase
       setup { get "#{@url}.log", :offset => 2 }
 
       should "have a response type of text/plain" do
-	assert_equal "text/plain;charset=utf-8", last_response.headers["Content-Type"]
+        assert_equal "text/plain;charset=utf-8", last_response.headers["Content-Type"]
       end
 
       should "return the output starting at the offset" do
-	assert_equal "ta", last_response.body
+        assert_equal "ta", last_response.body
       end
     end
-  end
-
-  protected
-  def overview_visible?
-    find("#overview").visible?
-  end
-
-  def results_visible?
-    find("#results").visible?
-  end
-
-  def output_visible?
-    find("#output").visible?
   end
 end

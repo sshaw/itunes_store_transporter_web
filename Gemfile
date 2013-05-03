@@ -31,5 +31,5 @@ group :test do
   gem 'shoulda', '~> 3'
   gem 'rack-test', :require => 'rack/test'
   gem 'capybara', '~> 1.1.2'
-  gem 'capybara-webkit', '~> 0.12.1'
+  gem 'capybara-webkit', '~> 0.13.0'
 end

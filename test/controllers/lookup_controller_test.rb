@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../test_config.rb')
 
-class LookupControllerTest < CapybaraTestCase #Test::Unit::TestCase
+class LookupControllerTest < CapybaraTestCase
   should_toggle_auth_fields(app.url(:lookup))
 
   context "POST to status" do
