@@ -87,6 +87,29 @@ Usage:
 
 Errors are logged to +ROOT/log/production.log+.
 
+=== iTMSTransporter Job Queue
+
+Jobs created through the website are added to a job queue. In order for jobs in the queue to be processed a 
+worker (or many workers) must be running.
+
+==== Running a worker process
+
+The job queue is managed by {DelayedJob}[https://github.com/collectiveidea/delayed_job#readme], so running a worker is just a 
+matter or running one of the +DelayedJob+ tasks:
+
+  bundle exec rake jobs:work     # start a worker
+  bundle exec rake jobs:workoff  # start a worker & exit when all the jobs are processed
+  bundle exec rake jobs:clear    # clear the job queue
+
+Set the +MIN_PRIORITY+ and/or +MAX_PRIORITY+ environment variables to limit the worker to jobs with certain 
+priorities (as defined by the website):
+
+  MIN_PRIORITY=high bundle exec rake jobs:work
+
+==== Running a remote worker process
+
+TODO 
+
 === Website
 
 Configuration options are set in +ROOT/app/app.rb+. All options must be placed within the <code>configure :production</code> block:

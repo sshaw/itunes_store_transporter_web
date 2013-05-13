@@ -89,7 +89,6 @@ class TransporterJob < ActiveRecord::Base
   end
 
   def error(job, exception)
-    #p "====> FAILURE => #{exception}"
     update_attributes({:state => :failure, :exceptions => exception}, :without_protection => true)
   end
 
@@ -98,7 +97,6 @@ class TransporterJob < ActiveRecord::Base
   end
 
   def priority
-    #p "====> #{self[:priority]}"
     self[:priority].respond_to?(:to_sym) ? self[:priority].to_sym : :normal
   end
 
@@ -113,9 +111,8 @@ class TransporterJob < ActiveRecord::Base
   protected
   def numeric_priority
     # Lower number == higher priority
-    #p "-------> #{priority}"
     priority == :next ?
-      (Delayed::Job.minimum(:priority) || 0) - 1 :
+      [ Delayed::Job.minimum(:priority).to_i, 0 ].min - 1 :
       PRIORITY[priority]
   end
 
