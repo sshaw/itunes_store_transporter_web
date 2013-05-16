@@ -1,3 +1,11 @@
+GIT
+  remote: git://github.com/sshaw/itunes_store_transporter.git
+  revision: 78cbca1e78db5025acc9beba6e5f2598b6573b65
+  specs:
+    itunes_store_transporter (0.1.1)
+      childprocess (~> 0.3.2)
+      optout (~> 0.0.2)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -41,9 +49,6 @@ GEM
       rack (>= 1.0.0)
       url_mount (~> 0.2.1)
     i18n (0.6.4)
-    itunes_store_transporter (0.0.2)
-      childprocess (~> 0.3.2)
-      optout (~> 0.0.2)
     json (1.7.7)
     metaclass (0.0.1)
     mime-types (1.23)
@@ -116,7 +121,7 @@ DEPENDENCIES
   delayed_job (~> 3.0.0)
   delayed_job_active_record
   haml
-  itunes_store_transporter (~> 0.0.2)
+  itunes_store_transporter!
   padrino-core (= 0.10.7)
   padrino-gen (= 0.10.7)
   padrino-helpers (= 0.10.7)
