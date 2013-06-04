@@ -1,14 +1,17 @@
 require File.expand_path('../config/boot.rb', __FILE__)
 require 'padrino-core/cli/rake'
 require 'delayed/tasks'
-require "fileutils"
+require 'fileutils'
 
-# task :build_worker do
-#   build = "build/itmsweb_worker"
-#   lib = "#{build}/lib"
-#   FileUtils.mkdir_p(lib) unless File.directoy?(lib)
-#   deps = Dir["{models,lib}/*"]
-# end
+PadrinoTasks.init
+
+task :build_worker do
+  root = "worker"
+  dest = "#{root}/lib"
+  deps = Dir["models/*.rb"] << %w[lib/options.rb]
+  deps.each { |path| FileUtils.cp(path, dest) }
+  sh "cd #{root} && gem build *.gemspec"
+end
 
 namespace :jobs do
   # Override the DelayedJob task of the same name and use options that are more suitable
@@ -35,5 +38,3 @@ namespace :jobs do
     }
   end
 end
-
-PadrinoTasks.init
