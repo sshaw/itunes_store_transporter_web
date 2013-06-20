@@ -17,14 +17,13 @@ gem "tilt", "1.3.7"
 gem "coderay"
 gem "will_paginate", "~> 3.0"
 gem "itunes_store_transporter", :git => "git://github.com/sshaw/itunes_store_transporter.git"
-gem "padrino_bootstrap_forms", :require => "bootstrap_forms", :path => "../bootstrap_forms"
-#gem "padrino_bootstrap_forms", :require => "bootstrap_forms", :git => "https://github.com/k2052/padrino_bootstrap_forms"
+gem "padrino_bootstrap_forms", :require => "bootstrap_forms"
+
 # Or Individual Gems
 %w(core gen helpers).each do |g|
   gem 'padrino-' + g, '0.10.7'
 end
 
-gem 'slim', :group => [:development, :test]
 gem 'sqlite3', :group => [:development, :test]
 
 # Test requirements
