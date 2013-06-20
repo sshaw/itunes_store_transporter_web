@@ -45,7 +45,7 @@ With the exception of RubyGems {the install script}[rdoc-ref:README@Installation
 It requires a connection to the Internet.
 
 In most cases the database driver must be compiled against an underlying database library.
-<strong>You must install the underlying library yourself</strong>. The installer will only attempt to install the
+<b>You must install the underlying library yourself</b>. The installer will only attempt to install the
 Ruby portion which will fail if the underlying library is not found.
 
 == Installation
