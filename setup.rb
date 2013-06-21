@@ -86,20 +86,21 @@ ENV["BUNDLE_GEMFILE"] = "#{ROOT}/#{gemfile}"
 abort "Installation failed" unless system "bin/padrino rake -e production ar:setup"
 
 File.delete(*Dir["bin/*"].reject { |path|
-  %w[padrino itmsweb itmsweb_worker.rb].include? File.basename(path)
+  %w[padrino itmsweb].include? File.basename(path)
 })
 
+# TODO: Windows
 worker = "bin/itmsweb_worker"
 File.open(worker, "w") do |io|
   io.puts <<END
 #!/bin/bash
-BUNDLE_GEMFILE="#{ENV['BUNDLE_GEMFILE']}" ruby #{ROOT}/bin/itmsweb_worker.rb
+BUNDLE_GEMFILE="#{ENV['BUNDLE_GEMFILE']}" bundle exec rake jobs:work
 END
 end
 
-File.chmod(555, worker)
+File.chmod(0555, worker)
 FileUtils.mkdir_p("var/lib/output")
-puts "Installation complete, be sure to setup the iTMSTransporter output log directory, see the docs for more info"
+puts "\nInstallation complete, be sure to setup the iTMSTransporter output log directory, see the docs for more info"
 
 __END__
 ActiveRecord::Base.configurations[:production] = YAML.load_file(Padrino.root("config/database.yml"))
