@@ -1,6 +1,7 @@
 class ItunesStoreTransporterWeb < Padrino::Application
   use ActiveRecord::ConnectionAdapters::ConnectionManagement
 
+  register Sinatra::ConfigFile 
   register Padrino::Rendering
   register Padrino::Helpers
   register WillPaginate::Sinatra
@@ -10,24 +11,32 @@ class ItunesStoreTransporterWeb < Padrino::Application
   set :default_builder, TransporterFormBuilder
   set :haml, :ugly => true
 
+  ### Our config
+  enable :allow_select_transporter_path
+  set :output_log_directory, Padrino.root("var/lib/output")
+  set :file_browser_root_directory, FsUtil::DEFAULT_ROOT_DIRECTORY
+  ###
+
   error ActiveRecord::RecordNotFound do
     "Not Found"
   end
 
-  # The location where transporter output is saved
   configure :development do
-    AppConfig.output_log_directory = Padrino.root("tmp")
+    # Block gets called when rake tasks are run and there's no guarantee that
+    # the DB has been created
+    if AppConfig.table_exists?
+      AppConfig.output_log_directory = Padrino.root("tmp")
+    end
   end
 
   configure :production do
-    # Directory will not be created
-    # AppConfig.output_log_directory = Padrino.root("var/lib/output")
-    # For server based (i.e., non-local) configs:
-    # AppConfig.allow_select_transporter_path = false
-    # AppConfig.file_browser_root_directory = "/mnt/nas" # or %w[/mnt/nas01 /mnt/nas02]
+    config_file ITMSWEB_CONFIG
+    if AppConfig.table_exists?
+      AppConfig.output_log_directory = settings.output_log_directory
+    end
   end
-
-  before :except => %r|^/job| do
+  
+  before :except => %r|\A/job| do
     @config = AppConfig.first_or_initialize
   end
 
@@ -46,11 +55,11 @@ class ItunesStoreTransporterWeb < Padrino::Application
 
       @options = form.new(params["#{route}_form"])
       if @options.valid?
-	@job = job.create!(@options.marshal_dump)
-	flash[:success] = "#{name} job added to the queue."
-	redirect url(:job, :id => @job.id)
+        @job = job.create!(@options.marshal_dump)
+        flash[:success] = "#{name} job added to the queue."
+        redirect url(:job, :id => @job.id)
       else
-	render route
+        render route
       end
     end
   end
@@ -71,8 +80,8 @@ class ItunesStoreTransporterWeb < Padrino::Application
 
   post :browse do
     @files = FsUtil.ls(params[:dir],
-		       :type => params[:type],
-		       :root => @config.file_browser_root_directory)
+                       :type => params[:type],
+                       :root => settings.file_browser_root_directory)
     render :browse, :layout => false
   end
 

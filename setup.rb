@@ -9,16 +9,22 @@ rescue LoadError => e
   exit 1
 end
 
+def windows?
+  Gem.win_platform?
+end
+
 def config_database
-  config  = { :database => DBNAME }
+  config  = { :name => DBNAME }
   drivers = [
-    [:MySQL,  "mysql2" ],
-    [:SQLite, "sqlite3" ],
-    # Just for now...
+    # Just for now... ultimately will need installer class for each gem that
+    # will install all mods (e.g., JDBC + ActiveRecord adapter), set cfg options, ...
+    %w[MySQL mysql2],
+    %w[PostgreSQL pg postgresql],
+    %w[SQLite sqlite3]
   ]
 
   puts "Select your database: "
-  drivers.each_with_index { |name, i| puts "#{i + 1}: #{name[0]}" }
+  drivers.each_with_index { |name, i| puts "  #{i + 1}: #{name[0]}" }
   i = gets
   unless i =~ /\A\d+\Z/ && (pos = i.to_i - 1) >= 0 && pos < drivers.size
     puts "Unknown choice '#{i.chomp}'"
@@ -26,25 +32,28 @@ def config_database
   end
 
   config[:gem] = drivers[pos][1]
-  config[:adapter] = drivers[pos][1]
+  config[:adapter] = drivers[pos][2] || drivers[pos][1]
 
   if config[:adapter] == "sqlite3"
     path = "#{ROOT}/db"
     Dir.mkdir(path) unless File.directory?(path)
-    config[:database] = "#{path}/#{DBNAME}.sqlite3"
+    config[:name] = "#{path}/#{DBNAME}.sqlite3"
     return config
   end
 
-  [:host, :username, :password].each do |opt|
+  print "Host [localhost]: "
+  config[:host] = gets.chomp
+  config[:host] = "localhost" unless config[:host] =~ /\w/
+  [:username, :password].each do |opt|
     print "#{opt.to_s.capitalize}: "
     config[opt] = gets.chomp
   end
 
-  config[:host] = "localhost" unless config[:host] =~ /\w/
   config
 end
 
 DBNAME = "itmsweb"
+RAKE = "bin/padrino rake -e production"
 ROOT = File.expand_path(File.dirname(__FILE__))
 
 print "Internet access required, is this OK? [y/N]: "
@@ -58,7 +67,6 @@ FileUtils.cp("Gemfile", gemfile)
 File.open(gemfile, "a") { |io| io.puts "gem '#{config[:gem]}'" }
 
 puts "Installing dependencies"
-
 commands = ["bundle install --path vendor/bundle --without=test development --binstubs --gemfile=#{gemfile}"]
 
 begin
@@ -74,41 +82,47 @@ commands.each do |cmd|
 end
 
 config.delete(:gem)
-File.open("config/database.rb", "w") { |io| io.puts DATA.read }
-File.open("config/database.yml", "w") do |io|
-  io.puts ERB.new(<<'T').result(binding)
+File.open("#{ROOT}/config/itmsweb.yml", "w") do |io|
+  io.puts ERB.new(<<'T', nil, "<>").result(binding)
 ---
-<%= config.map { |k,v| %(#{k}: "#{v}") }.join "\n" %>
+database:
+<% config.each do |k,v| %>
+  <%= k %>: <%= v %>
+<% end %>
 T
 end
 
+FileUtils.mkdir_p("#{ROOT}/var/lib/output")
 ENV["BUNDLE_GEMFILE"] = "#{ROOT}/#{gemfile}"
-abort "Installation failed" unless system "bin/padrino rake -e production ar:setup"
+abort "Installation failed" unless system "#{RAKE} ar:migrate"
 
 File.delete(*Dir["bin/*"].reject { |path|
   %w[padrino itmsweb].include? File.basename(path)
 })
 
-# TODO: Windows
-worker = "bin/itmsweb_worker"
+worker = "#{ROOT}/bin/itmsworker"
+worker << ".bat" if windows?
 File.open(worker, "w") do |io|
-  io.puts <<END
+  env = %|BUNDLE_GEMFILE="#{ENV["BUNDLE_GEMFILE"]}"|
+  cmd = "#{RAKE} jobs:"
+
+  if windows?
+    # check this
+    io.puts <<-BAT
+@echo off
+set #{env}"
+set task=%1
+if "%task%" == "" (
+  set task=work
+)
+#{cmd}%task%
+    BAT
+  else
+    io.puts <<-SH 
 #!/bin/bash
-BUNDLE_GEMFILE="#{ENV['BUNDLE_GEMFILE']}" bundle exec rake jobs:work
-END
+#{env} #{cmd}${1:-work}
+    SH
+  end
 end
 
 File.chmod(0555, worker)
-FileUtils.mkdir_p("var/lib/output")
-puts "\nInstallation complete, be sure to setup the iTMSTransporter output log directory, see the docs for more info"
-
-__END__
-ActiveRecord::Base.configurations[:production] = YAML.load_file(Padrino.root("config/database.yml"))
-ActiveRecord::Base.logger = logger
-ActiveRecord::Base.mass_assignment_sanitizer = :strict
-ActiveRecord::Base.auto_explain_threshold_in_seconds = 0.5
-ActiveRecord::Base.include_root_in_json = false
-ActiveRecord::Base.store_full_sti_class = true
-ActiveSupport.use_standard_json_time_format = true
-ActiveSupport.escape_html_entities_in_json = false
-ActiveRecord::Base.establish_connection(ActiveRecord::Base.configurations[:production])

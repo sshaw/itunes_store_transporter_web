@@ -7,6 +7,9 @@ require 'rubygems' unless defined?(Gem)
 require 'bundler/setup'
 Bundler.require(:default, PADRINO_ENV)
 
+# Only used in production env
+ITMSWEB_CONFIG = Padrino.root("config/itmsweb.yml")
+
 ##
 # Enable devel logging
 #
@@ -18,14 +21,16 @@ Bundler.require(:default, PADRINO_ENV)
 # Add your before load hooks here
 #
 Padrino.before_load do
+  require "sinatra/config_file"
 end
 
 ##
 # Add your after load hooks here
 #
 Padrino.after_load do
-  require 'will_paginate/active_record'
+  require "will_paginate/active_record"
   Padrino.require_dependencies(Padrino.root("app/forms/*.rb"))
 end
 
+Padrino.load_paths.concat Dir[Padrino.root("vendor/**/lib")]
 Padrino.load!

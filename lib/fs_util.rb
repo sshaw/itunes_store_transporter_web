@@ -44,7 +44,7 @@ module FsUtil
   end
 
   DEFAULT_ROOT_DIRECTORY =
-    if RbConfig::CONFIG["host_os"] !~ /mswin|mingw/i
+    if RbConfig::CONFIG["host_os"] !~ /mswin|msys|mingw/i
       find("/", :type => "directory")
     else
       require "win32ole"

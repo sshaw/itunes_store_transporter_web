@@ -15,8 +15,9 @@ stop()
 root=${0%bin*}
 # Were we invoked from bin?
 [ "$root" == "$0" ] && root=".."
+[ -z $root ] && root=$(pwd)
 
-padrino="${root}bin/padrino"
+padrino="${root}/bin/padrino"
 if [ ! -x "$padrino" ]; then
     echo $padrino is missing, please run the install script first: ruby setup.rb
     exit 1

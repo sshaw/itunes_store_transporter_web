@@ -1,5 +1,4 @@
 source "https://rubygems.org"
-ruby "1.9.2"
 
 # Project requirements
 gem 'rake'
@@ -13,7 +12,7 @@ gem "daemons"
 gem "delayed_job", "~> 3.0.0"
 gem "delayed_job_active_record"
 
-gem "tilt", "1.3.7"
+gem "tilt", "~> 1.3.6"
 gem "coderay"
 gem "will_paginate", "~> 3.0"
 gem "itunes_store_transporter", :git => "git://github.com/sshaw/itunes_store_transporter.git"

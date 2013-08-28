@@ -3,16 +3,25 @@ ActiveRecord::Base.configurations[:development] = {
   :database => Padrino.root('db', 'itunes_store_transporter_web_development.db')
 }
 
-ActiveRecord::Base.configurations[:production] = {
-  :adapter => 'sqlite3',
-  :database => Padrino.root('db', 'itunes_store_transporter_web_production.db')
-
-}
-
 ActiveRecord::Base.configurations[:test] = {
   :adapter => 'sqlite3',
   :database => Padrino.root('db', 'itunes_store_transporter_web_test.db')
 }
+
+if Padrino.env == :production
+  begin 
+    config = YAML.load_file(ITMSWEB_CONFIG)
+    db = config["database"]
+    raise "missing or invalid database setting" unless Hash === db
+    db["database"] = db.delete("name") # We make the config better for user, but have to fix it for AR
+  rescue => e
+    msg = "failed to load config file #{ITMSWEB_CONFIG}: #{e}"
+    logger.fatal(msg)
+    abort msg
+  end
+
+  ActiveRecord::Base.configurations[:production] = db
+end
 
 # Setup our logger
 ActiveRecord::Base.logger = logger

@@ -1,17 +1,10 @@
 GIT
   remote: git://github.com/sshaw/itunes_store_transporter.git
-  revision: 78cbca1e78db5025acc9beba6e5f2598b6573b65
+  revision: 2ef218499a70a97e3ac8231f16034b0288b933fa
   specs:
     itunes_store_transporter (0.1.1)
       childprocess (~> 0.3.2)
       optout (~> 0.0.2)
-
-PATH
-  remote: ../bootstrap_forms
-  specs:
-    padrino_bootstrap_forms (0.0.2)
-      activesupport (~> 3.0)
-      padrino (~> 0.10.6)
 
 GEM
   remote: https://rubygems.org/
@@ -57,10 +50,6 @@ GEM
       url_mount (~> 0.2.1)
     i18n (0.6.4)
     json (1.7.7)
-    mail (2.3.3)
-      i18n (>= 0.4.0)
-      mime-types (~> 1.16)
-      treetop (~> 1.4.8)
     metaclass (0.0.1)
     mime-types (1.23)
     mocha (0.10.5)
@@ -68,18 +57,6 @@ GEM
     multi_json (1.7.2)
     nokogiri (1.5.9)
     optout (0.0.2)
-    padrino (0.10.7)
-      padrino-admin (= 0.10.7)
-      padrino-cache (= 0.10.7)
-      padrino-core (= 0.10.7)
-      padrino-gen (= 0.10.7)
-      padrino-helpers (= 0.10.7)
-      padrino-mailer (= 0.10.7)
-    padrino-admin (0.10.7)
-      padrino-core (= 0.10.7)
-      padrino-helpers (= 0.10.7)
-    padrino-cache (0.10.7)
-      padrino-core (= 0.10.7)
     padrino-core (0.10.7)
       activesupport (~> 3.2.0)
       http_router (~> 0.10.2)
@@ -92,10 +69,9 @@ GEM
     padrino-helpers (0.10.7)
       i18n (~> 0.6)
       padrino-core (= 0.10.7)
-    padrino-mailer (0.10.7)
-      mail (~> 2.3.0)
-      padrino-core (= 0.10.7)
-    polyglot (0.3.3)
+    padrino_bootstrap_forms (0.0.1)
+      activesupport (~> 3.0)
+      padrino-helpers (~> 0.10.6)
     rack (1.5.2)
     rack-protection (1.5.0)
       rack
@@ -122,16 +98,9 @@ GEM
       tilt (~> 1.3, >= 1.3.3)
     sinatra-flash (0.3.0)
       sinatra (>= 1.0.0)
-    slim (1.3.6)
-      temple (~> 0.5.5)
-      tilt (~> 1.3.3)
     sqlite3 (1.3.6)
-    temple (0.5.5)
     thor (0.15.4)
     tilt (1.3.6)
-    treetop (1.4.14)
-      polyglot
-      polyglot (>= 0.3.1)
     tzinfo (0.3.33)
     url_mount (0.2.1)
       rack
@@ -156,12 +125,12 @@ DEPENDENCIES
   padrino-core (= 0.10.7)
   padrino-gen (= 0.10.7)
   padrino-helpers (= 0.10.7)
-  padrino_bootstrap_forms!
+  padrino_bootstrap_forms
   rack-test
   rake
   rr
   shoulda (~> 3)
   sinatra-flash
-  slim
   sqlite3
+  tilt (~> 1.3.6)
   will_paginate (~> 3.0)
