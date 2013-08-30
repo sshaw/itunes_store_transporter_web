@@ -37,8 +37,7 @@ http://sshaw.github.com/itunes_store_transporter_web/images/verify.png
 == Requirements
 
 * Ruby 1.9
-* {RubyGems}[http://rubygems.org/pages/download]
-* {Bundler}[http://gembundler.com]
+* iTunes Store Transporter (http://www.apple.com/itunes/sellcontent)
 * A database driver
 
 With the exception of RubyGems {the install script}[rdoc-ref:README@Installation] will attempt to install everything for you.
@@ -129,7 +128,7 @@ TODO
 ==== File browser's root directory
 
 The file browser's root directory defaults to the root directory of the machine running the web
-server (that's +"/"+, not the web server's document root). On Windows the machine's volumes (+C:+, +D:+, etc...) will be
+server (that's <code>"/"</code>, not the web server's document root). On Windows the machine's volumes (+C:+, +D:+, etc...) will be
 used instead.
 
 This can be changed by setting +file_browser_root_directory+ to the path of the desired root directory.
