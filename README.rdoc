@@ -40,9 +40,6 @@ http://sshaw.github.com/itunes_store_transporter_web/images/verify.png
 * iTunes Store Transporter (http://www.apple.com/itunes/sellcontent)
 * A database driver
 
-With the exception of RubyGems {the install script}[rdoc-ref:README@Installation] will attempt to install everything for you.
-It requires a connection to the Internet.
-
 In most cases the database driver must be compiled against an underlying database library.
 <b>You must install the underlying library yourself</b>. The installer will only attempt to install the
 Ruby portion which will fail if the underlying library is not found.
