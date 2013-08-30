@@ -50,9 +50,13 @@ Ruby portion which will fail if the underlying library is not found.
   cd itunes_store_transporter_web-VERSION
   ruby ./setup.rb
 
-To start the webserver 
+Start the webserver 
 
   ./bin/itmsweb start
+
+Start the worker
+
+  ./bin/itmsworker
 
 == Configuration
 
