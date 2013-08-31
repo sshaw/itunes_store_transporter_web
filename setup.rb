@@ -1,17 +1,11 @@
 require "erb"
-require "tempfile"
 require "fileutils"
 
-begin
-  require "rubygems"
-rescue LoadError => e
-  $stderr.puts "RubyGems is not installed. Download and install it first: http://rubygems.org/pages/download"
-  exit 1
-end
+# Will we *really* run on 2?
+abort "Ruby >= 1.9 is required, you're running #{RUBY_VERSION}" if RUBY_VERSION < "1.9"
 
-def windows?
-  Gem.win_platform?
-end
+#
+# gem install sqlite3 -- --with-sqlite3-include=/opt/local/include --with-sqlite3-lib=/opt/local/lib
 
 def config_database
   config  = { :name => DBNAME }
@@ -23,6 +17,8 @@ def config_database
     %w[SQLite sqlite3]
   ]
 
+  # puts "Do you have an existing database that you want to use?"
+  # if yes get driver, username, etc... else DL and install SQLite to vendor/sqlite3
   puts "Select your database: "
   drivers.each_with_index { |name, i| puts "  #{i + 1}: #{name[0]}" }
   i = gets
@@ -96,33 +92,7 @@ FileUtils.mkdir_p("#{ROOT}/var/lib/output")
 ENV["BUNDLE_GEMFILE"] = "#{ROOT}/#{gemfile}"
 abort "Installation failed" unless system "#{RAKE} ar:migrate"
 
+# Remove unneeded files created by bundle --binstubs
 File.delete(*Dir["bin/*"].reject { |path|
-  %w[padrino itmsweb].include? File.basename(path)
+  %w[padrino itmsweb itmsworker].include? File.basename(path).sub(/\.\w+\Z/, "")
 })
-
-worker = "#{ROOT}/bin/itmsworker"
-worker << ".bat" if windows?
-File.open(worker, "w") do |io|
-  env = %|BUNDLE_GEMFILE="#{ENV["BUNDLE_GEMFILE"]}"|
-  cmd = "#{RAKE} jobs:"
-
-  if windows?
-    # check this
-    io.puts <<-BAT
-@echo off
-set #{env}"
-set task=%1
-if "%task%" == "" (
-  set task=work
-)
-#{cmd}%task%
-    BAT
-  else
-    io.puts <<-SH 
-#!/bin/bash
-#{env} #{cmd}${1:-work}
-    SH
-  end
-end
-
-File.chmod(0555, worker)

@@ -52,7 +52,7 @@ Ruby portion which will fail if the underlying library is not found.
 
 Start the webserver 
 
-  ./bin/itmsweb start
+  ./bin/itmsweb
 
 Start the worker
 
@@ -74,7 +74,7 @@ By default it will contain the information provided to the setup script. Here's 
    
   database:
     adapter: mysql2 # DB driver (or sqlite3, postgresql, etc...) 
-    database: itunes_store_transporter_web_production # DB table
+    database: itmsweb # DB table
     host: db.example.com
     username: sshaw
     password: ______Weee!@$%
@@ -147,7 +147,7 @@ A list of root directories can also be used
 
 Note that all directories *must* be accessable by the worker process.
 
-There is a difference between using a single root directory and using a list: if you use a single root directory
+There is a difference between using a single root directory and using a set of directories: if you use a single root directory
 the file browser will deault to displaying *all* the files under that directory.
 If multiple root directories are used the browser will default to displaying the names
 of these directories, *not* their contents.
