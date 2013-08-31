@@ -1,14 +1,14 @@
 require "fileutils"
 require "delayed/tasks"
 
-namespace :itmsweb do
-  desc "Build itmsweb_worker gem"
-  task :build_worker do
-    root = Padrino.root("worker")
-    dest = "#{root}/lib"
-    deps = Dir["#{root}/models/*.rb"] << "#{worker}/lib/options.rb"
+namespace :itmsworker do
+  desc "Build standalone worker gem"
+  task :build do
+    worker = Padrino.root("worker")
+    dest = "#{worker}/lib"
+    deps = Dir["#{Padrino.root}/models/*.rb"] << "#{Padrino.root}/lib/options.rb"
     deps.each { |path| FileUtils.cp(path, dest) }
-    sh "cd #{root} && gem build *.gemspec"
+    sh "cd #{worker} && gem build *.gemspec"
   end
 end
 
