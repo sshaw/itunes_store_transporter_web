@@ -89,13 +89,21 @@ By default it will contain the information provided to the setup script. Here's 
 
 Usage:
 
-  itmsweb [start|stop|restart]
+  itmsweb <start|stop|restart> [OPTIONS]
+
+  start options:
 
   -h HOST     # Bind to HOST address
-  -p PORT     # Use PORT, default: 3000
+  -p PORT     # Use PORT, default: 3000  
   -d          # Run daemonized in the background
+  -i PID      # Use PID as the PID file, default: ROOT/tmp/pids/server.pid
   -a HANDLER  # Rack Handler (default: autodetect)
 
+  stop options:
+
+  -i PID      # Path to PID file of running process
+              # Required if you started the server with a custom PID path
+  
 ==== Logging
 
 Errors are logged to +ROOT/log/production.log+.

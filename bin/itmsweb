@@ -2,14 +2,13 @@
 
 start()
 {
-    # -i must be an absolute path
-    "$padrino" start -e production $@ -c "$root"
+    "$padrino" start -e production "$@" -c "$root"
 }
 
 stop()
 {
-    # start uses -i for PID but stop uses -p, we try to use -i here too 
-    "$padrino" stop -c "$root"
+    "$padrino" stop -e production "$@" -c "$root"
+    echo			# Padrino message does not use line terminator
 }
 
 root=${0%bin*}
@@ -23,18 +22,15 @@ if [ ! -x "$padrino" ]; then
     exit 1
 fi
 
-# padrino stop -i PID doesn't work so use default for now
-# pidfile="${root}var/run/itmsweb.pid"
-command=${1:-start}; shift
-
+command="$1"; shift
 case $command in
     start)
-	start $@ ;;
+	start "$@" ;;
     stop)
-	stop $@;;
+	stop "$@";;
     restart)
-	stop $@
-	start $@ ;;
+	stop "$@"
+	start "$@" ;;
     *)
-	echo "unknown command '$command'"
+	echo "usage: itmsweb <start|stop|restart> [OPTIONS]
 esac
