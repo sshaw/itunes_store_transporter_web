@@ -49,7 +49,7 @@ def config_database
 end
 
 DBNAME = "itmsweb"
-RAKE = "bin/padrino rake -e production"
+RAKE = "ruby bin/padrino rake -e production"
 ROOT = File.expand_path(File.dirname(__FILE__))
 
 print "Internet access required, is this OK? [y/N]: "
@@ -90,9 +90,20 @@ end
 
 FileUtils.mkdir_p("#{ROOT}/var/lib/output")
 ENV["BUNDLE_GEMFILE"] = "#{ROOT}/#{gemfile}"
+puts "#{RAKE} ar:migrate"
 abort "Installation failed" unless system "#{RAKE} ar:migrate"
 
 # Remove unneeded files created by bundle --binstubs
 File.delete(*Dir["bin/*"].reject { |path|
   %w[padrino itmsweb itmsworker].include? File.basename(path).sub(/\.\w+\Z/, "")
 })
+
+puts(<<MSG)
+Installation successful! 
+You can now start the website and the queue worker using the following commands:
+
+bin/itmsweb start
+bin/itmsworker
+
+Enjoy!
+MSG

@@ -52,7 +52,7 @@ Ruby portion which will fail if the underlying library is not found.
 
 Start the webserver 
 
-  ./bin/itmsweb
+  ./bin/itmsweb start
 
 Start the worker
 
