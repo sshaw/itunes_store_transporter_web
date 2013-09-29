@@ -32,5 +32,5 @@ case $command in
 	stop "$@"
 	start "$@" ;;
     *)
-	echo "usage: itmsweb <start|stop|restart> [OPTIONS]
+	echo "usage: itmsweb <start|stop|restart> [OPTIONS]"
 esac
