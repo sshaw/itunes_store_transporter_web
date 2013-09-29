@@ -1,0 +1,56 @@
+.navbar-inner {
+    padding: 8px 20px;
+    background: #fff;
+    background-image: none;
+    border: none;
+    border-bottom: 1px solid #efefef;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    borer-radius: 0;
+    -webkit-border-radius: 0;
+}
+
+.navbar .nav > li {
+    padding-top: 2px;
+}
+
+.navbar .nav > li > a:focus,
+.navbar .nav > li > a:hover {
+    color: #333333;
+    text-decoration: none;
+    background-color: transparent;
+}
+
+.navbar .nav > .active > a,
+.navbar .nav > .active > a:hover,
+.navbar .nav > .active > a:focus {
+    color: #555555;
+    text-decoration: none;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+}
+
+.navbar .nav > li.download > a {      
+    text-shadow: none;
+}
+
+.navbar .nav > li.download:hover {
+    border: 2px solid #333;
+}
+
+.navbar .nav > li.download  {      
+    padding-top: 0;
+    border-radius: 4px;
+    border: 2px solid #999;
+}
+
+.hero-unit {
+    background: #fff;
+    padding: 30px;
+}
+
+.summary {
+    padding: 6px 0 25px;
+}
