@@ -3,12 +3,11 @@
 set -e
 
 root=$(dirname "$0")
-platform=$(ruby -e'print RUBY_PLATFORM')
-gemfile="$root/../Gemfile.$platform"
+padrino="${root}/padrino"
 
-if [ ! -f "$gemfile" ]; then
-    echo -e "Missing file $gemfile\nYou must run: ruby setup.rb" >&2
+if [ ! -x "$padrino" ]; then
+    echo $padrino is missing, please run the install script first: ruby setup.rb
     exit 1
 fi
 
-BUNDLE_GEMFILE="$gemfile" "$root/padrino" rake -c "$root/.." -e production jobs:${1:-work}
+"$padrino" rake -c "$root/.." -e production jobs:${1:-work}
