@@ -26,6 +26,9 @@ class TransporterFormBuilder < BootstrapForms::FormBuilder
     value = object.send(name)
     options[:value] = File.basename(value) if value
 
+    # Fix Bootstrap forms so that it renders errors for uneditable_input
+    options[:error] = object.errors[name].to_sentence if object.errors.include?(name)
+
     options[:id] = name
     options[:data] ||= {}
     options[:data][:content] = value
