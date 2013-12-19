@@ -2,12 +2,25 @@
 
 set -e
 
+error()
+{
+    echo "$*" >&2
+    exit 1
+}
+
 root=$(dirname "$0")
+action=${1:-work}
 padrino="${root}/padrino"
 
 if [ ! -x "$padrino" ]; then
-    echo $padrino is missing, please run the install script first: ruby setup.rb
-    exit 1
+    error "$padrino is missing, please run the install script first: ruby setup.rb"
 fi
 
-"$padrino" rake -c "$root/.." -e production jobs:${1:-work}
+case "$action" in
+    work|workoff|clear) # jobs:check task too?
+        "$padrino" rake -c "$root/.." -e production "jobs:$action"
+        ;;
+    *)
+        error "usage: itmsworker [work|workoff|clear]"
+
+esac

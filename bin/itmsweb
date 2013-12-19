@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 start()
 {
     "$padrino" start -e production "$@" -c "$root"
@@ -11,6 +13,12 @@ stop()
     echo			# Padrino message does not use line terminator
 }
 
+error()
+{
+    echo "$*" >&2
+    exit 1
+}
+
 root=${0%bin*}
 # Were we invoked from bin?
 [ "$root" == "$0" ] && root=".."
@@ -18,8 +26,7 @@ root=${0%bin*}
 
 padrino="${root}/bin/padrino"
 if [ ! -x "$padrino" ]; then
-    echo $padrino is missing, please run the install script first: ruby setup.rb
-    exit 1
+    error "$padrino is missing, please run the install script first: ruby setup.rb"
 fi
 
 command="$1"; shift
@@ -32,5 +39,5 @@ case $command in
 	stop "$@"
 	start "$@" ;;
     *)
-	echo "usage: itmsweb <start|stop|restart> [OPTIONS]"
+	error "usage: itmsweb <start|stop|restart> [OPTIONS]"
 esac
