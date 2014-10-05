@@ -1,11 +1,3 @@
-GIT
-  remote: git://github.com/sshaw/itunes_store_transporter.git
-  revision: 2ef218499a70a97e3ac8231f16034b0288b933fa
-  specs:
-    itunes_store_transporter (0.1.1)
-      childprocess (~> 0.3.2)
-      optout (~> 0.0.2)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -44,36 +36,67 @@ GEM
       activerecord (> 2.1.0)
       delayed_job (~> 3.0.0)
     ffi (1.8.1)
-    haml (3.1.4)
-    http_router (0.10.2)
+    haml (4.0.5)
+      tilt
+    http_router (0.11.1)
       rack (>= 1.0.0)
       url_mount (~> 0.2.1)
-    i18n (0.6.4)
+    i18n (0.6.11)
+    itunes_store_transporter (0.1.1)
+      childprocess (~> 0.3.2)
+      optout (~> 0.0.2)
     json (1.7.7)
+    mail (2.5.4)
+      mime-types (~> 1.16)
+      treetop (~> 1.4.8)
     metaclass (0.0.1)
-    mime-types (1.23)
+    mime-types (1.25.1)
     mocha (0.10.5)
       metaclass (~> 0.0.1)
-    multi_json (1.7.2)
+    moneta (0.7.20)
+    multi_json (1.10.1)
     nokogiri (1.5.9)
     optout (0.0.2)
-    padrino-core (0.10.7)
-      activesupport (~> 3.2.0)
-      http_router (~> 0.10.2)
-      sinatra (~> 1.3.1)
-      thor (~> 0.15.2)
-      tilt (~> 1.3.0)
-    padrino-gen (0.10.7)
+    padrino (0.12.3)
+      padrino-admin (= 0.12.3)
+      padrino-cache (= 0.12.3)
+      padrino-core (= 0.12.3)
+      padrino-gen (= 0.12.3)
+      padrino-helpers (= 0.12.3)
+      padrino-mailer (= 0.12.3)
+      padrino-support (= 0.12.3)
+    padrino-admin (0.12.3)
+      padrino-core (= 0.12.3)
+      padrino-helpers (= 0.12.3)
+    padrino-cache (0.12.3)
+      moneta (~> 0.7.0)
+      padrino-core (= 0.12.3)
+      padrino-helpers (= 0.12.3)
+    padrino-core (0.12.3)
+      activesupport (>= 3.1)
+      http_router (~> 0.11.0)
+      padrino-support (= 0.12.3)
+      rack-protection (>= 1.5.0)
+      sinatra (~> 1.4.2)
+      thor (~> 0.18)
+    padrino-gen (0.12.3)
       bundler (~> 1.0)
-      padrino-core (= 0.10.7)
-    padrino-helpers (0.10.7)
-      i18n (~> 0.6)
-      padrino-core (= 0.10.7)
-    padrino_bootstrap_forms (0.0.1)
-      activesupport (~> 3.0)
-      padrino-helpers (~> 0.10.6)
+      padrino-core (= 0.12.3)
+    padrino-helpers (0.12.3)
+      i18n (~> 0.6, >= 0.6.7)
+      padrino-support (= 0.12.3)
+      tilt (~> 1.4.1)
+    padrino-mailer (0.12.3)
+      mail (~> 2.5.3)
+      padrino-core (= 0.12.3)
+    padrino-support (0.12.3)
+      activesupport (>= 3.1)
+    padrino_bootstrap_forms (0.1.0)
+      activesupport (~> 3.1)
+      padrino (~> 0.11)
+    polyglot (0.3.5)
     rack (1.5.2)
-    rack-protection (1.5.0)
+    rack-protection (1.5.3)
       rack
     rack-test (0.6.2)
       rack (>= 1.0)
@@ -92,15 +115,18 @@ GEM
     shoulda-matchers (1.4.2)
       activesupport (>= 3.0.0)
       bourne (~> 1.1.2)
-    sinatra (1.3.6)
+    sinatra (1.4.5)
       rack (~> 1.4)
-      rack-protection (~> 1.3)
-      tilt (~> 1.3, >= 1.3.3)
+      rack-protection (~> 1.4)
+      tilt (~> 1.3, >= 1.3.4)
     sinatra-flash (0.3.0)
       sinatra (>= 1.0.0)
     sqlite3 (1.3.6)
-    thor (0.15.4)
-    tilt (1.3.6)
+    thor (0.19.1)
+    tilt (1.4.1)
+    treetop (1.4.15)
+      polyglot
+      polyglot (>= 0.3.1)
     tzinfo (0.3.33)
     url_mount (0.2.1)
       rack
@@ -118,19 +144,19 @@ DEPENDENCIES
   capybara-webkit (~> 0.13.0)
   coderay
   daemons
-  delayed_job (~> 3.0.0)
+  delayed_job
   delayed_job_active_record
   haml
-  itunes_store_transporter!
-  padrino-core (= 0.10.7)
-  padrino-gen (= 0.10.7)
-  padrino-helpers (= 0.10.7)
-  padrino_bootstrap_forms
+  itunes_store_transporter
+  padrino-core (= 0.12.3)
+  padrino-gen (= 0.12.3)
+  padrino-helpers (= 0.12.3)
+  padrino_bootstrap_forms (~> 0.1.0)
   rack-test
   rake
   rr
   shoulda (~> 3)
   sinatra-flash
   sqlite3
-  tilt (~> 1.3.6)
+  tilt
   will_paginate (~> 3.0)
