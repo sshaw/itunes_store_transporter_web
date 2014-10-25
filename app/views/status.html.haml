@@ -7,7 +7,7 @@
 %p
   Retrieve status information about a previously uploaded package. 
 
-- form_for @options, :status, :class => "form-horizontal" do |f|    
+= form_for @options, :status, :class => "form-horizontal" do |f|
   = f.text_field :vendor_id, :label => "Vendor ID:"
   = f.select_priority
 
