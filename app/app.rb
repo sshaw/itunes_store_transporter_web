@@ -1,7 +1,10 @@
+require "itunes/store/transporter/web/version"
+
 class ItunesStoreTransporterWeb < Padrino::Application
+
   use ActiveRecord::ConnectionAdapters::ConnectionManagement
 
-  register Sinatra::ConfigFile 
+  register Sinatra::ConfigFile
   register Padrino::Rendering
   register Padrino::Helpers
   register WillPaginate::Sinatra
@@ -35,7 +38,7 @@ class ItunesStoreTransporterWeb < Padrino::Application
       AppConfig.output_log_directory = settings.output_log_directory
     end
   end
-  
+
   before :except => %r|\A/job| do
     @config = AppConfig.first_or_initialize
   end
