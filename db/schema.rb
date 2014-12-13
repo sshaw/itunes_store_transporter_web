@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 7) do
+ActiveRecord::Schema.define(:version => 9) do
 
   create_table "config", :force => true do |t|
     t.string  "username",             :limit => 64
@@ -39,17 +39,24 @@ ActiveRecord::Schema.define(:version => 7) do
   end
 
   create_table "transporter_jobs", :force => true do |t|
-    t.string   "state",       :limit => 16
-    t.string   "options"
+    t.string   "state",           :limit => 16
+    t.string   "options",         :limit => 1024
     t.text     "result"
     t.string   "exceptions"
-    t.string   "output_file"
-    t.string   "type",        :limit => 32
-    t.datetime "created_at",                                      :null => false
-    t.datetime "updated_at",                                      :null => false
+    t.string   "output_log_file"
+    t.string   "type",            :limit => 32
+    t.datetime "created_at",                                            :null => false
+    t.datetime "updated_at",                                            :null => false
     t.integer  "job_id"
-    t.string   "priority",    :limit => 10, :default => "normal", :null => false
+    t.string   "priority",        :limit => 10,   :default => "normal", :null => false
     t.string   "target"
   end
+
+  add_index "transporter_jobs", ["created_at"], :name => "index_transporter_jobs_on_created_at"
+  add_index "transporter_jobs", ["priority"], :name => "index_transporter_jobs_on_priority"
+  add_index "transporter_jobs", ["state"], :name => "index_transporter_jobs_on_state"
+  add_index "transporter_jobs", ["target"], :name => "index_transporter_jobs_on_target"
+  add_index "transporter_jobs", ["type"], :name => "index_transporter_jobs_on_type"
+  add_index "transporter_jobs", ["updated_at"], :name => "index_transporter_jobs_on_updated_at"
 
 end
