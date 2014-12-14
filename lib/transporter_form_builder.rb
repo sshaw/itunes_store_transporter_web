@@ -12,6 +12,14 @@ class TransporterFormBuilder < BootstrapForms::FormBuilder
     select name, options
   end
 
+  def select_account(*args)
+    options = args.extract_options!
+    options[:options] = Array(args.shift).map { |a| [a.username, a.id] }
+    options[:include_blank] = true unless options.include?(:include_blank)
+    name = args.shift || "account_id"
+    select name, options
+  end
+
   def select_priority(*args)
     options = args.extract_options!
     options[:options] = PRIORITIES

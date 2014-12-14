@@ -14,18 +14,22 @@ class TransporterJob < ActiveRecord::Base
 
   attr_protected :state, :target, :job_id
 
+  belongs_to :account
+
   serialize :result
   serialize :options, Hash
   serialize :exceptions, ITunes::Store::Transporter::TransporterError
 
   before_save :typecast_options, :assign_target
 
+  # TODO: move these out
   after_create  :enqueue_delayed_job
   after_destroy :dequeue_delayed_job, :remove_log
 
   scope :completed, where(:state => [:success, :failure])
 
   def self.search(params)
+    # includes(:account).where(build_search_query(params))
     where(build_search_query(params))
   end
 
@@ -49,7 +53,7 @@ class TransporterJob < ActiveRecord::Base
   end
 
   def type
-    self[:type].sub(/Job$/, "") if self[:type]
+    self[:type].sub(/Job\Z/, "") if self[:type]
   end
 
   def state
@@ -180,6 +184,7 @@ class TransporterJob < ActiveRecord::Base
     d << where[:updated_at_from].to_date if where[:updated_at_from].present?
     d << where[:updated_at_to].to_date + 1.day if where[:updated_at_to].present?
     q[:updated_at] = d.size == 1 ? d.shift : Range.new(*d) if d.any?
+    q["accounts.id"] = where[:account_id] if where[:account_id].present?
 
     q
   end

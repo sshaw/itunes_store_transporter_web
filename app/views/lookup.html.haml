@@ -16,8 +16,7 @@
       = error_message_on @options, :package_id_value, :tag => "span", :class => "help-inline"
 
   = f.select_priority
-
-  = partial "shared/auth_fields", :object => f
+  = f.select_account @accounts
 
   = f.actions do
     = f.submit "Lookup"

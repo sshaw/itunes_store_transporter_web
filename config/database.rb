@@ -1,6 +1,12 @@
+# ActiveRecord::Base.configurations[:development] = {
+#   :adapter => 'sqlite3',
+#   :database => Padrino.root('db', 'itunes_store_transporter_web_development.db')
+# }
+
 ActiveRecord::Base.configurations[:development] = {
-  :adapter => 'sqlite3',
-  :database => Padrino.root('db', 'itunes_store_transporter_web_development.db')
+  :adapter => 'mysql2',
+  :username => 'root',
+  :database => 'itunes_store_transporter_web_development'
 }
 
 ActiveRecord::Base.configurations[:test] = {
@@ -9,7 +15,7 @@ ActiveRecord::Base.configurations[:test] = {
 }
 
 if Padrino.env == :production
-  begin 
+  begin
     config = YAML.load_file(ITMSWEB_CONFIG)
     db = config["database"]
     raise "missing or invalid database setting" unless Hash === db

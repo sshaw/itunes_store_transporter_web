@@ -39,9 +39,22 @@ class ItunesStoreTransporterWeb < Padrino::Application
     end
   end
 
-  before :except => %r|\A/job| do
+  before do
+    # For search form
+    @accounts = Account.all
+  end
+
+  before :except => %r{\A/account} do
+    if @accounts.none?
+      flash[:error] = "You must setup an account before you can continue."
+      redirect :accounts
+    end
+  end
+
+  before :except => %r{\A/(?:job|account)} do
     @config = AppConfig.first_or_initialize
   end
+
 
   [:lookup, :providers, :schema, :status, :upload, :verify].each do |route|
     name = route.to_s.capitalize
@@ -165,6 +178,42 @@ class ItunesStoreTransporterWeb < Padrino::Application
 
     content_type(:text)
     data
+  end
+
+  get :accounts do
+    @account = Account.new
+    render "accounts/new"
+  end
+
+  post :accounts do
+    @account = Account.new(params[:account])
+    if @account.save
+      flash[:success] = "Account created."
+      redirect :config
+    else
+      render "accounts/new"
+    end
+  end
+
+  get :account, "/accounts", :with => :id do
+    @account = Account.find(params[:id])
+    render "accounts/edit"
+  end
+
+  patch :account_update, "/accounts/:id" do
+    @account = Account.find(params[:id])
+    if @account.update_attributes(params[:account])
+      flash[:success] = "Account updated."
+      redirect :config
+    else
+      render "accounts/edit"
+    end
+  end
+
+  delete :account_delete, :map => "/accounts/:id", :provides => :js do
+    @account = Account.find(params[:id])
+    @account.destroy
+    render "accounts/delete"
   end
 
   get "/" do

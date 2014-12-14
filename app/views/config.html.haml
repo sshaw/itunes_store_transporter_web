@@ -1,21 +1,58 @@
 - content_for(:title) do
   Configuration
 
-%h2 
+%h2
   Configuration
-  
-= form_for @config, :config, :class => "form-horizontal" do |f|    
 
-  - if settings.allow_select_transporter_path?
-    = f.file_browser_field :path, :label => "Transporter", :data => { :title => "Transporter" }
+%ul.nav.nav-tabs
+  %li.active
+    = link_to "Transporter", "#transporter", :data => {:toggle => "tab"}
+  %li
+    = link_to "Accounts", "#accounts", :data => {:toggle => "tab"}
 
-  = f.text_field :username
-  = f.text_field :password
-  = f.text_field :shortname
+.tab-content
+  #transporter.tab-pane.active
+    = form_for @config, :config, :class => "form-horizontal" do |f|
 
-  = f.rate_field
-  = f.select_transport
+      - if settings.allow_select_transporter_path?
+        = f.file_browser_field :path, :label => "Location", :data => { :title => "Transporter" }
 
-  = f.actions do
-    = f.submit "Save"  
+      = f.rate_field
+      = f.select_transport
 
+      = f.actions do
+        = f.submit "Save"
+
+  #accounts.tab-pane
+    - if @accounts.none?
+      %p
+        No accounts have been created.
+        = link_to "Create one", url(:accounts)
+
+    - else
+      .actions(style="text-align: right;padding-bottom: 4px;")
+        %i.icon-user
+        = link_to "New Account", url(:accounts)
+
+      %table.table
+        %thead
+          %tr
+            %th
+              Username
+            %th
+              Shortname
+            %th{:colspan => 2}
+              Password
+
+        %tbody
+          - @accounts.each do |account|
+            %tr[account]
+              %td
+                = account.username
+              %td
+                = account.shortname
+              %td
+                = account.password
+              %td
+                = link_to "Edit", url(:account, account.id), :class => "btn btn-mini"
+                = link_to "Delete", url(:account_delete, account.id, :format => "js"), :class => "btn btn-mini btn-danger", :remote => true, :method => "delete"
