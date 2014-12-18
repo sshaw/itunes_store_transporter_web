@@ -21,7 +21,7 @@
           = text_field_tag :_updated_at_to, :id => "_updated_at_to", :class => "input-small", :value => params[:_updated_at_to]
           = hidden_field_tag :updated_at_to, :id => "updated_at_to", :value => params[:updated_at_to]
 
-      = bootstrap_select_tag :account, :options => [["client_one",1], ["number2", 2]], :include_blank => true, :class => "input-small", :selected => params[:account]
+      = bootstrap_select_tag :account_id, :options => accounts.map { |a| [a.username, a.id] }, :include_blank => true, :class => "input-small", :selected => params[:account_id]
 
       %div{:style => "float:right"}
         = link_to "Clear all fields", "#", :id => "clear_search_fields_link"

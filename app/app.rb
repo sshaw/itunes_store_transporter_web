@@ -102,12 +102,12 @@ class ItunesStoreTransporterWeb < Padrino::Application
   end
 
   get :jobs, :provides => [:html, :js] do
-    @jobs = TransporterJob.order(order_by).paginate(paging_options)
+    @jobs = TransporterJob.joins(:account).order(order_by).paginate(paging_options)
     render "jobs/index"
   end
 
   get :search, "/jobs/search", :provides => [:html, :js] do
-    @jobs = TransporterJob.search(params).order(order_by).paginate(paging_options)
+    @jobs = TransporterJob.joins(:account).search(params).order(order_by).paginate(paging_options)
     render "jobs/search"
   end
 
@@ -231,8 +231,12 @@ class ItunesStoreTransporterWeb < Padrino::Application
   end
 
   def order_by
-    column = TransporterJob.columns_hash.include?(params[:order]) ? params[:order].dup : "created_at"
+    columns = TransporterJob.columns_hash.keys << "account"
+    column = columns.include?(params[:order]) ? params[:order].dup : "created_at"
+
+    column = "accounts.username" if column == "account"
     column << " " << (params[:direction] != "asc" ? "desc" : params[:direction])
+
     column
   end
 end

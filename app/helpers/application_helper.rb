@@ -11,9 +11,4 @@ ItunesStoreTransporterWeb.helpers do
       html
     end
   end
-
-  def show_auth_fields?(form)
-    options = form.marshal_dump[:options]
-    [:username, :password].any? { |f| form.errors[f].any? || options[f].blank? }
-  end
 end

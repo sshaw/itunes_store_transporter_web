@@ -1,0 +1,11 @@
+- content_for(:title) do
+  New Account
+
+%h2
+  New Account
+
+= form_for @account, :accounts, :class => "form-horizontal" do |f|
+  = partial "accounts/fields", :object => f
+
+  = f.actions do
+    = f.submit "Create"

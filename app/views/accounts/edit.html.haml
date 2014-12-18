@@ -1,0 +1,11 @@
+- content_for(:title) do
+  Edit Account
+
+%h2
+  Edit Account
+
+= form_for @account, url(:account, :id => @account), :method => "patch", :class => "form-horizontal" do |f|
+  = partial "accounts/fields", :object => f
+
+  = f.actions do
+    = f.submit "Update"
