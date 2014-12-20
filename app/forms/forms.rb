@@ -3,12 +3,34 @@ require "options"
 
 class JobForm < OpenStruct
   include ActiveModel::Validations
-  validates_presence_of :username, :password
+
+  validates_presence_of :account_id
+  validate :find_account, :unless => lambda { |r| r.account_id.blank? }
+
 
   def marshal_dump
-    data = { :options => super.dup }
+    options = super.dup.except(:account_id)
+
+
+    if @account
+      options[:username]  = @account.username
+      options[:password]  = @account.password
+      options[:shortname] = @account.shortname
+    end
+
+    data = { :options => options, :account_id => account_id }
     data[:priority] = data[:options].delete(:priority) if data[:options].include?(:priority)
     data
+  end
+
+  protected
+  def find_account
+    # Avoid raising an exception via find()
+    @account = Account.where(:id => account_id).first
+    return true if @account
+
+    errors[:account_id] << "unknown"
+    false
   end
 end
 
@@ -26,7 +48,7 @@ class SchemaForm < JobForm
   validates_numericality_of :version_number, :greater_than => 0, :unless => lambda { |form| form.version_number.blank? }
   validates_inclusion_of :version_name, :in => %w[film tv], :message => "Must be film or TV"
   validates_inclusion_of :type, :in => %w[transitional strict], :message => "Must be transitional or strict"
-  
+
   def marshal_dump
     data = super
     data[:options].except!(:version_name, :version_number)

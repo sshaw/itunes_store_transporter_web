@@ -20,6 +20,8 @@ class TransporterJob < ActiveRecord::Base
   serialize :options, Hash
   serialize :exceptions, ITunes::Store::Transporter::TransporterError
 
+  validates :account_id, :presence => true
+
   before_save :typecast_options, :assign_target
 
   after_create  :enqueue_delayed_job
