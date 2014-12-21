@@ -26,9 +26,10 @@ end
 gem 'sqlite3', :group => [:development, :test]
 
 # Test requirements
-group :test do 
+group :test do
   gem 'rr'
-  gem 'shoulda', '~> 3'
+  gem 'minitest', :require => 'minitest/autorun'
+  gem 'shoulda', '~> 3.5'
   gem 'rack-test', :require => 'rack/test'
   gem 'capybara', '~> 1.1.2'
   gem 'capybara-webkit', '~> 0.13.0'
