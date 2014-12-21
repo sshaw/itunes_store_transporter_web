@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../test_config.rb')
 
-class UploadJobTest < Test::Unit::TestCase
+class UploadJobTest < Minitest::Test
   subject { UploadJob.new :options => options }
 
   should_behave_like_a_transporter_job

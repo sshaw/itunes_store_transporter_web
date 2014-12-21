@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../test_config.rb')
 
-class FsUtilTest < Test::Unit::TestCase
+class FsUtilTest < Minitest::Test
   context "#ls" do
     setup do
       @tmpdir = Dir.mktmpdir
@@ -91,7 +91,7 @@ class FsUtilTest < Test::Unit::TestCase
     should "return the file's basename" do
       assert_equal "c", FsUtil.basename("/a/b/c")
     end
- 
+
     # On Win File.basename doesn't act like this
     # context "#basename" do
     #   should "not remove the volume when the path only contains a root directory" do
