@@ -14,13 +14,13 @@ class TransporterJob < ActiveRecord::Base
 
   attr_protected :state, :target, :job_id
 
-  belongs_to :account
-
   serialize :result
   serialize :options, Hash
   serialize :exceptions, ITunes::Store::Transporter::TransporterError
 
   validates :account_id, :presence => true
+
+  belongs_to :account
 
   before_save :typecast_options, :assign_target
 
@@ -53,7 +53,7 @@ class TransporterJob < ActiveRecord::Base
   end
 
   def type
-    self[:type].sub(/Job\Z/, "") if self[:type]
+    self[:type].sub(/Job$/, "") if self[:type]
   end
 
   def state

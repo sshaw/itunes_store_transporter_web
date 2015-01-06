@@ -7,7 +7,6 @@ class JobForm < OpenStruct
   validates_presence_of :account_id
   validate :find_account, :unless => lambda { |r| r.account_id.blank? }
 
-
   def marshal_dump
     options = super.dup.except(:account_id)
 
