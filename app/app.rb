@@ -41,7 +41,7 @@ class ItunesStoreTransporterWeb < Padrino::Application
 
   before do
     # For search form
-    @accounts = Account.all
+    @accounts = Account.order(:username).all
   end
 
   before :except => %r{\A/account} do
