@@ -18,7 +18,7 @@
   = f.file_browser_field :failure, :label => "On failure, move to", :prompt => "Select Directory", :data => { :title => "Failure Directory" }
 
   = f.select_priority
-  = f.select_account @accounts
+  = f.select_account account_options(@accounts)
 
   = f.actions do
     = f.submit "Upload"

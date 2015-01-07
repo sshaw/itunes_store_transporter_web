@@ -56,12 +56,25 @@ ItunesStoreTransporterWeb.helpers do
     end
   end
 
-  def current_search_query(accounts)
-    terms = []
+  def account_options(accounts)
+    options = []
 
+    Array(accounts).sort_by { |u| u.username }.group_by(&:username).each do |_, users|
+      users.each do |u|
+        options << [
+          users.one? ? u.username : sprintf("%s (%s)", u.username, u.shortname),
+          u.id
+        ]
+      end
+    end
+
+    options
+  end
+
+  def current_search_query
+    terms = []
     [:priority, :state, :target, :type].each do |name|
       next if params[name].blank?
-
       term = case name
         when :type
           params[name].sub(/Job$/, "")
@@ -70,15 +83,7 @@ ItunesStoreTransporterWeb.helpers do
         else
           params[name].capitalize
         end
-
       terms << "#{name} #{term}"
-    end
-
-    if params[:account_id].present?
-      id = params[:account_id].to_i
-      if account = accounts.find { |a| a.id == id }
-        terms << "account %s" % %Q("#{account.username}")
-      end
     end
 
     updated = [:_updated_at_from, :_updated_at_to].inject([]) { |q, key| q << params[key] if params[key].present?; q }
@@ -89,8 +94,6 @@ ItunesStoreTransporterWeb.helpers do
         terms << "updated #{updated[0]}"
       end
     end
-
-    terms << "(no criteria)" if terms.none?
 
     truncate terms.join(" "), :length => 75
   end
@@ -126,7 +129,6 @@ ItunesStoreTransporterWeb.helpers do
   def sort_by(column)
     dir = params[:direction] == "asc" ? "desc" : "asc"
     arr = dir == "asc" ? "&darr;" : "&uarr;" if params[:order] == column
-
     link_to(column.titleize, current_path(params.merge("order" => column, "direction" => dir))) << " #{arr}"
   end
 end

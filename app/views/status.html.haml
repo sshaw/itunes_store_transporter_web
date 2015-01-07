@@ -10,7 +10,7 @@
 - form_for @options, :status, :class => "form-horizontal" do |f|
   = f.text_field :vendor_id, :label => "Vendor ID:"
   = f.select_priority
-  = f.select_account @accounts
+  = f.select_account account_options(@accounts)
 
   = f.actions do
     = f.submit "Check Status"

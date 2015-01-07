@@ -14,17 +14,7 @@ class TransporterFormBuilder < BootstrapForms::FormBuilder
 
   def select_account(*args)
     options = args.extract_options!
-
-    options[:options] = []
-    Array(args.shift).sort_by { |u| u.username }.group_by(&:username).each do |_, users|
-      users.each do |u|
-        options[:options] << [
-          users.one? ? u.username : sprintf("%s (%s)", u.username, u.shortname),
-          u.id
-        ]
-      end
-    end
-
+    options[:options] = args.shift
     options[:include_blank] = true unless options.include?(:include_blank)
     name = args.shift || "account_id"
     select name, options
