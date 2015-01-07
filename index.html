@@ -9,7 +9,7 @@
     <script type="text/javascript" src="magnific-popup/jquery.magnific-popup.min.js"></script>
     <script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
     <script>
-      $().ready(function() { 
+      $().ready(function() {
         $('.thumbnails').magnificPopup({
 	    delegate: '.thumbnail a',
 	    type: 'image',
@@ -31,6 +31,7 @@
           <ul class="nav pull-right">
             <li><a href="#features">Features</a></li>
             <li><a href="https://github.com/sshaw/itunes_store_transporter_web#requirements">Docs</a></li>
+            <li><a href="#news">News</a></li>
             <li><a href="#support">Support</a></li>
             <!--li class="download"><a href="http://demo.transportergui.com:3000">Online Demo</a></li-->
           </ul>
@@ -41,7 +42,7 @@
         <h2>Simplify your iTunes workflow.</h2>
         <p class="lead">The Transporter GUI is the easiest way to deliver and manage your content.</p>
         <!-- p><a href="http://demo.transportergui.com:3000">Try it</a>, it's free.</p-->
-        <p><a href="https://github.com/sshaw/itunes_store_transporter_web/archive/master.zip" class="btn btn-primary btn-large">Download The Transporter GUI</a></p>
+        <p><a href="https://github.com/sshaw/itunes_store_transporter_web/releases/tag/v0.0.1" class="btn btn-primary btn-large">Download The Transporter GUI</a></p>
         <p><small class="muted">For Mac, Windows and Linux</small></p>
       </div>
 
@@ -75,7 +76,7 @@
         </div>
 
         <hr/>
-        <div class="row text-center">                
+        <div class="row text-center">
           <h3>All Transporter activity and output are saved</h3>
           <div class="summary">
 	    <p>From uploads to metadata retrieval and package status, everything is tracked, stored and easily accessible.
@@ -102,7 +103,7 @@
           </ul>
         </div>
 
-        <div class="row text-center">                
+        <div class="row text-center">
           <h3>Easily track current and past jobs</h3>
           <div class="summary">
 	    <p>Search and sort jobs by date, job type (Transporter mode), status and more.</p>
@@ -130,10 +131,34 @@
 
       <hr/>
 
-      <div id="support" class="row">
+      <div id="news" class="row">
+	<h3 class="text-center">News</h3>
+	<div>
+	  <h4>Finally, an Offical Release! <small>2015-01-06</small></h4>
+	  <p>
+	    While the iTunes Store Transporter GUI has been relatively stable <a href="https://github.com/sshaw/itunes_store_transporter_web/commits/master">for some time</a>
+	    an offical release had yet to be made &mdash;until now. <a href="#">The <code>v0.0.1</code> release</a> contains 2 important additions:
+	  </p>
+
+	  <ol>
+	    <li>
+	      To better support <code>iTMSTransporter</code> options with long paths the length of the <code>transporter_jobs.options</code>
+	      column has been extended to 1024 characters
+	    </li>
+	    <li>
+	      DB indexes have been added to the various columns used for searching
+	    </li>
+	  </ol>
+
+	  <p><b><a href="https://github.com/sshaw/itunes_store_transporter_web/releases/tag/v0.0.1">Download <code>v0.0.1</code></a></b></p>
+	</div>
+      </div>
+
+      <hr/>
+
+      <div id="support" class="row text-center">
         <h3>Support</h3>
-        <p>For bugs or feature request please <a href="https://github.com/sshaw/itunes_store_transporter_web/issues">open an issue on GitHub.</a></p>
-        <!-- <p>Commericial support is also available. Email us at support -AT- transportergui.com with the details.</p> -->
+        <p>For bugs or feature requests please <a href="https://github.com/sshaw/itunes_store_transporter_web/issues">open an issue on GitHub</a>.</p>
       </div>
 
       <hr/>
