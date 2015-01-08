@@ -71,8 +71,9 @@ ItunesStoreTransporterWeb.helpers do
     options
   end
 
-  def current_search_query
+  def current_search_query(accounts)
     terms = []
+
     [:priority, :state, :target, :type].each do |name|
       next if params[name].blank?
       term = case name
@@ -84,6 +85,13 @@ ItunesStoreTransporterWeb.helpers do
           params[name].capitalize
         end
       terms << "#{name} #{term}"
+    end
+
+    if params[:account_id].present?
+      id = params[:account_id].to_i
+      if account = accounts.find { |a| a.id == id }
+        terms << "account %s" % %Q("#{account.username}")
+      end
     end
 
     updated = [:_updated_at_from, :_updated_at_to].inject([]) { |q, key| q << params[key] if params[key].present?; q }
