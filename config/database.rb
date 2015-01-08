@@ -1,12 +1,6 @@
-# ActiveRecord::Base.configurations[:development] = {
-#   :adapter => 'sqlite3',
-#   :database => Padrino.root('db', 'itunes_store_transporter_web_development.db')
-# }
-
 ActiveRecord::Base.configurations[:development] = {
-  :adapter => 'mysql2',
-  :username => 'root',
-  :database => 'itunes_store_transporter_web_development'
+  :adapter => 'sqlite3',
+  :database => Padrino.root('db', 'itunes_store_transporter_web_development.db')
 }
 
 ActiveRecord::Base.configurations[:test] = {
