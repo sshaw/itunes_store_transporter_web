@@ -3,7 +3,7 @@ $: << File.expand_path(File.dirname(__FILE__) + "/support")
 PADRINO_ENV = 'test' unless defined?(PADRINO_ENV)
 require File.expand_path(File.dirname(__FILE__) + "/../config/boot")
 
-require "test/unit"
+require 'minitest/autorun'
 require 'tmpdir'
 require 'fileutils'
 require 'capybara/dsl'
@@ -17,14 +17,20 @@ config = AppConfig.first_or_initialize
 config.output_log_directory = Dir.tmpdir
 config.save!
 
-class Test::Unit::TestCase
+class Minitest::Test
+  include Shoulda::Matchers::ActiveModel
+  extend Shoulda::Matchers::ActiveModel
+
+  include Shoulda::Matchers::ActiveRecord
+  extend Shoulda::Matchers::ActiveRecord
+
   extend JobFormTestMethods
 
   include RR::Adapters::TestUnit
   include TransporterJobTestMethods
 end
 
-class CapybaraTestCase < Test::Unit::TestCase
+class CapybaraTestCase < Minitest::Test
   include Capybara::DSL
   include Rack::Test::Methods
   include Rack::Test::Flash
@@ -69,7 +75,7 @@ class CapybaraTestCase < Test::Unit::TestCase
     end
 
     should "display a job added message" do
-      assert_match flash[:success], /job added/i
+      assert_match /job added/i, flash[:success]
     end
   end
 

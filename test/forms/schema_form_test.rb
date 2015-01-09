@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../test_config.rb')
 
-class SchemaFormTest < Test::Unit::TestCase
+class SchemaFormTest < Minitest::Test
   should_behave_like_a_job_form
   should validate_presence_of :version_number
   should validate_numericality_of(:version_number)

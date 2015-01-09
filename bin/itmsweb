@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -e
-
 start()
 {
     "$padrino" start -e production "$@" -c "$root"
@@ -9,6 +7,7 @@ start()
 
 stop()
 {
+    # Note that this always exits zero: https://github.com/padrino/padrino-framework/issues/1849
     "$padrino" stop -e production "$@" -c "$root"
     echo			# Padrino message does not use line terminator
 }
