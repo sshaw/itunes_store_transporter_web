@@ -141,7 +141,7 @@ class ItunesStoreTransporterWeb < Padrino::Application
   post :job_resubmit, :map => "/jobs/:id/resubmit" do
     job = TransporterJob.completed.find(params[:id])
     # Any Updated AppConfig options should be added...
-    job = job.class.new(:options => job.options.dup)
+    job = job.class.new(:options => job.options.dup, :account_id => job.account_id)
     job.save!
     flash[:success] = "Job resubmitted."
     redirect url(:job, :id => job.id)
