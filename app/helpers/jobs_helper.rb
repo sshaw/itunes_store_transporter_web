@@ -49,6 +49,8 @@ ItunesStoreTransporterWeb.helpers do
   def format_option_value(name, value)
     if name == :rate && value.present?
       number_with_delimiter(value) << " Kbps"
+    elsif name == :password
+      "*" * 8
     elsif value.present? || value == false
       h value
     else
