@@ -12,6 +12,22 @@ namespace :itmsworker do
   end
 end
 
+namespace :itmsweb do
+  task :create_test_directories do
+    require "fileutils"
+
+    root = ENV["ROOT"]
+    abort "usage: rake test:create_directories ROOT=xxx" unless root
+
+    %w[Harry_Potter_8/X123456.itmsp
+       Spiderman/SPIDEY_123456.itmsp
+       Spiderman/SPIDEY_123456_UK.itmsp
+       random_directory].each do |path|
+      FileUtils.mkdir_p(File.join(root, path))
+    end
+  end
+end
+
 # Override the DelayedJob task of the same name and use options that are more suitable
 # for a Transporter workflow (:read_ahead and :max_attempts, rm :queues). Note that max_attempts can't be set via @worker_options.
 namespace :jobs do
