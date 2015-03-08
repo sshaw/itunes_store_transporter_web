@@ -32,7 +32,7 @@
     box-shadow: none;
 }
 
-.navbar .nav > li.download > a {      
+.navbar .nav > li.download > a {
     text-shadow: none;
 }
 
@@ -40,7 +40,7 @@
     border: 2px solid #333;
 }
 
-.navbar .nav > li.download  {      
+.navbar .nav > li.download  {
     padding-top: 0;
     border-radius: 4px;
     border: 2px solid #999;
@@ -53,4 +53,8 @@
 
 .summary {
     padding: 6px 0 25px;
+}
+
+#news .item {
+    margin-bottom: 30px;
 }

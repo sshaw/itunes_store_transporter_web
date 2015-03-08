@@ -142,14 +142,34 @@
 
       <div id="news" class="row">
 	<h3 class="text-center">News</h3>
-	<div>
+	<div class="item">
+	  <h4>iTunes::Store::Transporter v0.1.2 Released <small>2015-03-07</small></h4>
+	  <p>This is the core library used by the Transporter GUI to interact with <code>iTMSTransporter</code>.
+	  <h5>Changes</h5>
+	  <ul>
+	    <li>
+	      Only parse errors from the main <code>iTMSTransporter</code> thread
+	    </li>
+	  </ul>
+	  <h5>Enhancements</h5>
+	  <ul>
+	    <li>
+	      Look for the <code>iTMSTransporter</code> at known locations on OS X
+	    </li>
+	    <li>
+	      Add the <code>:streams</code> (<code>-numStreams</code>) option to <code>#upload</code>
+	    </li>
+	  </ul>
+	  <p>Install the release <a href="https://rubygems.org/gems/itunes_store_transporter">via RubyGems</a>, view the source <a href="https://github.com/sshaw/itunes_store_transporter/tree/v0.1.2">on GitHub</a>.
+	</div>
+	<div class="item">
 	  <h4>Finally, an Official Release! <small>2015-01-06</small></h4>
 	  <p>
 	    While the iTunes Store Transporter GUI has been relatively stable <a href="https://github.com/sshaw/itunes_store_transporter_web/commits/master">for some time</a>
 	    an official release had yet to be made &mdash;until now. The <code>v0.0.1</code> release contains 2 important additions:
 	  </p>
 
-	  <ol>
+	  <ul>
 	    <li>
 	      To better support <code>iTMSTransporter</code> options with long paths the length of the <code>transporter_jobs.options</code>
 	      column has been extended to 1024 characters
@@ -157,7 +177,7 @@
 	    <li>
 	      DB indexes have been added to the various columns used for searching
 	    </li>
-	  </ol>
+	  </ul>
 
 	  <p><b><a href="https://github.com/sshaw/itunes_store_transporter_web/releases/tag/v0.0.1">Download <code>v0.0.1</code></a></b></p>
 	</div>
