@@ -7,9 +7,11 @@ require 'minitest/autorun'
 require 'tmpdir'
 require 'fileutils'
 require 'capybara/dsl'
+require 'capybara/poltergeist'
 require 'rack_test_flash'
 require 'transporter_job_test_methods'
 require 'job_form_test_methods'
+
 
 Capybara.app = Padrino.application
 
@@ -82,7 +84,7 @@ class CapybaraTestCase < Minitest::Test
   def self.should_have_a_search_dialog(url)
     context "when the search link is clicked" do
       setup do
-        Capybara.current_driver = :webkit
+        Capybara.current_driver = :poltergeist
         visit url
         click_link "Search"
       end
@@ -134,7 +136,7 @@ class CapybaraTestCase < Minitest::Test
 
   def self.should_toggle_auth_fields(url)
     context "username and password fields" do
-      setup { Capybara.current_driver = :webkit }
+      setup { Capybara.current_driver = :poltergeist }
 
       context "without defaults" do
         setup do

@@ -20,13 +20,19 @@ module Options
           include ActiveModel::Validations
 
           validates_presence_of :package
-          validate :check_package_suffix, :unless => lambda { |form| form.package.blank? }
+          validate :check_package, :unless => lambda { |form| form.package.blank? }
         end
       end
 
       private
-      def check_package_suffix
-        unless package.to_s.end_with?(".itmsp")
+      def contains_packages?(package)
+        Dir[ File.join(package, "*.itmsp") ].any? { |path| File.directory?(path) }
+      end
+
+      def check_package
+        if batch == "1" && !package.end_with?(".itmsp")
+          errors[:package] << 'does not contain any ".itmsp" directories' unless contains_packages?(package)
+        elsif !package.end_with?(".itmsp")
           errors[:package] << 'must end with ".itmsp"'
         end
       end

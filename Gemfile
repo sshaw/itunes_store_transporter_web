@@ -15,7 +15,7 @@ gem "delayed_job_active_record"
 gem "tilt", "~> 1.3.6"
 gem "coderay"
 gem "will_paginate", "~> 3.0"
-gem "itunes_store_transporter"
+gem "itunes_store_transporter", :github => "sshaw/itunes_store_transporter", :branch => "batch_operations"
 gem "padrino_bootstrap_forms", "0.0.2", :require => "bootstrap_forms"
 
 # Or Individual Gems
@@ -32,5 +32,6 @@ group :test do
   gem 'shoulda', '~> 3.5'
   gem 'rack-test', :require => 'rack/test'
   gem 'capybara', '~> 1.1.2'
-  gem 'capybara-webkit', '~> 0.13.0'
+  gem "poltergeist"
+  gem "phantomjs", :require => 'phantomjs/poltergeist'
 end

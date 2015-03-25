@@ -1,6 +1,7 @@
 class VerifyJob < TransporterJob
   protected
   def typecast_options
+    options[:batch] = to_bool(options[:batch])
     options[:verify_assets] = to_bool(options[:verify_assets])
     # If the last expressions returns false save is canceled
     true
@@ -12,7 +13,7 @@ class VerifyJob < TransporterJob
     itms.verify(package, optz)
   end
 
-  def _target 
+  def _target
     options[:package] ? File.basename(options[:package]) : super
   end
 end
