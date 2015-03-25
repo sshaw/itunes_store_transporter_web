@@ -36,7 +36,7 @@ end
 Dir.chdir(install_root)
 
 ENV["PADRINO_ENV"] = "production"
-failure("failed to run DB migrations, see above error") unless system("bin/padrino rake ar:migrate")
+failure("DB upgrade failed") unless system("ruby bin/padrino rake ar:migrate")
 
 puts(<<SUCCESS)
 ------------------------------
