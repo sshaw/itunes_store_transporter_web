@@ -45,6 +45,7 @@ namespace :jobs do
     end
 
     Delayed::Worker.max_attempts = 1
+    Delayed::Worker.max_run_time = 48.hours
     @worker_options = {
       :min_priority => ENV["MIN_PRIORITY"],
       :max_priority => ENV["MAX_PRIORITY"],

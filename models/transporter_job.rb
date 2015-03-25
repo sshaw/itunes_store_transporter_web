@@ -16,7 +16,7 @@ class TransporterJob < ActiveRecord::Base
 
   serialize :result
   serialize :options, Hash
-  serialize :exceptions, ITunes::Store::Transporter::TransporterError
+  serialize :exceptions
 
   validates :account_id, :presence => true
 
