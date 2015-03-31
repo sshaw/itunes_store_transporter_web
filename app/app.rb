@@ -233,6 +233,7 @@ class ItunesStoreTransporterWeb < Padrino::Application
   def order_by
     columns = TransporterJob.columns_hash.keys << "account"
     column = columns.include?(params[:order]) ? params[:order].dup : "created_at"
+    column.prepend "transporter_jobs."
 
     column = "accounts.username" if column == "account"
     column << " " << (params[:direction] != "asc" ? "desc" : params[:direction])

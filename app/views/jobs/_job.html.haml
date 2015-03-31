@@ -6,7 +6,7 @@
   %td
     = target(job)
   %td
-    = link_to job.options[:username], url(:job, :id => job.id)
+    = link_to job.account.display_name, url(:job, :id => job.id)
   %td
     = job.priority.to_s.titleize
   %td

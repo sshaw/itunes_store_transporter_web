@@ -29,7 +29,12 @@
               %th
                 = format_option_name(option)
               %td
-                = format_option_value(option, @job.options[option])
+                - if option == :username
+                  = @job.account.alias.presence || @job.account.username
+                - else
+                  = format_option_value(option, @job.options[option])
+
+
 
           %tr
             %th

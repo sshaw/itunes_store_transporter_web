@@ -39,8 +39,10 @@
           %tr
             %th
               Username
-            %th{:colspan => 2}
+            %th
               Shortname
+            %th{:colspan => 2}
+              Alias
 
         %tbody
           - @accounts.each do |account|
@@ -49,6 +51,12 @@
                 = account.username
               %td
                 = account.shortname
+              %td
+                - if account.alias.blank?
+                  &mdash;
+                - else
+                  = account.alias
+
               %td{:style => "text-align: right"}
                 = link_to "Edit", url(:account, account.id), :class => "btn btn-mini"
                 = link_to "Delete", url(:account_delete, account.id, :format => "js"), :class => "btn btn-mini btn-danger", :remote => true, :method => "delete"

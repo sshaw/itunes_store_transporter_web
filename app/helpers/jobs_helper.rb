@@ -37,6 +37,8 @@ ItunesStoreTransporterWeb.helpers do
     # Some options end with "_id", titleize() removes "_id"
     if option.end_with?("_id")
       name << " ID"
+    elsif option == "username"
+      name = "Account"
     elsif option == "failure" || option == "success"
       name = "On #{name}"
     elsif option == "delete"
@@ -61,10 +63,10 @@ ItunesStoreTransporterWeb.helpers do
   def account_options(accounts)
     options = []
 
-    Array(accounts).sort_by { |u| u.username }.group_by(&:username).each do |_, users|
+    Array(accounts).sort_by { |u| u.display_name }.group_by(&:display_name).each do |_, users|
       users.each do |u|
         options << [
-          users.one? ? u.username : sprintf("%s (%s)", u.username, u.shortname),
+          users.one? ? u.display_name : sprintf("%s (%s)", u.display_name, u.shortname),
           u.id
         ]
       end
@@ -92,7 +94,7 @@ ItunesStoreTransporterWeb.helpers do
     if params[:account_id].present?
       id = params[:account_id].to_i
       if account = accounts.find { |a| a.id == id }
-        terms << "account %s" % %Q("#{account.username}")
+        terms << "account %s" % %Q("#{account.display_name}")
       end
     end
 
