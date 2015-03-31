@@ -9,6 +9,7 @@
 
 = form_for @options, :upload, :class => "form-horizontal" do |f|
   = f.file_browser_field :package, :data => { :title => "Package" }
+  = f.check_box :batch, :label => "Batch upload?"
 
   = f.rate_field
   = f.select_transport

@@ -39,12 +39,12 @@ class ItunesStoreTransporterWeb < Padrino::Application
     end
   end
 
-  before do
+  before :except => :browse do
     # For search form
     @accounts = Account.all
   end
 
-  before :except => %r{\A/account} do
+  before :except => %r{\A/(?:account|browse)} do
     if @accounts.none?
       flash[:error] = "You must setup an account before you can continue."
       redirect :accounts

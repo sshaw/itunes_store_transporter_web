@@ -8,7 +8,7 @@ class ConfigControllerTest < CapybaraTestCase
   # should_have_a_file_dialog
   context "when the Select Path link is clicked" do
     setup do
-      Capybara.current_driver = :webkit
+      Capybara.current_driver = :poltergeist
       visit app.url(:config)
       click_link "Select Path"
     end
@@ -63,7 +63,7 @@ class ConfigControllerTest < CapybaraTestCase
         sleep 1
         click_link "Select"
       end
-      
+
       should "close the dialog" do
         assert !find(".modal").visible?
       end
@@ -78,7 +78,7 @@ class ConfigControllerTest < CapybaraTestCase
 
       context "when mousing over the selected directory's name" do
         setup { find("#path").trigger(:mouseover) }
-        
+
         should "display the directory's path" do
           assert has_selector?(".popover", :text => @element[:rel], :visible => true)
         end
