@@ -50,7 +50,12 @@ Ruby portion which will fail if the underlying library is not found.
   cd itunes_store_transporter_web-VERSION
   ruby ./setup.rb
 
-Start the webserver 
+Note that this *does* *not* install the iTunes Store Transporter. If you're on OS X
+you can install the Transporter by {installing Xcode}[https://developer.apple.com/xcode/downloads].
+Otherwise, you'll have to {create an iTunes Connect account}[http://www.apple.com/itunes/working-itunes/sell-content/]
+and install it yourself.
+
+Start the webserver
 
   ./bin/itmsweb start
 
@@ -60,20 +65,20 @@ Start the worker
 
 == Configuration
 
-In this section +ROOT+ refers to the directory containing the website. All configuration options are 
+In this section +ROOT+ refers to the directory containing the website. All configuration options are
 set in +ROOT/config/itmsweb.yml+.
 
 === Database
 
 Database configuration is contained within the +database+ section of the configuration file (+ROOT/config/itmsweb.yml+).
-It is used by the web server *and* the worker. 
+It is used by the web server *and* the worker.
 
 By default it will contain the information provided to the setup script. Here's an example:
 
   # itmsweb.yml
-   
+
   database:
-    adapter: mysql2 # DB driver (or sqlite3, postgresql, etc...) 
+    adapter: mysql2 # DB driver (or sqlite3, postgresql, etc...)
     database: itmsweb # DB table
     host: db.example.com
     username: sshaw
@@ -82,7 +87,7 @@ By default it will contain the information provided to the setup script. Here's 
 === Webserver
 
 ==== Starting/stopping
-  
+
   cd ROOT
   ./bin/itmsweb start  # start the server on 0.0.0.0 port 3000
   ./bin/itmsweb stop
@@ -94,7 +99,7 @@ Usage:
   start options:
 
   -h HOST     # Bind to HOST address
-  -p PORT     # Use PORT, default: 3000  
+  -p PORT     # Use PORT, default: 3000
   -d          # Run daemonized in the background
   -i PID      # Use PID as the PID file, default: ROOT/tmp/pids/server.pid
   -a HANDLER  # Rack Handler (default: autodetect)
@@ -103,19 +108,19 @@ Usage:
 
   -i PID      # Path to PID file of running process
               # Required if you started the server with a custom PID path
-  
+
 ==== Logging
 
 Errors are logged to +ROOT/log/production.log+.
 
 === iTMSTransporter Job Queue
 
-Jobs created through the website are added to a job queue. In order for jobs in the queue to be processed a 
+Jobs created through the website are added to a job queue. In order for jobs in the queue to be processed a
 worker (or many workers) must be running.
 
 ==== Running a worker process
 
-The job queue is managed by {DelayedJob}[https://github.com/collectiveidea/delayed_job#readme], so running a worker is just a 
+The job queue is managed by {DelayedJob}[https://github.com/collectiveidea/delayed_job#readme], so running a worker is just a
 matter or running one of the +DelayedJob+ tasks:
 
   ./bin/itmsworker          # start a worker
@@ -123,14 +128,14 @@ matter or running one of the +DelayedJob+ tasks:
   ./bin/itmsworker workoff  # start a worker & exit when all the jobs are processed
   ./bin/itmsworker clear    # clear the job queue
 
-Set the +MIN_PRIORITY+ and/or +MAX_PRIORITY+ environment variables to limit the worker to jobs with certain 
+Set the +MIN_PRIORITY+ and/or +MAX_PRIORITY+ environment variables to limit the worker to jobs with certain
 priorities (as defined by the website):
 
   MIN_PRIORITY=high ./bin/itmsworker
 
 ==== Running a remote worker process
 
-TODO 
+TODO
 
 === Website
 
@@ -163,7 +168,7 @@ of these directories, *not* their contents.
 ==== Preventing users from changing the Transporter path
 
 By default the +iTMSTransporter+ path can be set by visiting the config page. For client/server (i.e., non-local)
-setups it might be desirable to prevent users from changing it. This can be done by setting the +allow_select_transporter_path+ 
+setups it might be desirable to prevent users from changing it. This can be done by setting the +allow_select_transporter_path+
 option to +false+. This will prevent the config page from displaying the +iTMSTransporter+ path dialog.
 
   # itmsweb.yml
