@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../test_config.rb')
 
-class SchemaJobTest < Test::Unit::TestCase  
+class SchemaJobTest < Minitest::Test
   subject { SchemaJob.new :options => options }
 
   should_behave_like_a_transporter_job
@@ -8,8 +8,8 @@ class SchemaJobTest < Test::Unit::TestCase
   should_have_the_target_name("filmX-strict")
   should_have_the_target_name_when_stringified
 
-  context "#perform" do 
-    setup do 
+  context "#perform" do
+    setup do
       stub(@itms={}).schema
       stub(subject).itms { @itms }
       subject.perform
@@ -17,11 +17,11 @@ class SchemaJobTest < Test::Unit::TestCase
 
     should "retrieve the schema" do
       assert_received(@itms) { |itms| itms.schema(hash_including(options)) }
-    end    
+    end
   end
-  
+
   protected
   def options
-    { :type => "strict", :version => "filmX" } 
+    { :type => "strict", :version => "filmX" }
   end
 end

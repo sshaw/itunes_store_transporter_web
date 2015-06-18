@@ -2,16 +2,15 @@
   Status
 
 %h2
-  Status 
+  Status
 
 %p
-  Retrieve status information about a previously uploaded package. 
+  Retrieve status information about a previously uploaded package.
 
-= form_for @options, :status, :class => "form-horizontal" do |f|
+- form_for @options, :status, :class => "form-horizontal" do |f|
   = f.text_field :vendor_id, :label => "Vendor ID:"
   = f.select_priority
+  = f.select_account account_options(@accounts)
 
-  = partial "shared/auth_fields", :object => f
-
-  = f.actions do 
+  = f.actions do
     = f.submit "Check Status"

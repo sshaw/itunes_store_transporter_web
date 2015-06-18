@@ -1,7 +1,10 @@
+require "itunes/store/transporter/web/version"
+
 class ItunesStoreTransporterWeb < Padrino::Application
+
   use ActiveRecord::ConnectionAdapters::ConnectionManagement
 
-  register Sinatra::ConfigFile 
+  register Sinatra::ConfigFile
   register Padrino::Rendering
   register Padrino::Helpers
   register WillPaginate::Sinatra
@@ -35,10 +38,23 @@ class ItunesStoreTransporterWeb < Padrino::Application
       AppConfig.output_log_directory = settings.output_log_directory
     end
   end
-  
-  before :except => %r|\A/job| do
+
+  before :except => :browse do
+    # For search form
+    @accounts = Account.all
+  end
+
+  before :except => %r{\A/(?:account|browse)} do
+    if @accounts.none?
+      flash[:error] = "You must setup an account before you can continue."
+      redirect :accounts
+    end
+  end
+
+  before :except => %r{\A/(?:job|account)} do
     @config = AppConfig.first_or_initialize
   end
+
 
   [:lookup, :providers, :schema, :status, :upload, :verify].each do |route|
     name = route.to_s.capitalize
@@ -86,12 +102,12 @@ class ItunesStoreTransporterWeb < Padrino::Application
   end
 
   get :jobs, :provides => [:html, :js] do
-    @jobs = TransporterJob.order(order_by).paginate(paging_options)
+    @jobs = TransporterJob.joins(:account).order(order_by).paginate(paging_options)
     render "jobs/index"
   end
 
   get :search, "/jobs/search", :provides => [:html, :js] do
-    @jobs = TransporterJob.search(params).order(order_by).paginate(paging_options)
+    @jobs = TransporterJob.joins(:account).search(params).order(order_by).paginate(paging_options)
     render "jobs/search"
   end
 
@@ -125,7 +141,7 @@ class ItunesStoreTransporterWeb < Padrino::Application
   post :job_resubmit, :map => "/jobs/:id/resubmit" do
     job = TransporterJob.completed.find(params[:id])
     # Any Updated AppConfig options should be added...
-    job = job.class.new(:options => job.options.dup)
+    job = job.class.new(:options => job.options.dup, :account_id => job.account_id)
     job.save!
     flash[:success] = "Job resubmitted."
     redirect url(:job, :id => job.id)
@@ -164,6 +180,42 @@ class ItunesStoreTransporterWeb < Padrino::Application
     data
   end
 
+  get :accounts do
+    @account = Account.new
+    render "accounts/new"
+  end
+
+  post :accounts do
+    @account = Account.new(params[:account])
+    if @account.save
+      flash[:success] = "Account created."
+      redirect :config
+    else
+      render "accounts/new"
+    end
+  end
+
+  get :account, "/accounts", :with => :id do
+    @account = Account.find(params[:id])
+    render "accounts/edit"
+  end
+
+  patch :account_update, "/accounts/:id" do
+    @account = Account.find(params[:id])
+    if @account.update_attributes(params[:account])
+      flash[:success] = "Account updated."
+      redirect :config
+    else
+      render "accounts/edit"
+    end
+  end
+
+  delete :account_delete, :map => "/accounts/:id", :provides => :js do
+    @account = Account.find(params[:id])
+    @account.destroy
+    render "accounts/delete"
+  end
+
   get "/" do
     redirect :jobs
   end
@@ -179,8 +231,12 @@ class ItunesStoreTransporterWeb < Padrino::Application
   end
 
   def order_by
-    column = TransporterJob.columns_hash.include?(params[:order]) ? params[:order].dup : "created_at"
+    columns = TransporterJob.columns_hash.keys << "account"
+    column = columns.include?(params[:order]) ? params[:order].dup : "created_at"
+
+    column = "accounts.username" if column == "account"
     column << " " << (params[:direction] != "asc" ? "desc" : params[:direction])
+
     column
   end
 end

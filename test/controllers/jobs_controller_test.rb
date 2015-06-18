@@ -6,7 +6,7 @@ class JobsControllerTest < CapybaraTestCase
 
   context "viewing the list of jobs" do
     setup do
-      Capybara.current_driver = :webkit
+      Capybara.current_driver = :poltergeist
       @lookup = LookupJob.create! :options => options.merge(:vendor_id => "vendor_id_123")
       @lookup.success!
       @schema = SchemaJob.create! :options => options.merge(:type => "strict", :version => "film123")
@@ -46,7 +46,7 @@ class JobsControllerTest < CapybaraTestCase
 
   context "viewing a job" do
     setup do
-      Capybara.current_driver = :webkit
+      Capybara.current_driver = :poltergeist
       @job = LookupJob.create! :options => options.merge(:vendor_id => "ID123")
       visit app.url(:job, @job.id)
     end
@@ -55,14 +55,14 @@ class JobsControllerTest < CapybaraTestCase
     tabs.each do |show|
       hide = tabs.dup
       hide.delete(show)
-      
+
       context "when the #{show} tab is clicked" do
         setup { click_on show }
-        
+
         should "display the job #{show}" do
           assert find("##{show.downcase}").visible?
         end
-        
+
         hide.each do |tab|
           should "hide the job #{tab}" do
             assert !find("##{tab.downcase}").visible?
@@ -70,7 +70,7 @@ class JobsControllerTest < CapybaraTestCase
         end
       end
     end
-    
+
     context "when the Delete is clicked" do
       setup { click_on "Delete" }
 

@@ -13,22 +13,22 @@ class LookupControllerTest < CapybaraTestCase
       end
 
       should "create the job" do
-        assert_not_nil @job, "job created"
+        refute_nil @job, "job created"
       end
-      
+
       should "set the job's options" do
         assert_equal options.merge(:vendor_id => "VID"), @job.options
       end
-      
+
       should_create_the_job
     end
-    
+
     context "without valid parameters" do
       setup { post app.url(:lookup) }
       should_return_success
     end
   end
-  
+
   context "GET to lookup" do
     setup { get app.url(:lookup) }
     should_return_success

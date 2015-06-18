@@ -1,7 +1,6 @@
 require "erb"
 require "fileutils"
 
-# Will we *really* run on 2?
 abort "Ruby >= 1.9 is required, you're running #{RUBY_VERSION}" if RUBY_VERSION < "1.9"
 
 #
@@ -101,7 +100,7 @@ File.delete(*Dir["bin/*"].reject { |path|
 })
 
 puts(<<MSG)
-Installation successful! 
+Installation successful!
 You can now start the website and the queue worker using the following commands:
 
 bin/itmsweb start

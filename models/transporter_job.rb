@@ -16,7 +16,11 @@ class TransporterJob < ActiveRecord::Base
 
   serialize :result
   serialize :options, Hash
-  serialize :exceptions, ITunes::Store::Transporter::TransporterError
+  serialize :exceptions
+
+  validates :account_id, :presence => true
+
+  belongs_to :account
 
   before_save :typecast_options, :assign_target
 
@@ -174,7 +178,7 @@ class TransporterJob < ActiveRecord::Base
 
   def self.build_search_query(where)
     q = {}
-    [:priority, :target, :type, :state].each { |k| q[k] = where[k] if where[k].present? }
+    [:priority, :target, :type, :state, :account_id].each { |k| q[k] = where[k] if where[k].present? }
 
     d = []
     d << where[:updated_at_from].to_date if where[:updated_at_from].present?

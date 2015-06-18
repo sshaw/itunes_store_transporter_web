@@ -49,6 +49,8 @@ ItunesStoreTransporterWeb.helpers do
   def format_option_value(name, value)
     if name == :rate && value.present?
       number_with_delimiter(value) << " Kbps"
+    elsif name == :password
+      "*" * 8
     elsif value.present? || value == false
       h value
     else
@@ -56,8 +58,24 @@ ItunesStoreTransporterWeb.helpers do
     end
   end
 
-  def current_search_query
+  def account_options(accounts)
+    options = []
+
+    Array(accounts).sort_by { |u| u.username }.group_by(&:username).each do |_, users|
+      users.each do |u|
+        options << [
+          users.one? ? u.username : sprintf("%s (%s)", u.username, u.shortname),
+          u.id
+        ]
+      end
+    end
+
+    options
+  end
+
+  def current_search_query(accounts)
     terms = []
+
     [:priority, :state, :target, :type].each do |name|
       next if params[name].blank?
       term = case name
@@ -69,6 +87,13 @@ ItunesStoreTransporterWeb.helpers do
           params[name].capitalize
         end
       terms << "#{name} #{term}"
+    end
+
+    if params[:account_id].present?
+      id = params[:account_id].to_i
+      if account = accounts.find { |a| a.id == id }
+        terms << "account %s" % %Q("#{account.username}")
+      end
     end
 
     updated = [:_updated_at_from, :_updated_at_to].inject([]) { |q, key| q << params[key] if params[key].present?; q }
@@ -98,7 +123,7 @@ ItunesStoreTransporterWeb.helpers do
   def link_to_download(url)
     link_to content_tag(:i, "", :class => "icon-download-alt") << "Download", url
   end
-  
+
   def link_to_view(url)
     link_to content_tag(:i, "", :class => "icon-resize-full")  << "View", url
  end

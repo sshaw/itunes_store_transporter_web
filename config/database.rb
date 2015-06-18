@@ -9,7 +9,7 @@ ActiveRecord::Base.configurations[:test] = {
 }
 
 if Padrino.env == :production
-  begin 
+  begin
     config = YAML.load_file(ITMSWEB_CONFIG)
     db = config["database"]
     raise "missing or invalid database setting" unless Hash === db

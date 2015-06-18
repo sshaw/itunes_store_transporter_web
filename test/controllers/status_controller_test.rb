@@ -2,7 +2,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../test_config.rb')
 
 class StatusControllerTest < CapybaraTestCase
   should_toggle_auth_fields(app.url(:status))
-  
+
   context "POST to status" do
     context "with valid parameters" do
       setup do
@@ -13,10 +13,10 @@ class StatusControllerTest < CapybaraTestCase
       end
 
       should "set the job's options" do
-        assert_not_nil @job, "job created"
+        refute_nil @job, "job created"
         assert_equal @options, @job.options
       end
-      
+
       should_create_the_job
     end
 

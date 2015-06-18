@@ -1,7 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../test_config.rb')
 require "options"
 
-class AppConfigTest < Test::Unit::TestCase
+class AppConfigTest < Minitest::Test
   should validate_numericality_of(:rate)
   should_not allow_value(0).for(:rate)
   should_not allow_value(-1).for(:rate)

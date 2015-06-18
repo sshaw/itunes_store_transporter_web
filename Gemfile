@@ -15,7 +15,7 @@ gem "delayed_job_active_record"
 gem "tilt"
 gem "coderay"
 gem "will_paginate", "~> 3.0"
-gem "itunes_store_transporter"
+gem "itunes_store_transporter", "~> 0.1.3"
 gem "padrino_bootstrap_forms", "~> 0.1.0", :require => "bootstrap_forms"
 
 # Or Individual Gems
@@ -26,10 +26,12 @@ end
 gem 'sqlite3', :group => [:development, :test]
 
 # Test requirements
-group :test do 
+group :test do
   gem 'rr'
-  gem 'shoulda', '~> 3'
+  gem 'minitest', :require => 'minitest/autorun'
+  gem 'shoulda', '~> 3.5'
   gem 'rack-test', :require => 'rack/test'
   gem 'capybara', '~> 1.1.2'
-  gem 'capybara-webkit', '~> 0.13.0'
+  gem "poltergeist"
+  gem "phantomjs", :require => 'phantomjs/poltergeist'
 end

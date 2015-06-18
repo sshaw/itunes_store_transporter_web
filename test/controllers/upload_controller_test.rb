@@ -13,22 +13,22 @@ class UploadControllerTest < CapybaraTestCase
       end
 
       should "create the job" do
-        assert_not_nil @job, "job created"
+        refute_nil @job, "job created"
       end
-      
+
       should "set the job's options" do
         assert_equal @options, @job.options
       end
-      
+
       should_create_the_job
     end
-    
+
     context "without valid parameters" do
       setup { post app.url(:upload) }
-      should_return_success      
+      should_return_success
     end
   end
-  
+
   context "GET to upload" do
     setup { get app.url(:upload) }
     should_return_success
@@ -39,7 +39,7 @@ class UploadControllerTest < CapybaraTestCase
       @options = set_defaults(options.merge(:rate => 100, :transport => "Signiant"))
       visit app.url(:upload)
     end
-    
+
     [:rate, :transport, :username, :password, :shortname].each do |opt|
       should "set the #{opt} field to the default" do
         # :rate is an int

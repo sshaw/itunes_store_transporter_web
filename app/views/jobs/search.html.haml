@@ -1,10 +1,10 @@
 - content_for :title do
-  &= current_search_query
+  &= current_search_query(@accounts)
 
 %h2
   Search:
   %span{:style => "font-weight:normal;font-size:0.9em"}
-    &= current_search_query
+    &= current_search_query(@accounts)
 
 .jobs
   - if @jobs.none?

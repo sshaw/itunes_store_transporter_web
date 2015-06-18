@@ -4,18 +4,18 @@
     %meta{:charset => "utf-8"}
     %meta{"http-equiv" => "X-UA-Compatible", :content => "IE=edge"}
     %title
-      - if content_for?(:title) 
+      - if content_for?(:title)
         &= yield_content(:title)
         \-
       iTunes Store Transporter
 
     = stylesheet_link_tag "bootstrap.min", "jquery-ui-1.9.2.custom.min", "jqueryFileTree", "main"
     = javascript_include_tag "jquery", "jquery-ujs", "jquery-ui-1.9.2.custom.min.js", "bootstrap.min", "jqueryFileTree", "application"
-     
+
   %body
     .navbar.navbar-fixed-top
       .navbar-inner
-        .container          
+        .container
           = link_to "iTunes Store Transporter: GUI", url("/"), :class => "brand"
 
           .nav
@@ -37,5 +37,10 @@
 
       = flash_messages
       = yield
-    
-    = partial "shared/search_form"
+
+    %footer
+      %p{:style => "text-align:center"}
+        %small
+          v#{ITunes::Store::Transporter::Web::VERSION}
+
+    = partial "shared/search_form", :locals => { :accounts => @accounts }
