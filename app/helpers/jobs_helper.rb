@@ -113,7 +113,7 @@ ItunesStoreTransporterWeb.helpers do
   end
 
   def highlite(txt, format)
-    CodeRay.scan(txt, format).div #(:line_numbers => :table)
+    CodeRay.scan(txt, format).div.html_safe
   end
 
   def state_label(state)
