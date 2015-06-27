@@ -20,7 +20,7 @@ gem "padrino_bootstrap_forms", "~> 0.1.0", :require => "bootstrap_forms"
 
 # Or Individual Gems
 %w(core gen helpers).each do |g|
-  gem 'padrino-' + g, '0.12.3'
+  gem 'padrino-' + g, '0.12.5'
 end
 
 gem 'sqlite3', :group => [:development, :test]
