@@ -137,8 +137,9 @@ ItunesStoreTransporterWeb.helpers do
   end
 
   def sort_by(column)
-    dir = params[:direction] == "asc" ? "desc" : "asc"
-    arr = dir == "asc" ? "&darr;" : "&uarr;" if params[:order] == column
-    link_to(column.titleize, current_path(params.merge("order" => column, "direction" => dir))) << " #{arr}"
+    dir  = params[:direction] == "asc" ? "desc" : "asc"
+    link = link_to(column.titleize, current_path(params.merge("order" => column, "direction" => dir)))
+    link << (dir == "asc" ? " &darr;" : " &uarr;").html_safe if params[:order] == column
+    link
   end
 end
