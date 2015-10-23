@@ -27,11 +27,17 @@ gem 'sqlite3', :group => [:development, :test]
 
 # Test requirements
 group :test do
-  gem 'rr'
-  gem 'minitest', :require => 'minitest/autorun'
-  gem 'shoulda', '~> 3.5'
+  gem 'rspec'
+  gem 'shoulda-matchers', :require => false
+  # Without this shouda-matchers fails to load
+  gem 'test-unit', '~> 3.0'
   gem 'rack-test', :require => 'rack/test'
   gem 'capybara', '~> 1.1.2'
+  gem "database_cleaner"
   gem "poltergeist"
   gem "phantomjs", :require => 'phantomjs/poltergeist'
+end
+
+group :test, :development do
+  gem "factory_girl"
 end

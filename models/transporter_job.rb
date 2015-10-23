@@ -113,6 +113,7 @@ class TransporterJob < ActiveRecord::Base
   end
 
   protected
+
   def numeric_priority
     # Lower number == higher priority
     priority == :next ?
