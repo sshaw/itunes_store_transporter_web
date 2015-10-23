@@ -2,9 +2,9 @@
 
 GUI for the iTunes Store’s Transporter (iTMSTransporter)
 
-* [Installation](#Installation)
-* [Configuration](#Configuration)
-* [More Info](#More+Info)
+* [Installation](#installation)
+* [Configuration](#configuration)
+* [More Info](#more-info)
 
 ## Overview
 
