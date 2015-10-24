@@ -22,7 +22,7 @@ class TransporterJob < ActiveRecord::Base
 
   belongs_to :account
 
-  before_save :typecast_options, :assign_target
+  before_save :typecast_options
 
   after_create  :enqueue_delayed_job
   after_destroy :dequeue_delayed_job, :remove_log
@@ -100,6 +100,10 @@ class TransporterJob < ActiveRecord::Base
     failure!
   end
 
+  def target
+    _target
+  end
+
   def priority
     self[:priority].respond_to?(:to_sym) ? self[:priority].to_sym : :normal
   end
@@ -132,10 +136,6 @@ class TransporterJob < ActiveRecord::Base
   def dequeue_delayed_job
     # what if running... raise error?
     Delayed::Job.delete(job_id) if queued?
-  end
-
-  def assign_target
-    self.target = _target
   end
 
   def _target

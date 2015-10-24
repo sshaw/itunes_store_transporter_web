@@ -8,8 +8,10 @@ FactoryGirl.define do
 
   factory :lookup_job, :parent => :job, :class => LookupJob do
     after :build do |job|
-      id = [:vendor_id, :apple_id].sample
-      job.options[id] = "X123"
+      if !job.options.include?(:apple_id) && !job.options.include?(:vendor_id)
+        id = [:vendor_id, :apple_id].sample
+        job.options[id] = "X123"
+      end
     end
   end
 

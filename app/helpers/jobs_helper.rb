@@ -27,7 +27,7 @@ ItunesStoreTransporterWeb.helpers do
   end
 
   def target(job)
-    job.target.present? ? link_to(job.target, url(:job, :id => job.id)) : "&mdash;"
+    job.target.present? ? link_to(job.target, url(:job, :id => job.id)) : "&mdash;".html_safe
   end
 
   def format_option_name(option)
@@ -54,7 +54,7 @@ ItunesStoreTransporterWeb.helpers do
     elsif value.present? || value == false
       h value
     else
-      "&mdash;"
+      "&mdash;".html_safe
     end
   end
 

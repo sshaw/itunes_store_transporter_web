@@ -6,7 +6,19 @@ RSpec.describe LookupJob, :model do
 
   it_should_behave_like "a transporter job"
 
-  describe "#perform" do
+  describe "#target" do
+    it "uses the vendor id" do
+      job.options[:vendor_id] = "VID"
+      expect(job.target).to eq job.options[:vendor_id]
+    end
+
+    it "uses the apple id" do
+      job.options[:apple_id] = "AID"
+      expect(job.target).to eq job.options[:apple_id]
+    end
+  end
+
+  describe "when executed" do
     it "retrieves metadata for the given identifier" do
       metadata = "<x>123</x>"
 
