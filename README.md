@@ -1,5 +1,8 @@
 # iTunes::Store::Transporter::Web
 
+[![Build Status](https://secure.travis-ci.org/sshaw/itunes_store_transporter_web.svg)](https://secure.travis-ci.org/sshaw/itunes_store_transporter_web)
+[![Code Climate](https://codeclimate.com/github/sshaw/itunes_store_transporter_web/badges/gpa.svg)](https://codeclimate.com/github/sshaw/itunes_store_transporter_web)
+
 GUI for the iTunes Store’s Transporter (iTMSTransporter)
 
 * [Installation](#installation)

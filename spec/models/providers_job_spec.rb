@@ -6,7 +6,7 @@ RSpec.describe ProvidersJob, :model do
 
   it_should_behave_like "a transporter job"
 
-  describe "#perform" do
+  describe "when executed" do
     it "retrieves a list of providers" do
       providers = [1,2,3]
 

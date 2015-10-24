@@ -6,7 +6,7 @@ RSpec.describe SchemaJob, :model do
 
   it_should_behave_like "a transporter job"
 
-  describe "#perform" do
+  describe "when executed" do
     it "retrieves a schema" do
 
       schema = "<x>123</x>"

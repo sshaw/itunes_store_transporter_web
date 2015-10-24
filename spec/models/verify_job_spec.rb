@@ -6,7 +6,7 @@ RSpec.describe VerifyJob, :model do
 
   it_should_behave_like "a transporter job"
 
-  describe "#perform" do
+  describe "when executed" do
     it "verifies the package" do
       itms = stub_itms(job)
       expect(itms).to receive(:verify).with(
