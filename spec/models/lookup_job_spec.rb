@@ -8,12 +8,12 @@ RSpec.describe LookupJob, :model do
 
   describe "#target" do
     it "uses the vendor id" do
-      job.options[:vendor_id] = "VID"
+      job.options = { :vendor_id => "VID" }
       expect(job.target).to eq job.options[:vendor_id]
     end
 
     it "uses the apple id" do
-      job.options[:apple_id] = "AID"
+      job.options = { :apple_id => "AID" }
       expect(job.target).to eq job.options[:apple_id]
     end
   end

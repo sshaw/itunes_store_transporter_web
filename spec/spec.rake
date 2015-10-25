@@ -1,20 +1,22 @@
-begin
-  require 'rspec/core/rake_task'
+require 'rspec/core/rake_task'
 
-  spec_tasks = Dir['spec/*/'].each_with_object([]) do |d, result|
-    result << File.basename(d) unless Dir["#{d}*"].empty?
-  end
-
-  spec_tasks.each do |folder|
-    desc "Run the spec suite in #{folder}"
-    RSpec::Core::RakeTask.new("spec:#{folder}") do |t|
-      t.pattern = "./spec/#{folder}/**/*_spec.rb"
-      t.rspec_opts = "--color"
-    end
-  end
-
-  desc "Run complete application spec suite"
-  task 'spec' => spec_tasks.map { |f| "spec:#{f}" }
-rescue LoadError
-  puts "RSpec is not part of this bundle, skip specs."
+def self.spec_glob(root = 'spec')
+  "#{root}/**/*_spec.rb"
 end
+
+tests = Dir[spec_glob].map { |path| File.dirname(path) }.uniq
+tests.each do |path|
+  dirs = path.split('/')
+  desc "Run specs in #{dirs[1]}"
+  RSpec::Core::RakeTask.new("spec:#{dirs[1]}") do |t|
+    t.pattern = spec_glob("spec/#{dirs[1]}")
+    t.verbose = true
+  end
+end
+
+desc 'Run application test suite'
+RSpec::Core::RakeTask.new do |t|
+  t.verbose = true
+end
+
+task :default => 'spec'
