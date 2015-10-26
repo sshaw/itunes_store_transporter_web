@@ -1,7 +1,10 @@
 language: ruby
+sudo: false
+env:
+  - RACK_ENV=test
+before_script: bundle exec rake ar:create && bundle exec rake ar:migrate
 rvm:
   - 1.9.3
-  - jruby-19mode
   - 2.0
   - 2.1
   - 2.2
