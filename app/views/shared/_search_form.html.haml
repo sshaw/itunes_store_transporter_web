@@ -1,7 +1,7 @@
-- form_tag url(:search), :method => :get, :class => "form-horizontal" do
+= form_tag url(:search), :method => :get, :class => "form-horizontal" do
   #search.modal{:style => "display:none"}
     .modal-header
-      = link_to "&times;", :class => "close", :data => { :dismiss => "modal" }
+      = link_to "&times;".html_safe, :class => "close", :data => { :dismiss => "modal" }
 
       %h3
         Search
