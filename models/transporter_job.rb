@@ -22,7 +22,7 @@ class TransporterJob < ActiveRecord::Base
 
   belongs_to :account
 
-  before_save :typecast_options
+  before_save :typecast_options, :set_target
 
   after_create  :enqueue_delayed_job
   after_destroy :dequeue_delayed_job, :remove_log
@@ -118,6 +118,10 @@ class TransporterJob < ActiveRecord::Base
 
   protected
 
+  def set_target
+    self[:target] = target
+  end
+
   def numeric_priority
     # Lower number == higher priority
     priority == :next ?
@@ -142,6 +146,7 @@ class TransporterJob < ActiveRecord::Base
     # An ID to denote the job's target. E.g., package name, apple id, ...
   end
 
+  # TODO: this should probably be moved to a the form class
   def typecast_options
     # For subclasses
   end
