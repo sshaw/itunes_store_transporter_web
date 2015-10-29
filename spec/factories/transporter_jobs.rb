@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :job, :class => TransporterJob do
     account
-    options { Hash[:uername => "sshaw", :password => "fofinha!"] }
+    options { Hash[:username => account.username, :password => account.password] }
   end
 
   factory :providers_job, :parent => :job, :class => ProvidersJob
@@ -10,7 +10,7 @@ FactoryGirl.define do
     after :build do |job|
       if !job.options.include?(:apple_id) && !job.options.include?(:vendor_id)
         id = [:vendor_id, :apple_id].sample
-        job.options[id] = "X123"
+        job.options[id] = job.object_id.to_s
       end
     end
   end
@@ -23,7 +23,7 @@ FactoryGirl.define do
 
   factory :status_job, :parent => :job, :class => StatusJob do
     after :build do |job|
-      job.options[:vendor_id] = "X999"
+      job.options[:vendor_id] = job.object_id.to_s
     end
   end
 

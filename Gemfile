@@ -20,20 +20,20 @@ gem "padrino_bootstrap_forms", "~> 0.1.0", :require => "bootstrap_forms"
 
 # Or Individual Gems
 %w(core gen helpers).each do |g|
-  gem 'padrino-' + g, '0.12.5'
+  gem "padrino-" + g, "0.12.5"
 end
 
-gem 'sqlite3', :group => [:development, :test]
+gem "sqlite3", :group => [:development, :test]
 
 # Test requirements
 group :test do
-  gem 'rspec'
-  gem 'shoulda-matchers', :require => false
-  # Without this shouda-matchers fails to load
+  gem "rspec"
+  # This is necessary because of https://github.com/sshaw/padrino_bootstrap_forms/issues/10
   gem 'test-unit', '~> 3.0'
-  gem 'rack-test', :require => 'rack/test'
-  gem 'capybara', '~> 1.1.2'
+  gem "shoulda-matchers", :require => false
+  gem "rack-test", :require => "rack/test"
   gem "database_cleaner"
+  gem "capybara-screenshot"
   gem "poltergeist"
   gem "phantomjs", :require => 'phantomjs/poltergeist'
 end
