@@ -30,7 +30,7 @@ end
 
 FactoryGirl.find_definitions
 
-#Capybara.save_and_open_page_path = Padrino.root('tmp/capybara')
+Capybara.save_and_open_page_path = "tmp/capybara"
 Capybara.javascript_driver = :poltergeist
 Capybara.app = ItunesStoreTransporterWeb
 Capybara::Screenshot.prune_strategy = :keep_last_run
