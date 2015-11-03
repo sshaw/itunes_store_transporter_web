@@ -127,8 +127,6 @@ feature "Job search", :js do
     end
   end
 
-
-  # first click is asc, next is desc
   describe "sorting the results" do
     before { @jobs = [ create(:status_job), create(:upload_job) ] }
 
@@ -138,37 +136,60 @@ feature "Job search", :js do
 
       visit app.url(:search)
 
-      click_on "State"
-      order = all(".jobs table tbody tr")
-
-      expect(page).to have_text("↑")
-      expect(order[0].text).to have_text(@jobs[0].state)
-      expect(order[1].text).to have_text(@jobs[1].state)
-
-      click_on "State"
-      order = all(".jobs table tbody tr")
-
-      expect(page).to have_text("↓")
-      expect(order[0].text).to have_text(@jobs[1].state)
-      expect(order[1].text).to have_text(@jobs[0].state)
+      expect(@jobs).to sort_by("State")
     end
 
     it "sorts by type" do
       visit app.url(:search)
 
-      click_on "Type"
-      order = all(".jobs table tbody tr")
+      @jobs.sort_by!(&:type)
 
+      expect(@jobs).to sort_by("Type")
+    end
+
+    it "sorts by account" do
+      visit app.url(:search)
+
+      @jobs.sort_by! { |j| j.account.username }
+
+      expect(@jobs).to sort_by("Account")
+    end
+
+    it "sorts by created at" do
+      visit app.url(:search)
+
+      @jobs[0].update_column(:created_at, 10.days.ago)
+      @jobs[1].update_column(:created_at, Time.now)
+
+      expect(@jobs).to sort_by("Created At")
+    end
+
+    it "sorts by updated at" do
+      visit app.url(:search)
+
+      @jobs[0].update_column(:updated_at, 10.days.ago)
+      @jobs[1].update_column(:updated_at, Time.now)
+
+      expect(@jobs).to sort_by("Updated At")
+    end
+  end
+
+  RSpec::Matchers.define :sort_by do |column|
+    match do |jobs|
+      page.click_on column
+      order = page.all(".jobs table tbody tr")
+
+      # first click is asc, next is desc
       expect(page).to have_text("↑")
-      expect(order[0].text).to have_text(@jobs[0].type)
-      expect(order[1].text).to have_text(@jobs[1].type)
+      expect(order[0].text).to have_text(jobs[0].type)
+      expect(order[1].text).to have_text(jobs[1].type)
 
-      click_on "Type"
-      order = all(".jobs table tbody tr")
+      page.click_on column
+      order = page.all(".jobs table tbody tr")
 
       expect(page).to have_text("↓")
-      expect(order[0].text).to have_text(@jobs[1].type)
-      expect(order[1].text).to have_text(@jobs[0].type)
+      expect(order[0].text).to have_text(jobs[1].type)
+      expect(order[1].text).to have_text(jobs[0].type)
     end
   end
 
