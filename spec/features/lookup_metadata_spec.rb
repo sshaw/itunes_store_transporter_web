@@ -6,7 +6,7 @@ feature "Lookup metadata", :js do
   end
 
   ["Vendor ID", "Apple ID"].each do |id|
-    it "creates a job for the given vendor id" do
+    it "creates a job for the given #{id}" do
       visit app.url(:lookup)
 
       select id, :from => "lookup_form[package_id]"
