@@ -13,6 +13,29 @@ RSpec.configure do |config|
   config.include FactoryGirl::Syntax::Methods
 
   config.include Module.new {
+    def select_file(path)
+      # Leading element is empty.
+      parts = @package.split("/")[1..-1]
+
+      # Double click expands, single click selects.
+      # We have to sleep after clicking so that double click detection works
+      # and jQuery.slideDown completes its expansion
+      parts[0..-2].each do |part|
+        2.times { click_on part }
+        sleep 0.5
+      end
+
+      click_on parts[-1]
+      sleep 0.5
+      click_on "Select"
+    end
+
+    def create_package(name = "X#{Time.now.to_i}")
+      path = File.join(Dir.tmpdir, "#{name}.itmsp")
+      Dir.mkdir(path)
+      path
+    end
+
     def stub_itms(job)
       transporter = double()
       allow(job).to receive(:itms) { transporter }
