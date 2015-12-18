@@ -15,7 +15,7 @@ RSpec.configure do |config|
   config.include Module.new {
     def select_file(path)
       # Leading element is empty.
-      parts = @package.split("/")[1..-1]
+      parts = path.split("/")[1..-1]
 
       # Double click expands, single click selects.
       # We have to sleep after clicking so that double click detection works
