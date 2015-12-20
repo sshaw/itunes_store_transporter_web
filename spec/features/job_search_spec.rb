@@ -1,8 +1,8 @@
 # coding: utf-8
 require "spec_helper"
 
-feature "Job search", :js do
-  it "finds job in the selected state" do
+feature "Search", :js do
+  scenario "Searching for jobs by state" do
     found = create(:upload_job)
     found.running!
 
@@ -18,7 +18,7 @@ feature "Job search", :js do
     expect(page).to have_no_selector(".job", :text => "Queued")
   end
 
-  it "finds jobs of the selected type" do
+  scenario "Searching for jobs by type" do
     found = create(:upload_job)
     not_found = create(:lookup_job)
 
@@ -31,7 +31,7 @@ feature "Job search", :js do
     expect(page).to have_no_selector(".job", :text => "Lookup")
   end
 
-  it "finds jobs with the selected priority" do
+  scenario "Searching for job by priority" do
     found = create(:upload_job, :priority => :high)
     not_found = create(:upload_job, :priority => :normal)
 
@@ -44,7 +44,7 @@ feature "Job search", :js do
     expect(page).to have_no_selector(".job", :text => "Normal")
   end
 
-  it "finds jobs with the given target" do
+  scenario "Searching for jobs by target" do
     found = create(:status_job)
     not_found = create(:status_job)
 
@@ -57,7 +57,7 @@ feature "Job search", :js do
     expect(page).to have_no_selector(".job", :text => not_found.target)
   end
 
-  it "finds jobs for the given account" do
+  scenario "Searching for jobs by account" do
     found = create(:status_job).account
     not_found = create(:status_job).account
 

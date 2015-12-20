@@ -1,5 +1,5 @@
 require "spec_helper"
-require "shared_examples_for_a_transporter_job"
+require "shared_examples/a_transporter_job"
 
 RSpec.describe SchemaJob, :model do
   subject(:job) { build(:schema_job) }
