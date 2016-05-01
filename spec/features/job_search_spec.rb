@@ -1,4 +1,5 @@
 # coding: utf-8
+
 require "spec_helper"
 
 feature "Search", :js do
@@ -84,7 +85,7 @@ feature "Search", :js do
       visit app.url(:jobs)
     end
 
-    context "selecting dates from the calendar" do
+    describe "selecting dates from the calendar" do
       it "finds jobs updated between the given date range" do
         search do
           pick_date("_updated_at_from", @start_date)
@@ -105,7 +106,7 @@ feature "Search", :js do
       end
     end
 
-    context "entering dates" do
+    describe "entering dates" do
       it "finds jobs updated on the given date", :pending => "Single date search broken, GitHub issue #5" do
         search { fill_in "_updated_at_from", :with => @start_date.strftime("%D") }
 

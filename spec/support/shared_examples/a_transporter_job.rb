@@ -86,7 +86,7 @@ shared_examples_for "a transporter job" do
       job.save!
     end
 
-    it "add the job's log file to its options" do
+    it "adds the job's log file to the its options" do
       allow(job).to receive(:run) do
         expect(job.options[:log]).to match /#{job.id}.log\Z/
       end

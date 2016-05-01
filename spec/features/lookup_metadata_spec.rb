@@ -1,6 +1,6 @@
 require "spec_helper"
 
-feature "Retrieve package metadata on the iTunes Store", :js do
+feature "Retrieve package metadata from the iTunes Store", :js do
   before do
     @account = create(:account)
 

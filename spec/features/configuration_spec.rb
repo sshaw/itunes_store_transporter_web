@@ -19,6 +19,7 @@ feature "Configuration", :js do
 
     expect(page).to have_text("Configuration saved")
     expect(page).to have_text(/Location:\s+#{File.basename(Dir.tmpdir)}\b/)
+    # popup with absolute path
     expect(page).to have_css("span[data-content='#{Dir.tmpdir}']")
     expect(page).to have_field("Rate", :with => "999")
     expect(page).to have_field("Transport", :with => "Aspera")
