@@ -16,11 +16,11 @@ gem "tilt"
 gem "coderay"
 gem "will_paginate", "~> 3.0"
 gem "itunes_store_transporter", "~> 0.1.3"
-gem "padrino_bootstrap_forms", "~> 0.1.0", :require => "bootstrap_forms"
+gem "padrino_bootstrap_forms", "~> 0.1.1", :require => "bootstrap_forms"
 
 # Or Individual Gems
 %w(core gen helpers).each do |g|
-  gem "padrino-" + g, "0.12.5"
+  gem "padrino-" + g, "0.12.6"
 end
 
 gem "sqlite3", :group => [:development, :test]
@@ -28,8 +28,6 @@ gem "sqlite3", :group => [:development, :test]
 # Test requirements
 group :test do
   gem "rspec"
-  # This is necessary because of https://github.com/sshaw/padrino_bootstrap_forms/issues/10
-  gem 'test-unit', '~> 3.0'
   gem "shoulda-matchers", :require => false
   gem "rack-test", :require => "rack/test"
   gem "database_cleaner"

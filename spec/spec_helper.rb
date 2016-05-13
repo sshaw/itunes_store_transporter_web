@@ -40,13 +40,6 @@ Capybara.javascript_driver = :poltergeist
 Capybara.app = ItunesStoreTransporterWeb
 Capybara::Screenshot.prune_strategy = :keep_last_run
 
-# This is necessary because of https://github.com/sshaw/padrino_bootstrap_forms/issues/10
-class Test::Unit::AutoRunner
-  def self.need_auto_run?
-    false
-  end
-end
-
 # You can use this method to custom specify a Rack app
 # you want rack-test to invoke:
 #
