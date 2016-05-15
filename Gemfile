@@ -16,7 +16,7 @@ gem "tilt"
 gem "coderay"
 gem "will_paginate", "~> 3.0"
 gem "itunes_store_transporter", "~> 0.1.3"
-gem "padrino_bootstrap_forms", "~> 0.1.1", :require => "bootstrap_forms"
+gem "padrino_bootstrap_forms", "~> 0.1.2", :require => "bootstrap_forms"
 
 # Or Individual Gems
 %w(core gen helpers).each do |g|
@@ -28,7 +28,7 @@ gem "sqlite3", :group => [:development, :test]
 # Test requirements
 group :test do
   gem "rspec"
-  gem "shoulda-matchers", :require => false
+  gem "shoulda-matchers"
   gem "rack-test", :require => "rack/test"
   gem "database_cleaner"
   gem "capybara-screenshot"

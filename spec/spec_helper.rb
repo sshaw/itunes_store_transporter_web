@@ -7,7 +7,6 @@ $: << File.dirname(__FILE__) + "/support"
 
 require "tmpdir"
 
-require "shoulda/matchers"
 require "capybara/dsl"
 require "capybara/poltergeist"
 require "capybara/rspec"
@@ -24,6 +23,9 @@ RSpec.configure do |config|
   config.include FeatureMatchers
   config.include FeatureActions
   config.include Helpers
+
+  config.include Shoulda::Matchers::ActiveModel
+  config.include Shoulda::Matchers::ActiveRecord
 
   config.before(:suite) { DatabaseCleaner.clean_with(:truncation) }
   config.around :each do |ex|

@@ -12,7 +12,8 @@ class TransporterJob < ActiveRecord::Base
 
   PRIORITY = Hash.new(0).merge!(:high => -1, :normal => 0, :low => 1)
 
-  attr_protected :state, :target, :job_id
+  # TODO: params in controller
+  #attr_protected :state, :target, :job_id
 
   serialize :result
   serialize :options, Hash
@@ -27,7 +28,7 @@ class TransporterJob < ActiveRecord::Base
   after_create  :enqueue_delayed_job
   after_destroy :dequeue_delayed_job, :remove_log
 
-  scope :completed, where(:state => [:success, :failure])
+  scope :completed, lambda { where(:state => [:success, :failure]) }
 
   def self.search(params)
     where(build_search_query(params))
@@ -93,7 +94,7 @@ class TransporterJob < ActiveRecord::Base
   end
 
   def error(job, exception)
-    update_attributes({:state => :failure, :exceptions => exception}, :without_protection => true)
+    update_attributes(:state => :failure, :exceptions => exception)
   end
 
   def failure
@@ -130,10 +131,10 @@ class TransporterJob < ActiveRecord::Base
   end
 
   def enqueue_delayed_job
-    connection.transaction do
+    transaction do
       # Uh, why not just has_one..?
       job = Delayed::Job.enqueue(self, :priority => numeric_priority)
-      update_column :job_id, job.id
+      update_column(:job_id, job.id)
     end
   end
 

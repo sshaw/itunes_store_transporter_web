@@ -3,9 +3,6 @@ require "tempfile"
 shared_examples_for "a transporter job" do
   it { should belong_to(:account) }
   it { should validate_presence_of(:account_id) }
-  it { should_not allow_mass_assignment_of(:state) }
-  it { should_not allow_mass_assignment_of(:target) }
-  it { should_not allow_mass_assignment_of(:job_id) }
 
   described_class::STATES.each do |state|
     describe "##{state}!" do
@@ -112,12 +109,12 @@ shared_examples_for "a transporter job" do
 
     context "when an exception occurs" do
       before do
-        @error = StandardError.new("bad thangz going down")
+        @error = RuntimeError.new("bad thangz goin' down")
         allow(job).to receive(:run).and_raise(@error)
 
         begin
           job.save!
-        rescue => e
+        rescue RuntimeError
         end
       end
 

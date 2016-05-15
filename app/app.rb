@@ -1,8 +1,7 @@
 require "itunes/store/transporter/web/version"
 
 class ItunesStoreTransporterWeb < Padrino::Application
-
-  use ActiveRecord::ConnectionAdapters::ConnectionManagement
+  use ConnectionPoolManagement
 
   register Sinatra::ConfigFile
   register Padrino::Rendering
