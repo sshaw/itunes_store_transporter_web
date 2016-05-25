@@ -28,7 +28,13 @@ gem "sqlite3", :group => [:development, :test]
 # Test requirements
 group :test do
   gem "rspec"
-  gem "shoulda-matchers"
+
+  if RUBY_VERSION <= "1.9.3"
+    gem "shoulda-matchers", "2.8.0"
+  else
+    gem "shoulda-matchers"
+  end
+
   gem "rack-test", :require => "rack/test"
   gem "database_cleaner"
   gem "capybara-screenshot"
