@@ -174,7 +174,7 @@ DEPENDENCIES
   rack-test
   rake
   rspec
-  shoulda-matchers
+  shoulda-matchers (~> 3.1.1)
   sinatra-flash
   sqlite3
   tilt
