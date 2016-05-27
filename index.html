@@ -30,6 +30,11 @@
 	      preload: [0,1] // Will preload 0 - before current, and 1 after the current image
 	    },
 	  });
+
+	  $('a.download').click(function() {
+	      var version = this.getAttribute('href').split('/').pop().replace(/\.\w+$/, '');
+	      ga('send', 'event', 'release', 'download', version);
+	  });
       });
     </script>
     <meta name="description" content="Simplify Your iTunes Workflow. The Transporter GUI is the easiest way to deliver and manage your books, music, TV shows, movies, and apps on the iTunes Store.">
@@ -53,7 +58,7 @@
         <h2>Simplify Your iTunes Workflow</h2>
         <p class="lead">The Transporter GUI is the easiest way to deliver and manage your books, music, TV shows, movies, and apps on the iTunes Store.</p>
         <!-- p><a href="http://demo.transportergui.com:3000">Try it</a>, it's free.</p-->
-        <p><a href="https://github.com/sshaw/itunes_store_transporter_web/releases/tag/v0.1.0" class="btn btn-primary btn-large">Download The Transporter GUI</a></p>
+        <p><a href="https://github.com/sshaw/itunes_store_transporter_web/archive/v0.1.0.zip" class="btn btn-primary btn-large download">Download The Transporter GUI</a></p>
         <p><small class="muted">For Mac, Windows and Linux</small></p>
       </div>
 
@@ -152,7 +157,7 @@
 	  <p>Batch operations allow one to take advantage of <code>iTMSTransporter</code>'s batch functionality.
 	    Now upload and verification jobs can be performed on a directory containing multiple packages.</p>
 
-	  <p><b><a href="https://github.com/sshaw/itunes_store_transporter_web/releases/tag/v0.1.0">Download <code>v0.1.0</code></a></b></p>
+	  <p><b><a href="https://github.com/sshaw/itunes_store_transporter_web/archive/v0.1.0.zip" class="download">Download <code>v0.1.0</code></a></b></p>
 
 	</div>
 	<div class="item">
@@ -192,7 +197,7 @@
 	    </li>
 	  </ul>
 
-	  <p><b><a href="https://github.com/sshaw/itunes_store_transporter_web/releases/tag/v0.0.1">Download <code>v0.0.1</code></a></b></p>
+	  <p><b><a href="https://github.com/sshaw/itunes_store_transporter_web/archive/v0.0.1.zip" class="download">Download <code>v0.0.1</code></a></b></p>
 	</div>
       </div>
 
