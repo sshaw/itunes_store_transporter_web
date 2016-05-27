@@ -3,6 +3,7 @@ source "https://rubygems.org"
 # Project requirements
 gem 'rake'
 gem 'sinatra-flash', :require => 'sinatra/flash'
+gem "sinatra-contrib"
 
 # Component requirements
 gem 'haml'
