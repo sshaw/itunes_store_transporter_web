@@ -12,7 +12,8 @@ class TransporterJob < ActiveRecord::Base
 
   PRIORITY = Hash.new(0).merge!(:high => -1, :normal => 0, :low => 1)
 
-  attr_protected :state, :target, :job_id
+  # TODO: params in controller
+  #attr_protected :state, :target, :job_id
 
   serialize :result
   serialize :options, Hash
@@ -22,12 +23,12 @@ class TransporterJob < ActiveRecord::Base
 
   belongs_to :account
 
-  before_save :typecast_options, :assign_target
+  before_save :typecast_options, :set_target
 
   after_create  :enqueue_delayed_job
   after_destroy :dequeue_delayed_job, :remove_log
 
-  scope :completed, where(:state => [:success, :failure])
+  scope :completed, lambda { where(:state => [:success, :failure]) }
 
   def self.search(params)
     where(build_search_query(params))
@@ -93,11 +94,15 @@ class TransporterJob < ActiveRecord::Base
   end
 
   def error(job, exception)
-    update_attributes({:state => :failure, :exceptions => exception}, :without_protection => true)
+    update_attributes(:state => :failure, :exceptions => exception)
   end
 
   def failure
     failure!
+  end
+
+  def target
+    _target
   end
 
   def priority
@@ -113,6 +118,11 @@ class TransporterJob < ActiveRecord::Base
   end
 
   protected
+
+  def set_target
+    self[:target] = target
+  end
+
   def numeric_priority
     # Lower number == higher priority
     priority == :next ?
@@ -121,10 +131,10 @@ class TransporterJob < ActiveRecord::Base
   end
 
   def enqueue_delayed_job
-    connection.transaction do
+    transaction do
       # Uh, why not just has_one..?
       job = Delayed::Job.enqueue(self, :priority => numeric_priority)
-      update_column :job_id, job.id
+      update_column(:job_id, job.id)
     end
   end
 
@@ -133,14 +143,11 @@ class TransporterJob < ActiveRecord::Base
     Delayed::Job.delete(job_id) if queued?
   end
 
-  def assign_target
-    self.target = _target
-  end
-
   def _target
     # An ID to denote the job's target. E.g., package name, apple id, ...
   end
 
+  # TODO: this should probably be moved to a the form class
   def typecast_options
     # For subclasses
   end

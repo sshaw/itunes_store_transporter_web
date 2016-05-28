@@ -25,6 +25,7 @@ module Options
       end
 
       private
+
       def contains_packages?(package)
         Dir[ File.join(package, "*.itmsp") ].any? { |path| File.directory?(path) }
       end

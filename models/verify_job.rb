@@ -1,5 +1,6 @@
 class VerifyJob < TransporterJob
   protected
+
   def typecast_options
     options[:batch] = to_bool(options[:batch])
     options[:verify_assets] = to_bool(options[:verify_assets])

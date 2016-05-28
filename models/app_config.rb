@@ -1,8 +1,7 @@
 require "options"
 require "itunes/store/transporter/shell"
 
-#class TransporterConfig < ActiveRecord::Base
-class AppConfig < ActiveRecord::Base
+class TransporterConfig < ActiveRecord::Base
   include Options::Validations::Upload
 
   self.table_name = "config"
@@ -17,3 +16,6 @@ class AppConfig < ActiveRecord::Base
     self[:path] || ITunes::Store::Transporter::Shell.default_path
   end
 end
+
+# Backwards compatibility
+AppConfig = TransporterConfig

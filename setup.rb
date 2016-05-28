@@ -89,6 +89,8 @@ end
 
 FileUtils.mkdir_p("#{ROOT}/var/lib/output")
 ENV["BUNDLE_GEMFILE"] = "#{ROOT}/#{gemfile}"
+
+# TODO: This should be changed to ar:setup
 puts "#{RAKE} ar:migrate"
 abort "Installation failed" unless system "#{RAKE} ar:migrate"
 

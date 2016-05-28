@@ -27,7 +27,7 @@ ItunesStoreTransporterWeb.helpers do
   end
 
   def target(job)
-    job.target.present? ? link_to(job.target, url(:job, :id => job.id)) : "&mdash;"
+    job.target.present? ? link_to(job.target, url(:job, :id => job.id)) : "&mdash;".html_safe
   end
 
   def format_option_name(option)
@@ -56,7 +56,7 @@ ItunesStoreTransporterWeb.helpers do
     elsif value.present? || value == false
       h value
     else
-      "&mdash;"
+      "&mdash;".html_safe
     end
   end
 
@@ -115,7 +115,7 @@ ItunesStoreTransporterWeb.helpers do
   end
 
   def highlite(txt, format)
-    CodeRay.scan(txt, format).div #(:line_numbers => :table)
+    CodeRay.scan(txt, format).div.html_safe
   end
 
   def state_label(state)
@@ -139,8 +139,9 @@ ItunesStoreTransporterWeb.helpers do
   end
 
   def sort_by(column)
-    dir = params[:direction] == "asc" ? "desc" : "asc"
-    arr = dir == "asc" ? "&darr;" : "&uarr;" if params[:order] == column
-    link_to(column.titleize, current_path(params.merge("order" => column, "direction" => dir))) << " #{arr}"
+    dir  = params[:direction] == "asc" ? "desc" : "asc"
+    link = link_to(column.titleize, current_path(params.merge("order" => column, "direction" => dir)))
+    link << (dir == "asc" ? " &darr;" : " &uarr;").html_safe if params[:order] == column
+    link
   end
 end

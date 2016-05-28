@@ -1,8 +1,7 @@
 require "itunes/store/transporter/web/version"
 
 class ItunesStoreTransporterWeb < Padrino::Application
-
-  use ActiveRecord::ConnectionAdapters::ConnectionManagement
+  use ConnectionPoolManagement
 
   register Sinatra::ConfigFile
   register Padrino::Rendering
@@ -55,7 +54,6 @@ class ItunesStoreTransporterWeb < Padrino::Application
     @config = AppConfig.first_or_initialize
   end
 
-
   [:lookup, :providers, :schema, :status, :upload, :verify].each do |route|
     name = route.to_s.capitalize
 
@@ -86,7 +84,7 @@ class ItunesStoreTransporterWeb < Padrino::Application
 
   post :config do
     # Queued and resubmitted jobs will still have the old transporter path
-    if @config.update_attributes(params[:app_config])
+    if @config.update_attributes(params[:transporter_config])
       flash[:success] = "Configuration saved."
       redirect :config
     else

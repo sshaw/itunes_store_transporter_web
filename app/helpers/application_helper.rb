@@ -1,6 +1,8 @@
 ItunesStoreTransporterWeb.helpers do
   def alert(message, type=:error)
-    content_tag(:div, link_to("&times;", "#", :class => "close", :data => { :dismiss => "alert" }) << message, :class => "alert alert-#{type}")
+    content_tag :div, :class => "alert alert-#{type}" do
+      link_to("&times;".html_safe, "#", :class => "close", :data => { :dismiss => "alert" }) << message
+    end
   end
 
   def flash_messages
@@ -9,6 +11,6 @@ ItunesStoreTransporterWeb.helpers do
 	html << alert(flash[message], message)
       end
       html
-    end
+    end.html_safe
   end
 end
