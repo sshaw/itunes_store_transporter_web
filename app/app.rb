@@ -219,6 +219,7 @@ class ItunesStoreTransporterWeb < Padrino::Application
   end
 
   protected
+
   def paging_options
     options = {}
     options[:page] = params[:page].to_i
