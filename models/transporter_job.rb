@@ -31,7 +31,8 @@ class TransporterJob < ActiveRecord::Base
   scope :completed, lambda { where(:state => [:success, :failure]) }
 
   def self.search(params)
-    where(build_search_query(params))
+    q = build_search_query(params)
+    q.any? ? where(q) : none
   end
 
   def command
@@ -187,10 +188,19 @@ class TransporterJob < ActiveRecord::Base
     q = {}
     [:priority, :target, :type, :state, :account_id].each { |k| q[k] = where[k] if where[k].present? }
 
-    d = []
-    d << where[:updated_at_from].to_date if where[:updated_at_from].present?
-    d << where[:updated_at_to].to_date + 1.day if where[:updated_at_to].present?
-    q[:updated_at] = d.size == 1 ? d.shift : Range.new(*d) if d.any?
+    if where[:updated_at_from].present?
+      d = []
+
+      begin
+        d << where[:updated_at_from].to_time(:local)
+        d << (where[:updated_at_to].present? ? where[:updated_at_to].to_time(:local).end_of_day : d[0].end_of_day)
+      rescue ArgumentError
+        # Ignore invalid dates
+        return q
+      end
+
+      q[:updated_at] = Range.new(*d)
+    end
 
     q
   end

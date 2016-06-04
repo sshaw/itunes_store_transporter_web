@@ -228,6 +228,7 @@ class ItunesStoreTransporterWeb < Padrino::Application
     options
   end
 
+  # TODO: put in TransporterJob
   def order_by
     columns = TransporterJob.columns_hash.keys << "account"
     column = columns.include?(params[:order]) ? params[:order].dup : "created_at"
