@@ -16,10 +16,13 @@
         %label.control-label{:for => "_updated_at_from"}
           Date:
         .controls
-          = text_field_tag :_updated_at_from, :id => "_updated_at_from", :class => "input-small", :value => params[:_updated_at_from]
+          = text_field_tag :_updated_at_from, :id => "_updated_at_from", :class => "input-small", :value => params[:_updated_at_from], :placeholder => "Start"
           = hidden_field_tag :updated_at_from, :id => "updated_at_from", :value => params[:updated_at_from]
-          = text_field_tag :_updated_at_to, :id => "_updated_at_to", :class => "input-small", :value => params[:_updated_at_to]
+          = text_field_tag :_updated_at_to, :id => "_updated_at_to", :class => "input-small", :value => params[:_updated_at_to], :placeholder => "End"
           = hidden_field_tag :updated_at_to, :id => "updated_at_to", :value => params[:updated_at_to]
+
+          %span{:class => "help-block"}
+            Updated on Start or updated between Start and End
 
       = bootstrap_select_tag :account_id, :options => account_options(accounts), :include_blank => true, :class => "input-medium", :selected => params[:account_id]
 
