@@ -87,6 +87,7 @@ footer {
 
 .container {
     margin: auto;
+    width: 980px;
 }
 
 /* file dialog */
