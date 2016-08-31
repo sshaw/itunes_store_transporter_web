@@ -1,0 +1,4 @@
+en:
+  time:
+    formats:
+      default: "%D %I:%M %p"
