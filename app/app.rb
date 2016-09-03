@@ -45,7 +45,7 @@ class ItunesStoreTransporterWeb < Padrino::Application
 
   before :except => %r{\A/(?:account|browse)} do
     if @accounts.none?
-      flash[:error] = "You must setup an account before you can continue."
+      flash[:error] = "You must configure an iTunes Connect account before you can continue."
       redirect :accounts
     end
   end
