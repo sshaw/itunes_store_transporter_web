@@ -1,3 +1,9 @@
+GIT
+  remote: https://gist.github.com/83f7ad7ce9c8f92a833f6d6530a2495c.git
+  revision: dd4147d09d16b9ee6ee24726ca7456787b90add6
+  specs:
+    page_number (0.0.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -177,6 +183,7 @@ DEPENDENCIES
   padrino-gen (= 0.12.6)
   padrino-helpers (= 0.12.6)
   padrino_bootstrap_forms (~> 0.1.2)
+  page_number!
   phantomjs
   poltergeist
   rack-test
@@ -190,4 +197,4 @@ DEPENDENCIES
   will_paginate (~> 3.0)
 
 BUNDLED WITH
-   1.12.0.pre.2
+   1.12.3

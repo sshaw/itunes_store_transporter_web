@@ -24,6 +24,7 @@ gem "padrino_bootstrap_forms", "~> 0.1.2", :require => "bootstrap_forms"
   gem "padrino-" + g, "0.12.6"
 end
 
+gem "page_number", :gist => "83f7ad7ce9c8f92a833f6d6530a2495c"
 gem "sqlite3", :group => [:development, :test]
 
 # Test requirements

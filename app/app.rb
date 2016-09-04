@@ -9,6 +9,8 @@ class ItunesStoreTransporterWeb < Padrino::Application
   register WillPaginate::Sinatra
   register BootstrapForms
 
+  include PageNumber
+
   enable :sessions
   set :default_builder, TransporterFormBuilder
   set :haml, :ugly => true
@@ -220,16 +222,15 @@ class ItunesStoreTransporterWeb < Padrino::Application
 
   protected
 
-  def paging_options
-    options = {}
-    options[:page] = params[:page].to_i
-    options[:page] = 1 unless options[:page] > 0
-    options[:per_page] = params[:per_page].to_i
-    options[:per_page] = 20 unless options[:per_page] > 0
-    options
+  def default_per_page
+    20
   end
 
-  # TODO: put in TransporterJob
+  def paging_options
+    { :page => page(params[:page]),
+      :per_page => per_page(params[:per_page]) }
+  end
+
   def order_by
     columns = TransporterJob.columns_hash.keys << "account"
     column = columns.include?(params[:order]) ? params[:order].dup : "created_at"
