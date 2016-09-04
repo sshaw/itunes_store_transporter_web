@@ -6,7 +6,7 @@ iTMS.fileSelected = function(id, file) {
     var basename = '/', match = file.match(/([^/]+)\/?$/);
     if(match) basename = match[1];
 
-    $('#'+id).html(basename).attr('data-content', file);
+    $('#'+id).html(basename).data('content', file);
     $('#'+id).popover();
     $('#selected_' + id).val(file);
 };
@@ -16,13 +16,21 @@ iTMS.updateJobs = function() {
     url[0] += '.js';
     url = url.join('?');
 
-    intId = setInterval(function() {
+    setTimeout(function() {
 	$.get(url, function() {
-            if($('tr.queued, tr.running').size() == 0)
-		clearInterval(intId);
+            if($('tr.queued, tr.running').size() > 0)
+		iTMS.updateJobs();
+	}).fail(function(xhr, status, error) {
+	    var message = 'Failed to update job statuses: ';
+	    if(xhr.status == 0)
+		message += 'cannot connect to server';
+	    else
+		message += error;
+
+	    alert(message);
 	});
     }, 5000);
-}
+};
 
 $(document).ready(function() {
     $('#open_file_browser_for_path').fileBrowser({title: 'iTMSTransporter Location'}, function(file) {
