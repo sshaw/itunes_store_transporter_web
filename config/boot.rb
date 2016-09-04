@@ -27,6 +27,11 @@ ITMSWEB_CONFIG = Padrino.root("config/itmsweb.yml")
 # Add your before load hooks here
 #
 Padrino.before_load do
+  if ENV["LANG"] && !ENV["LANG"].empty?
+    # Our localizations don't (yet) support a country part
+    lang = ENV["LANG"].split(".").first.split("_").first.to_sym
+    I18n.default_locale = lang if I18n.available_locales.include?(lang)
+  end
 end
 
 ##

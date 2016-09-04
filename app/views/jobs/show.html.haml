@@ -40,13 +40,13 @@
             %th
               Created
             %td
-              = l @job.created_at, :format => :short
+              = l @job.created_at
 
           %tr
             %th
               Updated
             %td
-              = l @job.updated_at, :format => :short
+              = l @job.updated_at
 
     #results.tab-pane
       = render_job_result(@job)
