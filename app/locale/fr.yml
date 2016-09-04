@@ -1,0 +1,4 @@
+fr:
+  time:
+    formats:
+      default: "%d/%m/%y %Hh:%M"
