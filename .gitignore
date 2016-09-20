@@ -12,3 +12,4 @@ var/**/*
 db/*.db
 *.lock
 !Gemfile.lock
+config/itmsweb.yml

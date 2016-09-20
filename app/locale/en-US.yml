@@ -1,0 +1,6 @@
+en-US:
+  time:
+    am: "am"
+    pm: "pm"
+    formats:
+      default: "%D %I:%M %p"
