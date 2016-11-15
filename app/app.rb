@@ -26,16 +26,16 @@ class ItunesStoreTransporterWeb < Padrino::Application
   end
 
   configure :development do
-    # Block gets called when rake tasks are run and there's no guarantee that
-    # the DB has been created
-    if AppConfig.table_exists?
-      AppConfig.output_log_directory = Padrino.root("tmp")
-    end
+    set :output_log_directory, Padrino.root("tmp")
   end
 
   configure :production do
     config_file ITMSWEB_CONFIG
-    if AppConfig.table_exists?
+  end
+
+  before do
+    # FIXME: was in configure block, but it doesn't work with AR 4 + ar:create as there's no DB
+    if Padrino.env == :development || Padrino.env == :production
       AppConfig.output_log_directory = settings.output_log_directory
     end
   end
