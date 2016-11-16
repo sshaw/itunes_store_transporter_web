@@ -15,6 +15,7 @@ gem "itunes_store_transporter", "~> 0.1.3"
 gem "padrino_bootstrap_forms", "~> 0.1.2", :require => "bootstrap_forms"
 gem "page_number", :gist => "83f7ad7ce9c8f92a833f6d6530a2495c"
 gem "i18n-env-config"
+gem "rufus-scheduler"
 
 %w(core gen helpers).each do |g|
   gem "padrino-" + g, "0.12.6"

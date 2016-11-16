@@ -9,6 +9,8 @@
     = link_to "Transporter", "#transporter", :data => {:toggle => "tab"}
   %li
     = link_to "Accounts", "#accounts", :data => {:toggle => "tab"}
+  %li
+    = link_to "Notifications", "#notifications", :data => {:toggle => "tab"}
 
 .tab-content
   #transporter.tab-pane.active
@@ -19,6 +21,8 @@
 
       = f.rate_field
       = f.select_transport
+
+      = f.select "Status check time", :options => (0..23).map { |i| sprintf "%02d", i }, :style => "width: 42px"
 
       = f.actions do
         = f.submit "Save"
@@ -58,5 +62,67 @@
                   = account.alias
 
               %td{:style => "text-align: right"}
+                = check_box_tag "foo"
+                Notify
+                &nbsp;
+
                 = link_to "Edit", url(:account, account.id), :class => "btn btn-mini"
                 = link_to "Delete", url(:account_delete, account.id, :format => "js"), :class => "btn btn-mini btn-danger", :remote => true, :method => "delete"
+
+  #notifications.tab-pane
+    .actions(style="text-align: right;padding-bottom: 4px;")
+      %i.icon-user
+      = link_to "New Notification", url(:notifications)
+      %i.icon-envelope
+      = link_to "SMTP Settings", url(:notifications)
+
+    %table.table
+      %thead
+        %tr
+          %th
+            Name
+          %th
+            Account
+          %th
+            From
+          %th{:colspan => 2}
+            To
+      %tbody
+        %tr
+          %td
+            Internal
+          %td
+            client1
+          %td
+            no-reply@example.com
+          %td
+            encoding@example.com, alerts@example.com
+          %td{:style => "text-align: right"}
+            = link_to "Edit", url(:account, 1), :class => "btn btn-mini"
+            = link_to "Delete", url(:account_delete, 1, :format => "js"), :class => "btn btn-mini btn-danger", :remote => true, :method => "delete"
+
+        %tr
+          %td
+            For Client
+          %td
+            client1
+          %td
+            alerts@example.com
+          %td
+            info@client1.com
+          %td{:style => "text-align: right"}
+            = link_to "Edit", url(:account, 1), :class => "btn btn-mini"
+            = link_to "Delete", url(:account_delete, 1, :format => "js"), :class => "btn btn-mini btn-danger", :remote => true, :method => "delete"
+
+        %tr
+          %td
+            Upload Alert
+          %td
+            number_two
+          %td
+            uploads@example.com
+          %td
+            alerts@example.com
+          %td{:style => "text-align: right"}
+            = link_to "Edit", url(:account, 1), :class => "btn btn-mini"
+            = link_to "Delete", url(:account_delete, 1, :format => "js"), :class => "btn btn-mini btn-danger", :remote => true, :method => "delete"

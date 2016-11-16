@@ -137,6 +137,7 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.4.0)
     rspec-support (3.4.1)
+    rufus-scheduler (3.2.1)
     shoulda-matchers (3.1.1)
       activesupport (>= 4.0.0)
     sinatra (1.4.7)
@@ -192,6 +193,7 @@ DEPENDENCIES
   rack-test
   rake
   rspec
+  rufus-scheduler
   shoulda-matchers (~> 3.1.1)
   sinatra-contrib
   sinatra-flash

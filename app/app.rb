@@ -21,8 +21,22 @@ class ItunesStoreTransporterWeb < Padrino::Application
   set :file_browser_root_directory, FsUtil::DEFAULT_ROOT_DIRECTORY
   ###
 
-  error ActiveRecord::RecordNotFound do
-    "Not Found"
+  # require 'rufus-scheduler'
+  # scheduler = Rufus::Scheduler.new
+  # # :blocking => true means to exec block (or whatever) in the scheduling thread
+  # scheduler.every '20s', :overlap => false, :blocking => true do |job|
+  #   logger.info "Foooo #{`ls`}"
+  # end
+
+  error do |e|
+    message = format_error(e)
+    logger.error(message)
+    content_type :text
+    "Error: #{message}"
+  end
+
+  def format_error(e)
+    sprintf "%s (%s)\n%s\n%s", e.message, e.class, e.backtrace.join("\n"), env.pretty_inspect
   end
 
   configure :development do
@@ -81,6 +95,7 @@ class ItunesStoreTransporterWeb < Padrino::Application
   end
 
   get :config do
+    #raise "Test error message"
     render :config
   end
 
@@ -214,6 +229,18 @@ class ItunesStoreTransporterWeb < Padrino::Application
     @account = Account.find(params[:id])
     @account.destroy
     render "accounts/delete"
+  end
+
+  get :notifications do
+    render "notifications/new"
+  end
+
+  get "notifications/config" do
+    render "notifications/config"
+  end
+
+  get "/packages/new" do
+    render "packages/new"
   end
 
   get "/" do
