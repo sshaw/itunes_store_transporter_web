@@ -1,0 +1,4 @@
+de:
+  time:
+    formats:
+      default: "%d.%m.%y %H:%M"

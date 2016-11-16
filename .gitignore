@@ -1,3 +1,6 @@
+*~
+*#
+.#*
 .DS_Store
 log/**/*
 tmp/**/*
@@ -5,4 +8,8 @@ vendor/gems/*
 !vendor/gems/cache/
 .sass-cache/*
 .bundle
-*~
+var/**/*
+db/*.db
+*.lock
+!Gemfile.lock
+config/itmsweb.yml

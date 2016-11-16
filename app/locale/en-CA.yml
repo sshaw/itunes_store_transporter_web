@@ -1,0 +1,6 @@
+en-CA:
+  time:
+    am: "am"
+    pm: "pm"
+    formats:
+      default: "%d/%m/%y %I:%M %p"

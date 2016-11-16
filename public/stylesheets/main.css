@@ -87,6 +87,7 @@ footer {
 
 .container {
     margin: auto;
+    width: 980px;
 }
 
 /* file dialog */
@@ -156,6 +157,11 @@ footer {
 #results .actions {
     text-align: right;
     padding-bottom: 4px;
+}
+
+/* Job listing status labels */
+tr.job td:first-of-type a:hover {
+    text-decoration: none;
 }
 
 th.sort-asc {

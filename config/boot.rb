@@ -27,6 +27,9 @@ ITMSWEB_CONFIG = Padrino.root("config/itmsweb.yml")
 # Add your before load hooks here
 #
 Padrino.before_load do
+  # Padrino loads these after the boot process, which is too late
+  I18n.load_path.concat Dir[Padrino.root("app/locale/*.yml")]
+  I18n.config = I18n::Env::Config.new
 end
 
 ##

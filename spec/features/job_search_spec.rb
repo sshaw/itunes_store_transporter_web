@@ -97,17 +97,17 @@ feature "Search", :js do
         expect(page).to have_no_selector(".job", :text => @not_found.type)
       end
 
-      it "finds jobs updated on the given date", :pending => "Single date search broken, GitHub issue #5" do
+      it "finds jobs updated on the given date" do
         search { pick_date("_updated_at_from", @start_date) }
 
-        expect(page).to have_text("Search: updated #{@start_date.strftime("%m/%d/%Y")} to #{@end_date.strftime("%m/%d/%Y")}")
-        expect(page).to have_selector(".job", :text => @found[0].type, :count => 2)
+        expect(page).to have_text("Search: updated #{@start_date.strftime("%m/%d/%Y")}")
+        expect(page).to have_selector(".job", :text => @found[0].type, :count => 1)
         expect(page).to have_no_selector(".job", :text => @not_found.type)
       end
     end
 
     describe "entering dates" do
-      it "finds jobs updated on the given date", :pending => "Single date search broken, GitHub issue #5" do
+      it "finds jobs updated on the given date" do
         search { fill_in "_updated_at_from", :with => @start_date.strftime("%D") }
 
         expect(page).to have_text("Search: updated #{@start_date.strftime("%D")}")
@@ -129,48 +129,49 @@ feature "Search", :js do
   end
 
   describe "sorting the results" do
-    before { @jobs = [ create(:status_job), create(:upload_job) ] }
+    before do
+      @target = "foo"
+      @jobs = [
+        create(:status_job, :options => { :vendor_id => @target }),
+        create(:upload_job, :options => { :package => @target })
+      ]
+    end
 
     it "sorts by state" do
       @jobs[0].queued!
       @jobs[1].success!
 
-      visit app.url(:search)
-
+      visit app.url(:search, :target => @target)
       expect(@jobs).to sort_by("State")
     end
 
     it "sorts by type" do
-      visit app.url(:search)
-
       @jobs.sort_by!(&:type)
 
+      visit app.url(:search, :target => @target)
       expect(@jobs).to sort_by("Type")
     end
 
     it "sorts by account" do
-      visit app.url(:search)
-
       @jobs.sort_by! { |j| j.account.username }
 
+      visit app.url(:search, :target => @target)
       expect(@jobs).to sort_by("Account")
     end
 
     it "sorts by created at" do
-      visit app.url(:search)
-
       @jobs[0].update_column(:created_at, 10.days.ago)
       @jobs[1].update_column(:created_at, Time.now)
 
+      visit app.url(:search, :target => @target)
       expect(@jobs).to sort_by("Created At")
     end
 
     it "sorts by updated at" do
-      visit app.url(:search)
-
       @jobs[0].update_column(:updated_at, 10.days.ago)
       @jobs[1].update_column(:updated_at, Time.now)
 
+      visit app.url(:search, :target => @target)
       expect(@jobs).to sort_by("Updated At")
     end
   end

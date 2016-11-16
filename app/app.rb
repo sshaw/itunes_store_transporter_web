@@ -9,6 +9,8 @@ class ItunesStoreTransporterWeb < Padrino::Application
   register WillPaginate::Sinatra
   register BootstrapForms
 
+  include PageNumber
+
   enable :sessions
   set :default_builder, TransporterFormBuilder
   set :haml, :ugly => true
@@ -24,16 +26,16 @@ class ItunesStoreTransporterWeb < Padrino::Application
   end
 
   configure :development do
-    # Block gets called when rake tasks are run and there's no guarantee that
-    # the DB has been created
-    if AppConfig.table_exists?
-      AppConfig.output_log_directory = Padrino.root("tmp")
-    end
+    set :output_log_directory, Padrino.root("tmp")
   end
 
   configure :production do
     config_file ITMSWEB_CONFIG
-    if AppConfig.table_exists?
+  end
+
+  before do
+    # FIXME: was in configure block, but it doesn't work with AR 4 + ar:create as there's no DB
+    if Padrino.env == :development || Padrino.env == :production
       AppConfig.output_log_directory = settings.output_log_directory
     end
   end
@@ -45,7 +47,7 @@ class ItunesStoreTransporterWeb < Padrino::Application
 
   before :except => %r{\A/(?:account|browse)} do
     if @accounts.none?
-      flash[:error] = "You must setup an account before you can continue."
+      flash[:error] = "You must configure an iTunes Connect account before you can continue."
       redirect :accounts
     end
   end
@@ -219,13 +221,14 @@ class ItunesStoreTransporterWeb < Padrino::Application
   end
 
   protected
+
+  def default_per_page
+    20
+  end
+
   def paging_options
-    options = {}
-    options[:page] = params[:page].to_i
-    options[:page] = 1 unless options[:page] > 0
-    options[:per_page] = params[:per_page].to_i
-    options[:per_page] = 20 unless options[:per_page] > 0
-    options
+    { :page => page(params[:page]),
+      :per_page => per_page(params[:per_page]) }
   end
 
   def order_by

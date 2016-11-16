@@ -13,7 +13,8 @@ if Padrino.env == :production
     config = YAML.load_file(ITMSWEB_CONFIG)
     db = config["database"]
     raise "missing or invalid database setting" unless Hash === db
-    db["database"] = db.delete("name") # We make the config better for user, but have to fix it for AR
+    db.keys.each { |key| db[key.to_sym] = db.delete(key) } # Padrino rake tasks require Symbols
+    db[:database] = db.delete(:name) # We make the config better for user, but have to fix it for AR
   rescue => e
     msg = "failed to load config file #{ITMSWEB_CONFIG}: #{e}"
     logger.fatal(msg)
