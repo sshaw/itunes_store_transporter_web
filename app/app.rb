@@ -6,6 +6,7 @@ class ItunesStoreTransporterWeb < Padrino::Application
   register Sinatra::ConfigFile
   register Padrino::Rendering
   register Padrino::Helpers
+  register Padrino::Mailer
   register WillPaginate::Sinatra
   register BootstrapForms
 
@@ -31,6 +32,10 @@ class ItunesStoreTransporterWeb < Padrino::Application
 
   configure :production do
     config_file ITMSWEB_CONFIG
+  end
+
+  configure :test do
+    set :delivery_method, :test
   end
 
   before do
@@ -81,6 +86,7 @@ class ItunesStoreTransporterWeb < Padrino::Application
   end
 
   get :config do
+    @notifications = Notification.includes(:account).all
     render :config
   end
 
@@ -145,6 +151,10 @@ class ItunesStoreTransporterWeb < Padrino::Application
     job.save!
     flash[:success] = "Job resubmitted."
     redirect url(:job, :id => job.id)
+  end
+
+  get "foo" do
+    self.class.registered_mailers.to_s
   end
 
   get :job_schema, :map => "/jobs/:id/schema", :provides => [:html, :xml] do
@@ -214,6 +224,58 @@ class ItunesStoreTransporterWeb < Padrino::Application
     @account = Account.find(params[:id])
     @account.destroy
     render "accounts/delete"
+  end
+
+  get "notifications/new" do
+    @notification = Notification.new
+    render "notifications/new"
+  end
+
+  get "notifications/config" do
+    render "notifications/config"
+  end
+
+  patch "notifications/config" do
+    if @config.update_attributes(params[:transporter_config])
+      flash[:success] = "SMTP settings updated."
+      redirect_to url(:config)
+    else
+      render "notifications/config"
+    end
+  end
+
+  get :notifications, :with => :id do
+    @notification = Notification.find(params[:id])
+    render "notifications/edit"
+  end
+
+  patch :notifications, :with => :id do
+    @notification = Notification.find(params[:id])
+    if @notification.update_attributes(params[:notification])
+      flash[:success] = "Notification updated."
+      redirect :config
+    else
+      render "notifications/edit"
+    end
+  end
+
+  delete :notifications, :with => :id, :provides => :js do
+    @notification = Notification.find(params[:id])
+    @notification.destroy
+    render "notifications/delete"
+  end
+
+
+  post :notifications do
+    @notification = Notification.new(params[:notification])
+
+    if @notification.valid?
+      @notification.save
+      flash[:success] = "Notification created."
+      redirect :config
+    else
+      render "notifications/new"
+    end
   end
 
   get "/" do

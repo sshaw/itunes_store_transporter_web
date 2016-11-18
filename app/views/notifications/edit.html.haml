@@ -1,0 +1,11 @@
+- content_for(:title) do
+  Edit Notification
+
+%h2
+  Edit Notification
+
+= form_for @notification, url(:notifications, :id => @notification), :method => "patch", :class => "form-horizontal" do |f|
+  = partial "notifications/fields", :object => f
+
+  = f.actions do
+    = f.submit "Update"

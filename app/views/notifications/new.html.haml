@@ -1,0 +1,14 @@
+- content_for(:title) do
+  New Notification
+
+%h2
+  New Notification
+
+%p
+  Currently only supported for upload jobs.
+
+= form_for @notification, url(:notifications), :class => "form-horizontal" do |f|
+  = partial "notifications/fields", :object => f
+
+  = f.actions do
+    = f.submit "Create"

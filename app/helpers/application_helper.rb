@@ -1,4 +1,6 @@
 ItunesStoreTransporterWeb.helpers do
+  HELP_PATH = "/docs/help.html".freeze
+
   def alert(message, type=:error)
     content_tag :div, :class => "alert alert-#{type}" do
       link_to("&times;".html_safe, "#", :class => "close", :data => { :dismiss => "alert" }) << message
@@ -12,5 +14,9 @@ ItunesStoreTransporterWeb.helpers do
       end
       html
     end.html_safe
+  end
+
+  def help_path
+    HELP_PATH
   end
 end
