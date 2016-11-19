@@ -39,7 +39,7 @@ FactoryGirl.find_definitions
 
 Capybara.save_and_open_page_path = "tmp/capybara"
 Capybara.javascript_driver = :poltergeist
-Capybara.app = ItunesStoreTransporterWeb
+Capybara.app = ITunes::Store::Transporter::Web::App
 Capybara::Screenshot.prune_strategy = :keep_last_run
 
 # You can use this method to custom specify a Rack app
@@ -53,5 +53,5 @@ Capybara::Screenshot.prune_strategy = :keep_last_run
 #
 def app(app = nil, &blk)
   @app ||= block_given? ? app.instance_eval(&blk) : app
-  @app ||= ItunesStoreTransporterWeb
+  @app ||= ITunes::Store::Transporter::Web::App
 end

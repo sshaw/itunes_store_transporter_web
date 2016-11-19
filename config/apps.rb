@@ -26,11 +26,8 @@
 # override these settings in the subapps as needed.
 #
 Padrino.configure_apps do
-  # enable :sessions
-  set :session_secret, 'bc9900d8ac4f3670aa673a74bd238d6e24a1aea75ba1becff1d8e316d9aa848f'
-  set :protection, :except => :path_traversal
-  set :protect_from_csrf, true
 end
 
 # Mounts the core application for this project
-Padrino.mount("ItunesStoreTransporterWeb", :app_file => Padrino.root('app/app.rb')).to('/')
+Padrino.mount("ITunes::Store::Transporter::Web::API", :app_file => Padrino.root("api/app.rb")).to("/api")
+Padrino.mount("ITunes::Store::Transporter::Web::App", :app_file => Padrino.root("app/app.rb")).to("/")

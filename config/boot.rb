@@ -13,6 +13,7 @@ $LOAD_PATH << Padrino.root("lib")
 require "will_paginate/active_record"
 require "sinatra/config_file"
 require "i18n/backend/fallbacks"
+require "page_number"
 
 # Only used in production env
 ITMSWEB_CONFIG = Padrino.root("config/itmsweb.yml")

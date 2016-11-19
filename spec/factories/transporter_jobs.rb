@@ -1,7 +1,12 @@
 FactoryGirl.define do
   factory :job, :class => TransporterJob do
     account
-    options { Hash[:username => account.username, :password => account.password] }
+
+    after :build do |job|
+      job.options[:username] ||=  job.account.username
+      job.options[:shortname] ||= job.account.shortname
+      job.options[:password] ||= job.account.password
+    end
   end
 
   factory :providers_job, :parent => :job, :class => ProvidersJob

@@ -44,7 +44,7 @@ class TransporterJob < ActiveRecord::Base
   end
 
   def output?
-    (log && File.size?(log)).to_i > 0
+    log.nil? || !File.exists?(log) ? false : File.size?(log) > 0
   end
 
   def output(offset = 0)
@@ -58,6 +58,7 @@ class TransporterJob < ActiveRecord::Base
     data
   end
 
+  # Why not just use command?
   def type
     self[:type].sub(/Job$/, "") if self[:type]
   end
@@ -112,6 +113,17 @@ class TransporterJob < ActiveRecord::Base
 
   def priority
     self[:priority].respond_to?(:to_sym) ? self[:priority].to_sym : :normal
+  end
+
+  def as_json(options = nil)
+    return super if options
+    json = super(:except => [:job_id, :target, :output_log_file])
+    json["options"].try(:delete, :log)
+    json.merge!("type" => type.try(:downcase), "exceptions" => exceptions ? exceptions.to_s : nil)
+  end
+
+  def to_json(options = nil)
+    options ? super : as_json.to_json
   end
 
   def to_s

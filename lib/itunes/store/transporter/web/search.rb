@@ -4,8 +4,6 @@ module ITunes
       module Web
         module Search
           class Where
-            VALID_COLUMNS = %w[priority target type state account_id updated_at].freeze
-
             def initialize(base_query)
               @base_query = base_query
             end
@@ -13,8 +11,12 @@ module ITunes
             def build(params)
               conditions = {}
 
-              VALID_COLUMNS.each do |k|
+              [:priority, :target, :state, :account_id].each do |k|
                 conditions[k] = params[k] if params[k].present?
+              end
+
+              if params[:type].present?
+                conditions[:type] = sprintf("%sJob", params[:type].capitalize)
               end
 
               if params[:updated_at_from].present?
