@@ -1,7 +1,6 @@
 source "https://rubygems.org"
 
 gem "rake"
-gem "sinatra-flash", :require => "sinatra/flash"
 gem "sinatra-contrib"
 gem "haml"
 gem "activerecord", :require => "active_record"
