@@ -31,8 +31,13 @@ class TransporterJob < ActiveRecord::Base
   scope :completed, lambda { where(:state => [:success, :failure]) }
 
   def self.search(params)
-    q = build_search_query(params)
-    q.any? ? where(q) : none
+    criteria = build_search_query(params)
+
+    column = order_by_column(params[:order])
+    q = where(criteria).order(column)
+    q = q.joins(:account) if column.start_with?("account")
+
+    q
   end
 
   def command
@@ -182,6 +187,19 @@ class TransporterJob < ActiveRecord::Base
 
   def config
     @confg ||= AppConfig.first_or_initialize
+  end
+
+  def self.order_by_column(order)
+    column, direction = order.to_s.split(":")
+
+    if column == "account"
+      column = "accounts.username"
+    # FIXME: we don't want to allow *all* columns
+    elsif !column_names.include?(column)
+      column = "created_at"
+    end
+
+    column << " " << (direction != "asc" ? "desc" : direction)
   end
 
   def self.build_search_query(where)

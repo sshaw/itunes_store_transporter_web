@@ -126,7 +126,7 @@ ItunesStoreTransporterWeb.helpers do
 
   def link_to_view(url)
     link_to content_tag(:i, "", :class => "icon-resize-full")  << "View", url
- end
+  end
 
   def job_state_options
     TransporterJob::STATES.map { |state| [ state.to_s.capitalize, state ] }
@@ -137,9 +137,11 @@ ItunesStoreTransporterWeb.helpers do
   end
 
   def sort_by(column)
-    dir  = params[:direction] == "asc" ? "desc" : "asc"
-    link = link_to(column.titleize, current_path(params.merge("order" => column, "direction" => dir)))
-    link << (dir == "asc" ? " &darr;" : " &uarr;").html_safe if params[:order] == column
+    current_column, current_dir = params[:order].to_s.split(":")
+
+    dir  = current_dir == "asc" ? "desc" : "asc"
+    link = link_to(column.titleize, current_path(params.merge(:order => "#{column}:#{dir}")))
+    link << (dir == "asc" ? " &darr;" : " &uarr;").html_safe if column == current_column
     link
   end
 end
