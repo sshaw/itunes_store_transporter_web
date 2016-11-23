@@ -1,3 +1,4 @@
+require "itunes/store/transporter/web/search"
 require "itunes/store/transporter/web/version"
 
 class ItunesStoreTransporterWeb < Padrino::Application
@@ -10,6 +11,7 @@ class ItunesStoreTransporterWeb < Padrino::Application
   register BootstrapForms
 
   include PageNumber
+  include ITunes::Store::Transporter::Web
 
   enable :sessions
   set :default_builder, TransporterFormBuilder
@@ -102,7 +104,7 @@ class ItunesStoreTransporterWeb < Padrino::Application
   end
 
   get :jobs, :provides => [:html, :js] do
-    @jobs = TransporterJob.search(params).paginate(paging_options)
+    @jobs = Search::Order.new(TransporterJob).build(params).paginate(paging_options)
     render "jobs/index"
   end
 

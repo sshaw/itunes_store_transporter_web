@@ -2,8 +2,11 @@ require "fileutils"
 require "delayed_job"
 require "itunes/store/transporter"
 require "itunes/store/transporter/errors"
+require "itunes/store/transporter/web/search"
 
 class TransporterJob < ActiveRecord::Base
+  include ITunes::Store::Transporter::Web
+
   STATES = [:queued, :running, :success, :failure]
   STATES.each do |s|
     define_method("#{s}!") { update_attribute(:state, s) }
@@ -31,13 +34,9 @@ class TransporterJob < ActiveRecord::Base
   scope :completed, lambda { where(:state => [:success, :failure]) }
 
   def self.search(params)
-    criteria = build_search_query(params)
-
-    column = order_by_column(params[:order])
-    q = where(criteria).order(column)
-    q = q.joins(:account) if column.start_with?("account")
-
-    q
+    Search::Order.new(
+      Search::Where.new(self).build(params)
+    ).build(params)
   end
 
   def command
@@ -187,39 +186,5 @@ class TransporterJob < ActiveRecord::Base
 
   def config
     @confg ||= AppConfig.first_or_initialize
-  end
-
-  def self.order_by_column(order)
-    column, direction = order.to_s.split(":")
-
-    if column == "account"
-      column = "accounts.username"
-    # FIXME: we don't want to allow *all* columns
-    elsif !column_names.include?(column)
-      column = "created_at"
-    end
-
-    column << " " << (direction != "asc" ? "desc" : direction)
-  end
-
-  def self.build_search_query(where)
-    q = {}
-    [:priority, :target, :type, :state, :account_id].each { |k| q[k] = where[k] if where[k].present? }
-
-    if where[:updated_at_from].present?
-      d = []
-
-      begin
-        d << where[:updated_at_from].to_time(:local)
-        d << (where[:updated_at_to].present? ? where[:updated_at_to].to_time(:local).end_of_day : d[0].end_of_day)
-      rescue ArgumentError
-        # Ignore invalid dates
-        return q
-      end
-
-      q[:updated_at] = Range.new(*d)
-    end
-
-    q
   end
 end
