@@ -1,6 +1,7 @@
 FactoryGirl.define do
   factory :job, :class => TransporterJob do
     account
+
     after :build do |job|
       job.options[:username] ||=  job.account.username
       job.options[:shortname] ||= job.account.shortname

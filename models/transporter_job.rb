@@ -2,8 +2,11 @@ require "fileutils"
 require "delayed_job"
 require "itunes/store/transporter"
 require "itunes/store/transporter/errors"
+require "itunes/store/transporter/web/search"
 
 class TransporterJob < ActiveRecord::Base
+  include ITunes::Store::Transporter::Web
+
   STATES = [:queued, :running, :success, :failure]
   STATES.each do |s|
     define_method("#{s}!") { update_attribute(:state, s) }
@@ -31,8 +34,9 @@ class TransporterJob < ActiveRecord::Base
   scope :completed, lambda { where(:state => [:success, :failure]) }
 
   def self.search(params)
-    q = build_search_query(params)
-    q.any? ? where(q) : none
+    Search::Order.new(
+      Search::Where.new(self).build(params)
+    ).build(params)
   end
 
   def command
@@ -54,6 +58,7 @@ class TransporterJob < ActiveRecord::Base
     data
   end
 
+  # Why not just use command?
   def type
     self[:type].sub(/Job$/, "") if self[:type]
   end
@@ -112,6 +117,17 @@ class TransporterJob < ActiveRecord::Base
 
   def priority
     self[:priority].respond_to?(:to_sym) ? self[:priority].to_sym : :normal
+  end
+
+  def as_json(options = nil)
+    return super if options
+    json = super(:except => [:job_id, :target, :output_log_file])
+    json["options"].try(:delete, :log)
+    json.merge!("type" => type.try(:downcase), "exceptions" => exceptions ? exceptions.to_s : nil)
+  end
+
+  def to_json(options = nil)
+    options ? super : as_json.to_json
   end
 
   def to_s
@@ -186,26 +202,5 @@ class TransporterJob < ActiveRecord::Base
 
   def config
     @confg ||= AppConfig.first_or_initialize
-  end
-
-  def self.build_search_query(where)
-    q = {}
-    [:priority, :target, :type, :state, :account_id].each { |k| q[k] = where[k] if where[k].present? }
-
-    if where[:updated_at_from].present?
-      d = []
-
-      begin
-        d << where[:updated_at_from].to_time(:local)
-        d << (where[:updated_at_to].present? ? where[:updated_at_to].to_time(:local).end_of_day : d[0].end_of_day)
-      rescue ArgumentError
-        # Ignore invalid dates
-        return q
-      end
-
-      q[:updated_at] = Range.new(*d)
-    end
-
-    q
   end
 end

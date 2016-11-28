@@ -12,6 +12,8 @@ $LOAD_PATH << Padrino.root("lib")
 
 require "will_paginate/active_record"
 require "sinatra/config_file"
+require "i18n/backend/fallbacks"
+require "page_number"
 
 # Only used in production env
 ITMSWEB_CONFIG = Padrino.root("config/itmsweb.yml")
@@ -30,6 +32,7 @@ Padrino.before_load do
   # Padrino loads these after the boot process, which is too late
   I18n.load_path.concat Dir[Padrino.root("app/locale/*.yml")]
   I18n.config = I18n::Env::Config.new
+  I18n::Backend::Simple.include(I18n::Backend::Fallbacks)
 end
 
 ##

@@ -1,2 +1,4 @@
-path =  File.expand_path("../../Gemfile",  __FILE__)
+path = File.expand_path("../../Gemfile",  __FILE__)
 eval_gemfile path, File.read(path).sub(/(^\s+gem\s+["']shoulda-matchers["']).*/, "\\1, '2.8.0'\n")
+# Not quite sure what requires this (should-matchers, maybe) but we'll fail otherwise
+gem "public_suffix", "~> 1.4.6"

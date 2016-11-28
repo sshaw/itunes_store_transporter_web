@@ -9,7 +9,5 @@ vendor/gems/*
 .sass-cache/*
 .bundle
 var/**/*
-db/*.db
-*.lock
-!Gemfile.lock
+db/*
 config/itmsweb.yml

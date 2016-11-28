@@ -1,8 +1,8 @@
 GIT
   remote: https://gist.github.com/83f7ad7ce9c8f92a833f6d6530a2495c.git
-  revision: dd4147d09d16b9ee6ee24726ca7456787b90add6
+  revision: 8fed2a5341e2ca8e2726e39df29188d4c6619092
   specs:
-    page_number (0.0.1)
+    page_number (0.0.2)
 
 GEM
   remote: https://rubygems.org/
@@ -24,14 +24,14 @@ GEM
     arel (6.0.3)
     backports (3.6.8)
     builder (3.2.2)
-    capybara (2.7.1)
+    capybara (2.10.1)
       addressable
       mime-types (>= 1.16)
       nokogiri (>= 1.3.3)
       rack (>= 1.0.0)
       rack-test (>= 0.5.4)
       xpath (~> 2.0)
-    capybara-screenshot (1.0.12)
+    capybara-screenshot (1.0.14)
       capybara (>= 1.0, < 3)
       launchy
     childprocess (0.3.9)
@@ -61,18 +61,17 @@ GEM
       childprocess (~> 0.3.2)
       optout (~> 0.0.2)
     json (1.8.3)
-    kramdown (1.13.0)
     launchy (2.4.3)
       addressable (~> 2.3)
     mail (2.6.4)
       mime-types (>= 1.16, < 4)
-    mime-types (2.99.1)
-    mini_portile2 (2.0.0)
+    mime-types (2.99.3)
+    mini_portile2 (2.1.0)
     minitest (5.9.1)
     moneta (0.7.20)
-    multi_json (1.12.0)
-    nokogiri (1.6.7.2)
-      mini_portile2 (~> 2.0.0.rc2)
+    multi_json (1.12.1)
+    nokogiri (1.6.8.1)
+      mini_portile2 (~> 2.1.0)
     optout (0.0.2)
     padrino (0.12.6)
       padrino-admin (= 0.12.6)
@@ -114,32 +113,32 @@ GEM
       activesupport (>= 3.1, < 5)
       padrino (~> 0.11, != 0.13.1, != 0.13.0, != 0.12.5, != 0.12.4, != 0.12.3, != 0.12.2, != 0.12.1, != 0.12.0)
     phantomjs (2.1.1.0)
-    poltergeist (1.9.0)
+    poltergeist (1.11.0)
       capybara (~> 2.1)
       cliver (~> 0.3.1)
-      multi_json (~> 1.0)
       websocket-driver (>= 0.2.0)
+    public_suffix (1.4.6)
     rack (1.5.5)
     rack-protection (1.5.3)
       rack
     rack-test (0.6.3)
       rack (>= 1.0)
-    rake (11.1.2)
-    rspec (3.4.0)
-      rspec-core (~> 3.4.0)
-      rspec-expectations (~> 3.4.0)
-      rspec-mocks (~> 3.4.0)
-    rspec-core (3.4.4)
-      rspec-support (~> 3.4.0)
-    rspec-expectations (3.4.0)
+    rake (11.3.0)
+    rspec (3.5.0)
+      rspec-core (~> 3.5.0)
+      rspec-expectations (~> 3.5.0)
+      rspec-mocks (~> 3.5.0)
+    rspec-core (3.5.4)
+      rspec-support (~> 3.5.0)
+    rspec-expectations (3.5.0)
       diff-lcs (>= 1.2.0, < 2.0)
-      rspec-support (~> 3.4.0)
-    rspec-mocks (3.4.1)
+      rspec-support (~> 3.5.0)
+    rspec-mocks (3.5.0)
       diff-lcs (>= 1.2.0, < 2.0)
-      rspec-support (~> 3.4.0)
-    rspec-support (3.4.1)
-    shoulda-matchers (3.1.1)
-      activesupport (>= 4.0.0)
+      rspec-support (~> 3.5.0)
+    rspec-support (3.5.0)
+    shoulda-matchers (2.8.0)
+      activesupport (>= 3.0.0)
     sinatra (1.4.7)
       rack (~> 1.5)
       rack-protection (~> 1.4)
@@ -151,7 +150,7 @@ GEM
       rack-test
       sinatra (~> 1.4.0)
       tilt (>= 1.3, < 3)
-    sqlite3 (1.3.11)
+    sqlite3 (1.3.12)
     thor (0.19.1)
     thread_safe (0.3.5)
     tilt (1.4.1)
@@ -159,13 +158,10 @@ GEM
       thread_safe (~> 0.1)
     url_mount (0.2.1)
       rack
-    valid_email (0.0.13)
-      activemodel
-      mail (~> 2.6.1)
-    websocket-driver (0.6.3)
+    websocket-driver (0.6.4)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.2)
-    will_paginate (3.1.0)
+    will_paginate (3.1.5)
     xpath (2.0.0)
       nokogiri (~> 1.3)
 
@@ -173,7 +169,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  activerecord (~> 4.2.0)
+  activerecord
   capybara-screenshot
   coderay
   daemons
@@ -184,25 +180,22 @@ DEPENDENCIES
   haml
   i18n-env-config
   itunes_store_transporter (~> 0.1.3)
-  kramdown
-  mail
   padrino-core (= 0.12.6)
   padrino-gen (= 0.12.6)
   padrino-helpers (= 0.12.6)
-  padrino-mailer (= 0.12.6)
   padrino_bootstrap_forms (~> 0.1.2)
   page_number!
   phantomjs
   poltergeist
+  public_suffix (~> 1.4.6)
   rack-test
   rake
   rspec
-  shoulda-matchers (~> 3.1.1)
+  shoulda-matchers (= 2.8.0)
   sinatra-contrib
   sqlite3
   tilt
-  valid_email
   will_paginate (~> 3.0)
 
 BUNDLED WITH
-   1.12.3
+   1.13.6
