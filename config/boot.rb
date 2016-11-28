@@ -38,5 +38,5 @@ end
 Padrino.after_load do
 end
 
-Padrino::Application.prerequisites.concat Dir[Padrino.root("app/forms/*.rb")]
+Padrino::Application.prerequisites.concat Dir[Padrino.root("app/{forms,jobs}/*.rb")]
 Padrino.load!

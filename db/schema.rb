@@ -11,8 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 13) do
-
+ActiveRecord::Schema.define(version: 14) do
   create_table "accounts", force: true do |t|
     t.string   "username",   limit: 64, null: false
     t.string   "password",   limit: 64, null: false
@@ -50,11 +49,25 @@ ActiveRecord::Schema.define(version: 13) do
     t.datetime "updated_at",             null: false
   end
 
+  create_table "notifications", force: true do |t|
+    t.string   "name",       limit: 32,  null: false
+    t.integer  "account_id",             null: false
+    t.string   "from",       limit: 64,  null: false
+    t.string   "to",         limit: 128, null: false
+    t.string   "subject",    limit: 128, null: false
+    t.string   "reply_to",   limit: 64
+    t.text     "message"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "notifications", ["account_id"], name: "index_notifications_on_account_id", unique: true
+
   create_table "transporter_jobs", force: true do |t|
     t.string   "state",           limit: 16
     t.string   "options",         limit: 1024
     t.text     "result"
-    t.string   "exceptions"
+    t.text     "exceptions"
     t.string   "output_log_file"
     t.string   "type",            limit: 32
     t.datetime "created_at",                                      null: false

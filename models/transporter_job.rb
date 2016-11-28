@@ -40,7 +40,7 @@ class TransporterJob < ActiveRecord::Base
   end
 
   def output?
-    (log && File.size?(log)).to_i > 0
+    log.nil? || !File.exists?(log) ? false : File.size?(log) > 0
   end
 
   def output(offset = 0)
@@ -83,6 +83,10 @@ class TransporterJob < ActiveRecord::Base
     update_attribute(:result, run)
   ensure
     options.delete(:log)
+  end
+
+  def queue_name
+    "jobs".freeze
   end
 
   # job is Delayed::Backend::ActiveRecord::Job

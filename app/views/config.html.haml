@@ -15,7 +15,6 @@
 .tab-content
   #transporter.tab-pane.active
     = form_for @config, :config, :class => "form-horizontal" do |f|
-
       - if settings.allow_select_transporter_path?
         = f.file_browser_field :path, :label => "Location", :data => { :title => "Transporter" }
 
@@ -70,59 +69,41 @@
                 = link_to "Delete", url(:account_delete, account.id, :format => "js"), :class => "btn btn-mini btn-danger", :remote => true, :method => "delete"
 
   #notifications.tab-pane
-    .actions(style="text-align: right;padding-bottom: 4px;")
-      %i.icon-user
-      = link_to "New Notification", url(:notifications)
-      %i.icon-envelope
-      = link_to "SMTP Settings", url(:notifications)
+    - if @notifications.none?
+      %p
+        No notifications have been created.
+        = link_to "Create one", url("notifications/new")
 
-    %table.table
-      %thead
-        %tr
-          %th
-            Name
-          %th
-            Account
-          %th
-            From
-          %th{:colspan => 2}
-            To
-      %tbody
-        %tr
-          %td
-            Internal
-          %td
-            client1
-          %td
-            no-reply@example.com
-          %td
-            encoding@example.com, alerts@example.com
-          %td{:style => "text-align: right"}
-            = link_to "Edit", url(:account, 1), :class => "btn btn-mini"
-            = link_to "Delete", url(:account_delete, 1, :format => "js"), :class => "btn btn-mini btn-danger", :remote => true, :method => "delete"
+    - else
+      .actions(style="text-align: right;padding-bottom: 4px;")
+        %i.icon-envelope
+        = link_to "New Notification", url("notifications/new")
+        %i.icon-wrench
+        = link_to "SMTP Settings", url("notifications/config")
 
-        %tr
-          %td
-            For Client
-          %td
-            client1
-          %td
-            alerts@example.com
-          %td
-            info@client1.com
-          %td{:style => "text-align: right"}
-            = link_to "Edit", url(:account, 1), :class => "btn btn-mini"
-            = link_to "Delete", url(:account_delete, 1, :format => "js"), :class => "btn btn-mini btn-danger", :remote => true, :method => "delete"
+      %table.table
+        %thead
+          %tr
+            %th
+              Name
+            %th
+              Account
+            %th
+              From
+            %th{:colspan => 2}
+              To
 
-        %tr
-          %td
-            Upload Alert
-          %td
-            number_two
-          %td
-            uploads@example.com
-          %td
-            alerts@example.com
-          %td{:style => "text-align: right"}
-            = link_to "Edit", url(:account, 1), :class => "btn btn-mini"
-            = link_to "Delete", url(:account_delete, 1, :format => "js"), :class => "btn btn-mini btn-danger", :remote => true, :method => "delete"
+        - @notifications.each do |notification|
+          %tbody
+            %tr[notification]
+              %td
+                = notification.name
+              %td
+                = notification.account.username
+              %td
+                = notification.from
+              %td
+                = truncate(notification.recipients.join(", "), :length => 50)
+              %td{:style => "text-align: right"}
+                = link_to "Edit", url(:notifications, :id => notification.id), :class => "btn btn-mini"
+                = link_to "Delete", url(:notifications, :id => notification.id, :format => "js"), :class => "btn btn-mini btn-danger", :remote => true, :method => "delete"

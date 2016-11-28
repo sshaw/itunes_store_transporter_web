@@ -7,21 +7,21 @@ GIT
 GEM
   remote: https://rubygems.org/
   specs:
-    activemodel (4.1.15)
-      activesupport (= 4.1.15)
+    activemodel (4.2.7.1)
+      activesupport (= 4.2.7.1)
       builder (~> 3.1)
-    activerecord (4.1.15)
-      activemodel (= 4.1.15)
-      activesupport (= 4.1.15)
-      arel (~> 5.0.0)
-    activesupport (4.1.15)
-      i18n (~> 0.6, >= 0.6.9)
+    activerecord (4.2.7.1)
+      activemodel (= 4.2.7.1)
+      activesupport (= 4.2.7.1)
+      arel (~> 6.0)
+    activesupport (4.2.7.1)
+      i18n (~> 0.7)
       json (~> 1.7, >= 1.7.7)
       minitest (~> 5.1)
-      thread_safe (~> 0.1)
+      thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
     addressable (2.4.0)
-    arel (5.0.1.20140414130214)
+    arel (6.0.3)
     backports (3.6.8)
     builder (3.2.2)
     capybara (2.7.1)
@@ -61,13 +61,14 @@ GEM
       childprocess (~> 0.3.2)
       optout (~> 0.0.2)
     json (1.8.3)
+    kramdown (1.13.0)
     launchy (2.4.3)
       addressable (~> 2.3)
     mail (2.6.4)
       mime-types (>= 1.16, < 4)
     mime-types (2.99.1)
     mini_portile2 (2.0.0)
-    minitest (5.8.4)
+    minitest (5.9.1)
     moneta (0.7.20)
     multi_json (1.12.0)
     nokogiri (1.6.7.2)
@@ -153,7 +154,7 @@ GEM
       tilt (>= 1.3, < 3)
     sinatra-flash (0.3.0)
       sinatra (>= 1.0.0)
-    sqlite3 (1.3.11)
+    sqlite3 (1.3.12)
     thor (0.19.1)
     thread_safe (0.3.5)
     tilt (1.4.1)
@@ -161,6 +162,9 @@ GEM
       thread_safe (~> 0.1)
     url_mount (0.2.1)
       rack
+    valid_email (0.0.13)
+      activemodel
+      mail (~> 2.6.1)
     websocket-driver (0.6.3)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.2)
@@ -172,7 +176,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  activerecord
+  activerecord (~> 4.2.0)
   capybara-screenshot
   coderay
   daemons
@@ -183,9 +187,12 @@ DEPENDENCIES
   haml
   i18n-env-config
   itunes_store_transporter (~> 0.1.3)
+  kramdown
+  mail
   padrino-core (= 0.12.6)
   padrino-gen (= 0.12.6)
   padrino-helpers (= 0.12.6)
+  padrino-mailer (= 0.12.6)
   padrino_bootstrap_forms (~> 0.1.2)
   page_number!
   phantomjs
@@ -199,6 +206,7 @@ DEPENDENCIES
   sinatra-flash
   sqlite3
   tilt
+  valid_email
   will_paginate (~> 3.0)
 
 BUNDLED WITH
