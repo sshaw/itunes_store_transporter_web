@@ -99,7 +99,7 @@ module ITunes
             if params[:account_id].present?
               id = params[:account_id].to_i
               if account = accounts.find { |a| a.id == id }
-                terms << "account %s" % %Q("#{account.username}")
+                terms << "account %s" % %Q("#{account.display_name}")
               end
             end
 

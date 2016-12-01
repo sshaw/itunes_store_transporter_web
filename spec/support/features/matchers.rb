@@ -5,7 +5,7 @@ module FeatureMatchers
   end
 
   def expect_to_have_account(account)
-    expect(page).to have_text(account.username)
+    expect(page).to have_text(account.display_name)
     expect(page).to have_text(account.shortname)
   end
 end

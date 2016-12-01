@@ -8,8 +8,7 @@ class JobForm < OpenStruct
   validate :find_account, :unless => lambda { |r| r.account_id.blank? }
 
   def marshal_dump
-    options = super.dup.except(:account_id)
-
+    options = super.dup.except(:account_id, :disable_notification)
 
     if @account
       options[:username]  = @account.username
@@ -18,11 +17,14 @@ class JobForm < OpenStruct
     end
 
     data = { :options => options, :account_id => account_id }
+    data[:disable_notification] = disable_notification unless disable_notification.nil?
     data[:priority] = data[:options].delete(:priority) if data[:options].include?(:priority)
+
     data
   end
 
   protected
+
   def find_account
     # Avoid raising an exception via find()
     @account = Account.where(:id => account_id).first

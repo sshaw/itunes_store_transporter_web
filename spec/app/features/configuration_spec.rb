@@ -34,6 +34,7 @@ feature "Configuration", :js do
     fill_in "Username", :with => "sshaw"
     fill_in "Password", :with => "what_it_iz!@#"
     fill_in "Shortname", :with => "galinha"
+    fill_in "Alias", :with => "fofinho"
 
     click_on "Create"
 
@@ -55,6 +56,7 @@ feature "Configuration", :js do
     fill_in "Username", :with => @account.username << "X"
     fill_in "Password", :with => "foo"
     fill_in "Shortname", :with => @account.shortname << "X"
+    fill_in "Alias", :with => @account.alias << "X"
     click_on "Update"
 
     expect(page).to have_text("Account updated")

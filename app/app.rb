@@ -1,5 +1,6 @@
 require "itunes/store/transporter/web/search"
 require "itunes/store/transporter/web/version"
+require "pp"
 
 module ITunes
   module Store
@@ -196,6 +197,7 @@ module ITunes
             if content_type == :html
               filename = "#{job.type}-Job"
               filename << "-#{job.target}" if job.target.present?
+              filename << ".log"
               attachment filename
             end
 

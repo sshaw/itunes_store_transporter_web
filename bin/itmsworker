@@ -9,8 +9,7 @@ error()
 }
 
 root=$(dirname "$0")
-#action=${1:-work}
-action=$1
+action=${1:-jobs}
 padrino="${root}/padrino"
 
 if [ ! -x "$padrino" ]; then

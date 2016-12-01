@@ -14,12 +14,13 @@
 ActiveRecord::Schema.define(version: 16) do
 
   create_table "accounts", force: :cascade do |t|
-    t.string   "username",   limit: 64, null: false
-    t.string   "password",   limit: 64, null: false
-    t.string   "shortname",  limit: 64
+    t.string   "username",             limit: 64,                 null: false
+    t.string   "password",             limit: 64,                 null: false
+    t.string   "shortname",            limit: 64
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "alias",      limit: 32
+    t.string   "alias",                limit: 32
+    t.boolean  "disable_notification",            default: false, null: false
   end
 
   add_index "accounts", ["alias"], name: "index_accounts_on_alias", unique: true
@@ -67,18 +68,19 @@ ActiveRecord::Schema.define(version: 16) do
   add_index "notifications", ["account_id"], name: "index_notifications_on_account_id", unique: true
 
   create_table "transporter_jobs", force: :cascade do |t|
-    t.string   "state",           limit: 16
-    t.string   "options",         limit: 1024
+    t.string   "state",                limit: 16
+    t.string   "options",              limit: 1024
     t.text     "result"
     t.text     "exceptions"
     t.string   "output_log_file"
-    t.string   "type",            limit: 32
+    t.string   "type",                 limit: 32
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "job_id"
-    t.string   "priority",        limit: 10,   default: "normal", null: false
+    t.string   "priority",             limit: 10,   default: "normal", null: false
     t.string   "target"
     t.integer  "account_id"
+    t.boolean  "disable_notification",              default: false,    null: false
   end
 
   add_index "transporter_jobs", ["account_id"], name: "index_transporter_jobs_on_account_id"

@@ -1,6 +1,6 @@
 require "template"
 
-ItunesStoreTransporterWeb.mailer :notifications do
+ITunes::Store::Transporter::Web::App.mailer :notifications do
   email :job_completed do |job|
     t = Template.new(job)
     notice = job.account.notification

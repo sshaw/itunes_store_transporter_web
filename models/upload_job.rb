@@ -2,7 +2,7 @@ require "delayed_job"
 
 class UploadJob < TransporterJob
   def after(job)
-    return if account.notification.nil?
+    return if skip_notification?
     Delayed::Job.enqueue(SendNotificationJob.new(id))
   end
 
@@ -23,5 +23,11 @@ class UploadJob < TransporterJob
 
   def _target
      options[:package] ? File.basename(options[:package]) : super
+  end
+
+  private
+
+  def skip_notification?
+    disable_notification || account.disable_notification || account.notification.nil?
   end
 end

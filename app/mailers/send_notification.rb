@@ -2,7 +2,7 @@ class SendNotification
   def send(job_id)
     job = TransporterJob.includes(:account => :notification).find(job_id)
     raise ArgumentError, error_message(job) if job.account.notification.nil?
-    ItunesStoreTransporterWeb.deliver(:notifications, :job_completed, job)
+    ITunes::Store::Transporter::Web::App.deliver(:notifications, :job_completed, job)
   end
 
   private

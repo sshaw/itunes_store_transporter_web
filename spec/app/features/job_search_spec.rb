@@ -66,9 +66,9 @@ feature "Search", :js do
 
     search { select found.username, :from => "Account" }
 
-    expect(page).to have_text(%{Search: account "#{found.username}"})
-    expect(page).to have_selector(".job", :text => found.username, :count => 1)
-    expect(page).to have_no_selector(".job", :text => not_found.username)
+    expect(page).to have_text(%{Search: account "#{found.display_name}"})
+    expect(page).to have_selector(".job", :text => found.display_name, :count => 1)
+    expect(page).to have_no_selector(".job", :text => not_found.display_name)
   end
 
   describe "searching by date" do

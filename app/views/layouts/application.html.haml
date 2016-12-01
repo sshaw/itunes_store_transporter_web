@@ -40,8 +40,10 @@
       = yield
 
     %footer
-      %p{:style => "text-align:center"}
-        -# %small
-        -#   v#{ITunes::Store::Transporter::Web::VERSION}
+      %p
+        %small
+          = link_to "Help", help_path, :target => "_blank"
+          &#183;
+          v#{ITunes::Store::Transporter::Web::VERSION}
 
     = partial "shared/search_form", :locals => { :accounts => @accounts }
