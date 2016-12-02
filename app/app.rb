@@ -175,6 +175,7 @@ class ItunesStoreTransporterWeb < Padrino::Application
     if content_type == :html
       filename = "#{job.type}-Job"
       filename << "-#{job.target}" if job.target.present?
+      filename << ".log"
       attachment filename
     end
 
