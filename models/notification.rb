@@ -8,7 +8,8 @@ class Notification < ActiveRecord::Base
   validates :account_id, :presence => true
   validates :name, :presence => true
   validates :to, :presence => true
-  validates :from, :email => true
+
+  validates :from, :presence => true, :email => { :allow_blank => true }
   validates :reply_to, :email => { :allow_blank => true }
   validates :subject, :presence => true
   validates :account_id, :uniqueness => true
