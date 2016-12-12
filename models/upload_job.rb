@@ -1,9 +1,22 @@
 require "delayed_job"
 
 class UploadJob < TransporterJob
+  serialize :vendor_ids
+
   def after(job)
     return if skip_notification?
     Delayed::Job.enqueue(SendNotificationJob.new(id))
+  end
+
+  def success(job)
+    super
+    update_package
+  end
+
+  def as_json(options = nil)
+    json = super
+    json.delete("vendor_ids")
+    json
   end
 
   protected
@@ -29,5 +42,11 @@ class UploadJob < TransporterJob
 
   def skip_notification?
     disable_notification || account.disable_notification || account.notification.nil?
+  end
+
+  def update_package
+    Package.where(:vendor_id => vendor_ids).update_all(:last_upload => Time.current)
+    Package.where(:vendor_id => vendor_ids, :current_status => nil).
+      update_all(:current_status => state.to_s.titleize)
   end
 end

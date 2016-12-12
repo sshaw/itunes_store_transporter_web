@@ -1,0 +1,64 @@
+%h2
+  Package Statuses:
+  = form_tag url(:packages), :method => "get", :class => "form-inline" do
+    = hidden_field_tag :order, :value => params[:order]
+    = select_tag :current_status, :options => status_options, :include_blank => "All", :selected => params[:current_status], :class => "input-medium js-package-filter"
+  :javascript
+
+.jobs
+  - if @packages.none?
+    %p
+      No packages found.
+
+  - else
+    .actions(style="text-align: right; padding-bottom: 4px;")
+      %i.icon-film
+      = link_to "New Package", url("packages/new")
+
+    %table.table
+      %thead
+        %tr
+          %th
+            = sort_by("status")
+          %th
+            = sort_by("title")
+          %th
+            = sort_by("vendor_id")
+          %th
+            = sort_by("account")
+          %th
+            = sort_by("last_upload")
+          %th{:colspan => 2}
+            = sort_by("last_status_check")
+
+      %tbody
+        - @packages.each do |pkg|
+          %tr
+            %td
+              - if pkg.current_status
+                = link_to status_label(pkg.current_status), url(:packages, pkg.id)
+              - else
+                &mdash;
+            %td
+              = link_to pkg.title, url(:packages, pkg.id)
+            %td
+              = link_to pkg.vendor_id, url(:packages, pkg.id)
+            %td
+              = link_to pkg.account.shortname, url(:packages, pkg.id)
+            %td
+              - if pkg.last_upload
+                = l pkg.last_upload
+              - else
+                &mdash;
+            %td
+              - if pkg.last_status_check
+                = l pkg.last_status_check
+              - else
+                &mdash;
+            %td{:style => "text-align: right"}
+              = form_for :status_form, url(:status), :class => "form-inline" do |f|
+                = f.hidden_field :vendor_id, :value => pkg.vendor_id
+                = f.hidden_field :account_id, :value => pkg.account_id
+                = f.submit "Check status", :class => "btn btn-mini"
+
+    = will_paginate @packages

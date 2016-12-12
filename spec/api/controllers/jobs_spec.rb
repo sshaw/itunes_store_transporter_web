@@ -93,9 +93,12 @@ RSpec.describe "/api" do
 
   describe "POST to upload" do
     it "creates an upload job" do
+      pkg = create_package
+      create_metadata(pkg)
+
       params = {
         :account_id => @account.id,
-        :package => "/a/dir.itmsp",
+        :package => pkg,
         :batch => false,
         :success => "good",
         :failure => "bad",

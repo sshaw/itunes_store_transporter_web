@@ -1,0 +1,68 @@
+- content_for(:title) { @package.to_s }
+
+%h2
+  = @package.to_s
+
+%ul.nav.nav-tabs
+  %li.active
+    = link_to "Summary", "#summary", :data => {:toggle => "tab"}
+  %li
+    = link_to "Status History", "#history", :data => {:toggle => "tab"}
+
+.tab-content
+  #summary.tab-pane.active
+    %table.table.table-bordered.table-condensed
+      %tbody
+        %tr
+          %th
+            Current Status
+          %td
+            - if @package.current_status
+              = status_label(@package.current_status)
+            - else
+              &mdash;
+        %tr
+          %th
+            Account
+          %td
+            = @package.account.display_name
+        %tr
+          %th
+            Last Upload
+          %td
+            - if @package.last_upload
+              = l @package.last_upload
+            - else
+              &mdash;
+        %tr
+          %th
+            Last Status Check
+          %td
+            - if @package.last_status_check
+              = l @package.last_status_check
+            - else
+              &mdash;
+
+
+  #history.tab-pane
+    - if @package.status_history.none?
+      %p None
+    - else
+      %table.table
+        %thead
+          %tr
+            %th
+              &#35;
+            %th
+              Status
+            %th
+              Time
+        %tbody
+          - @package.status_history.reverse_each.with_index do |status, i|
+            %tr
+              %td
+                = @package.status_history.size - i
+              %td
+                = status_label(status.name)
+              %td
+                = l status.time

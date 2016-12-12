@@ -9,7 +9,18 @@ ITunes::Store::Transporter::Web::API.controllers do
       form = "#{name}Form".constantize.new(json_params)
 
       if form.valid?
-        job = job.create!(form.marshal_dump)
+        if route != :upload
+          job = job.create(form.marshal_dump)
+        else
+          Package.transaction do
+            form.packages.each do |pkg|
+              pkg.save! if pkg.new_record?
+            end
+
+            job = job.create(form.marshal_dump)
+          end
+        end
+
         halt 201, { "Location" => url(:jobs, :id => job.id) }, job.to_json
       else
         halt 422, form.errors.to_json

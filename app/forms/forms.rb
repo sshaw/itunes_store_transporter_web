@@ -1,5 +1,6 @@
 require "ostruct"
 require "options"
+require "rexml/document"
 
 class JobForm < OpenStruct
   include ActiveModel::Validations
@@ -38,6 +39,76 @@ end
 class UploadForm < JobForm
   include Options::Validations::Upload
   include Options::Validations::Package
+
+  validate :check_metadata, :unless => lambda { |form| form.package.blank? }
+
+  def initialize(options = {})
+    super
+    @titles = []
+    @vendor_ids = []
+  end
+
+  def packages
+    return [] unless valid?
+    build_packages
+  end
+
+  def marshal_dump
+    super.merge(:vendor_ids => @vendor_ids)
+  end
+
+  private
+
+  def build_packages
+    @vendor_ids.map.with_index do |id, i|
+      Package.find_or_initialize_by(:vendor_id => id) do |pkg|
+        pkg.account_id = account_id
+        pkg.title = @titles[i]
+      end
+    end.uniq
+  end
+
+  def check_metadata
+    # Don't accumulate between calls to valid?
+    @titles.clear
+    @vendor_ids.clear
+    if batch == "1"
+      Dir[ File.join(package, "*.itmsp") ].each { |pkg| extract_title_and_vendor_id(pkg) }
+    else
+      extract_title_and_vendor_id(package)
+    end
+  end
+
+  def extract_title_and_vendor_id(pkg)
+    path = File.join(pkg, "metadata.xml")
+    unless File.file?(path)
+      errors.add(:base, "No metadata.xml in #{File.basename(pkg)}")
+      return false
+    end
+
+    begin
+      doc = REXML::Document.new(File.read(path))
+    rescue => e
+      errors.add(:base, "Metadata problem for #{File.basename(pkg)}: #{e}")
+      return false
+    end
+
+    e = doc.get_elements("//video/vendor_id").first
+    unless e
+      errors.add(:base, "Metadata missing vendor_id in #{File.basename(pkg)}")
+      return false
+    end
+
+    @vendor_ids << e.text.strip
+
+    e = doc.get_elements("//video/title").first
+    unless e
+      errors.add(:base, "Metadata missing title in #{File.basename(pkg)}")
+      return false
+    end
+
+    @titles << e.text.strip
+  end
 end
 
 class VerifyForm < JobForm

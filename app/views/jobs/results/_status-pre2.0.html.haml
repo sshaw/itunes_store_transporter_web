@@ -1,0 +1,30 @@
+-# This is for displaying statuses returned from version < 2.0
+- content_for :results do
+  .section
+    %table.table.table-bordered
+      - job.result.each do |k, v|
+        - next if k == :status
+        %tr
+          %th
+            = format_option_name(k)
+          %td
+            = job.result[k]
+
+
+
+  - job.result[:status].each_with_index do |status, i|
+    .numbered-section
+      .number
+        - pos = job.result[:status].size - i
+        = link_to "##{pos}", "#status#{pos}", :name => "status#{pos}"
+
+      .section
+        %table.table.table-bordered.table-condensed
+          - status.each do |k, v|
+            %tr
+              %th
+                &= k.to_s.titleize
+              %td
+                &= v
+
+= partial "jobs/results/result"

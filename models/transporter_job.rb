@@ -34,8 +34,8 @@ class TransporterJob < ActiveRecord::Base
   scope :completed, lambda { where(:state => [:success, :failure]) }
 
   def self.search(params)
-    Search::Order.new(
-      Search::Where.new(self).build(params)
+    Search::Jobs::Order.new(
+      Search::Jobs::Where.new(self).build(params)
     ).build(params)
   end
 
@@ -121,8 +121,13 @@ class TransporterJob < ActiveRecord::Base
 
   def as_json(options = nil)
     return super if options
+
     json = super(:except => [:job_id, :target, :output_log_file])
-    json["options"].try(:delete, :log)
+    if json["options"]
+      json["options"].delete(:log)
+      json["options"][:password] = "*" * 8 if json["options"][:password]
+    end
+
     json.merge!("type" => type.try(:downcase), "exceptions" => exceptions ? exceptions.to_s : nil)
   end
 

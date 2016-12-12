@@ -21,7 +21,13 @@
       = f.rate_field
       = f.select_transport
 
-      -#= f.select "Status check time", :options => (0..23).map { |i| sprintf "%02d", i }, :style => "width: 42px"
+      .control-group
+        %label.control-label
+          Status check time:
+        .controls
+          = succeed " :" do
+            = select_tag "transporter_config[check_upload_status_at(4i)]", select_hour_options(@config.check_upload_status_at.try(:hour))
+          = select_tag "transporter_config[check_upload_status_at(5i)]", select_minute_options(@config.check_upload_status_at.try(:min))
 
       = f.actions do
         = f.submit "Save"

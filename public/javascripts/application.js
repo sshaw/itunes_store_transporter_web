@@ -65,4 +65,8 @@ $(document).ready(function() {
 
     dateOptions['altField'] = '#updated_at_from';
     $('#_updated_at_from').datepicker(dateOptions);
+
+    $('.js-package-filter').change(function(e) {
+	$(this).parent().submit();
+    });
 });

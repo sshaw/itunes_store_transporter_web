@@ -1,7 +1,7 @@
 = fields.text_field :name
 = fields.select :account_id, :options => account_options(@accounts), :include_blank => true
-= fields.text_field :subject, :class => "input-xxlarge", :help_block => "Can contain #{link_to("template variables", help_path, :id => "notification-templates", :target => "_blank")}".html_safe
+= fields.text_field :subject, :class => "input-xxlarge", :help_block => "Can contain #{link_to("template variables", help_path("notification-templates"), :target => "_blank")}".html_safe
 = fields.text_field :from, :help_block => "Notifications will be sent by this email address"
 = fields.text_field :reply_to
 = fields.text_area :to, :rows => 3, :help_block => "Separate multiple email addresses by a comma or newline"
-= fields.text_area :message, :rows => 10, :help_block => "The notification's message, can contain #{link_to("template variables", help_path, :id => "notification-templates", :target => "_blank")} for details".html_safe, :class => "input-xxlarge"
+= fields.text_area :message, :rows => 10, :help_block => "The notification's message, can contain #{link_to("template variables", help_path("notification-templates"), :target => "_blank")} for details".html_safe, :class => "input-xxlarge"

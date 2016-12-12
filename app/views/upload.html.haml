@@ -1,6 +1,9 @@
 - content_for :title do
   Upload
 
+- if @options.errors[:base].any?
+  = alert @options.errors[:base].to_sentence
+
 %h2
   Upload
 

@@ -1,26 +1,8 @@
-- content_for :results do 
-  .section
-    - job.result.each do |k, v|
-      - next if k == :status
-
-      %span(style="padding-right:8px;")
-        %strong
-          &= "#{format_option_name(k)}:"
-        &= v
-
-  - job.result[:status].each_with_index do |status, i|
-    .numbered-section
-      .number
-        - pos = job.result[:status].size - i
-        = link_to "##{pos}", "#status#{pos}", :name => "status#{pos}"
-
-      .section
-        %table.table.table-bordered.table-condensed
-          - status.each do |k, v|
-            %tr
-              %th
-                &= k.to_s.titleize
-              %td
-                &= v
-
-= partial "jobs/results/result"
+-# Before 2.0, result contained a Hash
+- if job.result.is_a?(Array)
+  - if job.result.none?
+    %p No status found.
+  - else
+    = render_partial "jobs/results/status-2.0", :locals => { :status => job.result.first }
+- else
+  = render_partial "jobs/results/status-pre2.0", :locals => { :job => job }

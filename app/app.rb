@@ -94,7 +94,18 @@ module ITunes
 
               @options = form.new(params["#{route}_form"])
               if @options.valid?
-                @job = job.create!(@options.marshal_dump)
+                if route != :upload
+                  @job = job.create(@options.marshal_dump)
+                else
+                  Package.transaction do
+                    @options.packages.each do |pkg|
+                      pkg.save! if pkg.new_record?
+                    end
+
+                    @job = job.create(@options.marshal_dump)
+                  end
+                end
+
                 flash[:success] = "#{name} job added to the queue."
                 redirect url(:job, :id => @job.id)
               else
@@ -289,6 +300,34 @@ module ITunes
               redirect :config
             else
               render "notifications/new"
+            end
+          end
+
+          get "/packages/new" do
+            @package = Package.new
+            render "packages/new"
+          end
+
+          get :packages do
+            @accounts = Account.all
+            @packages = Package.search(params).paginate(paging_options)
+            render "packages/index"
+          end
+
+          get :packages, :with => :id do
+            @package = Package.find(params[:id])
+            render "packages/show"
+          end
+
+          post :packages do
+            @package = Package.new(params[:package])
+            if @package.valid?
+              @package.save
+              flash[:success] = "Package created."
+              redirect :packages
+            else
+              @accounts = Account.all
+              render "packages/new"
             end
           end
 

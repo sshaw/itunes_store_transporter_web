@@ -31,6 +31,26 @@ module ITunes
             options
           end
 
+          def select_hour_options(hour)
+            options = {
+              :options => (00..24).map { |i| "%02d" % i },
+              :class => "input-mini"
+            }
+
+            options[:selected] = "%02d" % hour if hour
+            options
+          end
+
+          def select_minute_options(min)
+            options = {
+              :options => %w[00 15 30 45],
+              :class => "input-mini"
+            }
+
+            options[:selected] = "%02d" % min if min
+            options
+          end
+
           def target(job)
             job.target.present? ? link_to(job.target, url(:job, :id => job.id)) : "&mdash;".html_safe
           end
@@ -146,9 +166,13 @@ module ITunes
           def sort_by(column)
             current_column, current_dir = params[:order].to_s.split(":")
 
+            text = column.titleize
+            text << " ID" if column.end_with?("_id")
+
             dir  = current_dir == "asc" ? "desc" : "asc"
-            link = link_to(column.titleize, current_path(params.merge(:order => "#{column}:#{dir}")))
+            link = link_to(text, current_path(params.merge(:order => "#{column}:#{dir}")))
             link << (dir == "asc" ? " &darr;" : " &uarr;").html_safe if column == current_column
+
             link
           end
         end

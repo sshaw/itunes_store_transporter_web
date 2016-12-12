@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 16) do
+ActiveRecord::Schema.define(version: 19) do
 
   create_table "accounts", force: :cascade do |t|
     t.string   "username",             limit: 64,                 null: false
@@ -27,14 +27,15 @@ ActiveRecord::Schema.define(version: 16) do
   add_index "accounts", ["username", "shortname"], name: "index_accounts_on_username_and_shortname", unique: true
 
   create_table "config", force: :cascade do |t|
-    t.string  "username",             limit: 64
-    t.string  "password",             limit: 64
-    t.string  "shortname",            limit: 64
-    t.string  "transport",            limit: 16
+    t.string  "username",               limit: 64
+    t.string  "password",               limit: 64
+    t.string  "shortname",              limit: 64
+    t.string  "transport",              limit: 16
     t.string  "path"
     t.integer "rate"
     t.string  "output_log_directory"
     t.string  "jvm"
+    t.time    "check_upload_status_at"
     t.string  "smtp_host"
     t.integer "smtp_port"
   end
@@ -67,6 +68,29 @@ ActiveRecord::Schema.define(version: 16) do
 
   add_index "notifications", ["account_id"], name: "index_notifications_on_account_id", unique: true
 
+  create_table "packages", force: :cascade do |t|
+    t.string   "title",                        null: false
+    t.string   "vendor_id",         limit: 64, null: false
+    t.string   "current_status",    limit: 32
+    t.datetime "last_upload"
+    t.datetime "last_status_check"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "account_id",                   null: false
+  end
+
+  add_index "packages", ["current_status"], name: "index_packages_on_current_status"
+  add_index "packages", ["last_status_check"], name: "index_packages_on_last_status_check"
+  add_index "packages", ["last_upload"], name: "index_packages_on_last_upload"
+  add_index "packages", ["updated_at"], name: "index_packages_on_updated_at"
+  add_index "packages", ["vendor_id"], name: "index_packages_on_vendor_id", unique: true
+
+  create_table "statuses", force: :cascade do |t|
+    t.string   "name",       limit: 32, null: false
+    t.datetime "time",                  null: false
+    t.integer  "package_id",            null: false
+  end
+
   create_table "transporter_jobs", force: :cascade do |t|
     t.string   "state",                limit: 16
     t.string   "options",              limit: 1024
@@ -81,6 +105,7 @@ ActiveRecord::Schema.define(version: 16) do
     t.string   "target"
     t.integer  "account_id"
     t.boolean  "disable_notification",              default: false,    null: false
+    t.text     "vendor_ids"
   end
 
   add_index "transporter_jobs", ["account_id"], name: "index_transporter_jobs_on_account_id"

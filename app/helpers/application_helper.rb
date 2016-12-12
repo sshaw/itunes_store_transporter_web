@@ -20,8 +20,8 @@ module ITunes
             end.html_safe
           end
 
-          def help_path
-            HELP_PATH
+          def help_path(anchor = nil)
+            anchor ? sprintf("%s#%s", HELP_PATH, anchor) : HELP_PATH
           end
         end
       end

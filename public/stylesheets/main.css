@@ -101,6 +101,11 @@ footer {
     background-color: #ccc;
 }
 
+.form-inline {
+    margin: 0;
+    display: inline-block;
+}
+
 .form-horizontal .control-group .control-label.select-label {
     padding-top: 0;
 }
@@ -109,13 +114,15 @@ footer {
     width: 140px;
 }
 
-/* Make Twitter's labels match our states. Can you say LESS? */
+/* Make Twitter's labels match our states and stauses. */
 /* important */
+.label-not-on-store,
 .label-failure {
     background-color: #b94a48
 }
 
 /* info */
+.label-review,
 .label-running {
     background-color: #3a87ad;
 }
@@ -123,6 +130,14 @@ footer {
 /* Just like a regular .label */
 .label-queued  {
     background-color: #999;
+}
+
+.label-on-store {
+    background-color: #468847;
+}
+
+.label-ready {
+    background-color: #c77a03;
 }
 
 .popover {

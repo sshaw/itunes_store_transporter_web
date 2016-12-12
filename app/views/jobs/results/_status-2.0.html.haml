@@ -1,0 +1,70 @@
+-# This is for displaying statuses returned from version >= 2.0
+- content_for :results do
+  .section
+    %table.table.table-bordered
+      - [:vendor_id, :apple_id].each do |k|
+        - next unless status[k]
+        %tr
+          %th
+            = format_option_name(k)
+          %td
+            = status[k]
+
+  %h4 Content Status Info
+  .section
+    - if status[:content_status].nil?
+      %p None
+    - else
+      %table.table.table-bordered.table-condensed
+        - status[:content_status].each do |k, v|
+          - next if k == :video_components
+
+          - if k == :store_status
+            - v.each do |k, v|
+              %tr
+                %th
+                  &= k.to_s.titleize
+                %td
+                  &= v.any? ? v.join(", ") : "N/A"
+          - else
+            %tr
+              %th
+                &= k.to_s.titleize
+              %td
+                &= v
+
+
+      %h4 Video Components
+      - if status[:content_status][:video_components].nil?
+        %p None
+      - else
+        - status[:content_status][:video_components].each do |video|
+          %table.table.table-bordered.table-condensed
+            - video.each do |k, v|
+              %tr
+                %th
+                  &= k.to_s.titleize
+                %td
+                  &= k == :locale && v.nil? ? "N/A" : v
+
+  %h4 Upload Status Info
+  .section
+    - if status[:info].none?
+      %p None
+    - else
+      - status[:info].each_with_index do |stat, i|
+        %table.table.table-bordered.table-condensed
+          %tr
+            %th
+              Delivery #
+            %td
+              = status[:info].size - i
+
+          - stat.each do |k, v|
+            %tr
+              %th
+                &= k.to_s.titleize
+              %td
+                &= v
+
+= partial "jobs/results/result"
