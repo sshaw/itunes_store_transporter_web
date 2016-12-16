@@ -1,5 +1,10 @@
 class UploadJob < TransporterJob
+  def after(job)
+    Delayed::Job.enqueue(RunExecuteHookJob.new(id)) if execute.present?
+  end
+
   protected
+
   def typecast_options
     options[:rate]   = options[:rate].to_i if options[:rate] =~ /\A\d+\z/
     options[:delete] = to_bool(options[:delete])

@@ -8,7 +8,7 @@ class JobForm < OpenStruct
   validate :find_account, :unless => lambda { |r| r.account_id.blank? }
 
   def marshal_dump
-    options = super.dup.except(:account_id)
+    options = super.dup.except(:account_id, :execute)
 
 
     if @account
@@ -17,12 +17,13 @@ class JobForm < OpenStruct
       options[:shortname] = @account.shortname
     end
 
-    data = { :options => options, :account_id => account_id }
+    data = { :options => options, :account_id => account_id, :execute => execute }
     data[:priority] = data[:options].delete(:priority) if data[:options].include?(:priority)
     data
   end
 
   protected
+
   def find_account
     # Avoid raising an exception via find()
     @account = Account.where(:id => account_id).first
@@ -36,6 +37,14 @@ end
 class UploadForm < JobForm
   include Options::Validations::Upload
   include Options::Validations::Package
+
+  validate :check_executable, :unless => lambda { |form| form.execute.blank? }
+
+  private
+
+  def check_executable
+    errors.add(:execute, "not an executable file") unless File.file?(execute) && File.executable?(execute)
+  end
 end
 
 class VerifyForm < JobForm
