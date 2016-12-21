@@ -9,7 +9,7 @@ class JobForm < OpenStruct
   validate :find_account, :unless => lambda { |r| r.account_id.blank? }
 
   def marshal_dump
-    options = super.dup.except(:account_id, :disable_notification)
+    options = super.dup.except(:account_id, :disable_notification, :execute)
 
     if @account
       options[:username]  = @account.username
@@ -17,7 +17,7 @@ class JobForm < OpenStruct
       options[:shortname] = @account.shortname
     end
 
-    data = { :options => options, :account_id => account_id }
+    data = { :options => options, :account_id => account_id, :execute => execute }
     data[:disable_notification] = disable_notification unless disable_notification.nil?
     data[:priority] = data[:options].delete(:priority) if data[:options].include?(:priority)
 
@@ -41,6 +41,7 @@ class UploadForm < JobForm
   include Options::Validations::Package
 
   validate :check_metadata, :unless => lambda { |form| form.package.blank? }
+  validate :check_executable, :unless => lambda { |form| form.execute.blank? }
 
   def initialize(options = {})
     super
@@ -58,6 +59,10 @@ class UploadForm < JobForm
   end
 
   private
+
+  def check_executable
+    errors.add(:execute, "not an executable file") unless File.file?(execute) && File.executable?(execute)
+  end
 
   def build_packages
     @vendor_ids.map.with_index do |id, i|

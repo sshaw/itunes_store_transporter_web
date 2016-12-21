@@ -29,6 +29,24 @@ RSpec.describe UploadJob, :model do
         job.after(double())
       end
     end
+
+    context "given a program to execute" do
+      it "enqueues a RunExecuteHookJob" do
+        job = create(:upload_job, :execute => "foo")
+        expect(Delayed::Job).to receive(:enqueue).with(RunExecuteHookJob.new(job.id))
+
+        job.after(double("Job"))
+      end
+    end
+
+    context "given no program to execute" do
+      it "does not enqueue a RunExecuteHookJob" do
+        job = create(:upload_job, :execute => nil)
+        expect(Delayed::Job).to_not receive(:enqueue)
+
+        job.after(double("Job"))
+      end
+    end
   end
 
   # describe "when executed" do

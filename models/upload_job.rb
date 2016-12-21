@@ -4,6 +4,8 @@ class UploadJob < TransporterJob
   serialize :vendor_ids
 
   def after(job)
+    Delayed::Job.enqueue(RunExecuteHookJob.new(id)) if execute.present?
+
     return if skip_notification?
     Delayed::Job.enqueue(SendNotificationJob.new(id))
   end

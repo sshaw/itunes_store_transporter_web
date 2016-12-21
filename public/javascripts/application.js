@@ -49,6 +49,10 @@ $(document).ready(function() {
 	iTMS.fileSelected('failure', file);
     });
 
+    $('#open_file_browser_for_execute').fileBrowser({title: 'Select Program to Execute', type: 'file'}, function(file) {
+	iTMS.fileSelected('execute', file);
+    });
+
     $('#auth-fields div a').click(function(e) {
 	e.preventDefault();
 	$('#usernames-and-password').toggle();
