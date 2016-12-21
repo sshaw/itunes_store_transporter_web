@@ -9,6 +9,7 @@
 <ul>
   <li><a href="#api">API</a></li>
   <li><a href="#notification-templates">Notification Templates</a></li>
+  <li><a href="#job-hooks">Job Hooks</a></li>
 </ul>
 
 <h2 id="api">API</h2>
@@ -35,6 +36,7 @@
   },
   "result": null,
   "exceptions": null,
+  "execute": null,
   "created_at": "2016-11-19T20:01:07.373Z",
   "updated_at": "2016-11-19T20:01:07.373Z",
   "priority": "normal",
@@ -59,6 +61,7 @@
   },
   "result": null,
   "exceptions": "Feature is missing a checksum (5011), Playlist already exits for this UPC (3005), Bad chapter timecode (4009), Preorder date must be before available date (4019)",
+ 	  "execute": null,
   "created_at": "2016-09-04T00:54:24.205Z",
   "updated_at": "2016-09-25T02:48:06.575Z",
   "priority": "normal",
@@ -76,6 +79,7 @@
   <li><code>options</code> - arguments passed to <code>iTMSTransporter</code>, this varies based on the job’s type, see Endpoints below</li>
   <li><code>result</code> - the results of a successful job, this varies based on the job type</li>
   <li><code>exceptions</code> - why the job failed</li>
+  <li><code>execute</code>: - program to execute on job completion (currently only supported for uploads)</li>
   <li><code>disable_notification</code> - email notification’s are enabled/disabled for the job</li>
 </ul>
 
@@ -308,6 +312,7 @@ and <code>COLUMN</code> must be one of:</p>
 		"shortname": ""
 	  },
 	  "result": "Package Summary:\n\n    1 package was uploaded successfully:\n    \t/Users/sshaw/Desktop/WITH_MD.itmsp\n",
+  	  "execute": null,
 	  "exceptions": null,
 	  "created_at": "2016-01-12T05:29:55.878Z",
 	  "updated_at": "2016-01-12T05:34:54.372Z",
@@ -328,6 +333,7 @@ and <code>COLUMN</code> must be one of:</p>
 		"batch": null
 	  },
 	  "result": null,
+  	  "execute": null,
 	  "exceptions": "option invalid: package; dir 'foo.itmsp' does not exist",
 	  "created_at": "2016-01-13T18:53:40.446Z",
 	  "updated_at": "2016-01-13T05:34:47.825Z",
@@ -387,6 +393,7 @@ and <code>COLUMN</code> must be one of:</p>
   <li><code>disable_notification</code>: optional, disable email notifications for this job only</li>
   <li><code>rate</code>: Optional, transfer rate in kbps</li>
   <li><code>batch</code>: Optional, batch upload, defaults to <code>false</code></li>
+  <li><code>execute</code>: Optional, program to execute after the job completes, must be accessible by the worker process. See <a href="#job-hooks">Job Hooks</a>.</li>
   <li><code>success</code>: Optional, absolute path of a directory to move package to if the upload succeeds</li>
   <li><code>failure</code>: Optional, absolute path of a directory to move package to if the upload fails</li>
   <li><code>priority</code>: Optional, job priority, defaults to <code>"normal"</code>. See <a href="#priorities">Job Priorities</a>.</li>
@@ -514,6 +521,60 @@ See the below table for the supported variables.</p>
       <td><code>email_reply_to</code></td>
       <td><code>String</code></td>
       <td>Reply to email address (can be <code>nil</code>)</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="job-hooks">Job Hooks</h2>
+
+<p><em>Jobs hooks are currently only supported for upload jobs.</em></p>
+
+<p>Job hooks allow one to specify a command to be executed when a job completes. Information about the job
+is made available via the following environment variables:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Variable</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>ITMS_JOB_ID</code></td>
+      <td>Job id</td>
+    </tr>
+    <tr>
+      <td><code>ITMS_JOB_TARGET</code></td>
+      <td>Job target, varies based on the job type</td>
+    </tr>
+    <tr>
+      <td><code>ITMS_JOB_PACKAGE_PATH</code></td>
+      <td>Absolute path to the package, if the job contains one (can be empty)</td>
+    </tr>
+    <tr>
+      <td><code>ITMS_JOB_TYPE</code></td>
+      <td>The type of job, currently always <code>upload</code></td>
+    </tr>
+    <tr>
+      <td><code>ITMS_JOB_STATE</code></td>
+      <td>Job state, either <code>success</code> or <code>failure</code></td>
+    </tr>
+    <tr>
+      <td><code>ITMS_JOB_CREATED</code></td>
+      <td>Time the job was created, given in <code>YYYY-MM-DD HH:MM:SS ±ZONE</code> format (24 hour clock)</td>
+    </tr>
+    <tr>
+      <td><code>ITMS_JOB_COMPLETED</code></td>
+      <td>Time the job finished, given in <code>YYYY-MM-DD HH:MM:SS ±ZONE</code> format (24 hour clock)</td>
+    </tr>
+    <tr>
+      <td><code>ITMS_ACCOUNT_USERNAME</code></td>
+      <td>Username of the package’s iTunes Connect account</td>
+    </tr>
+    <tr>
+      <td><code>ITMS_ACCOUNT_SHORTNAME</code></td>
+      <td>Shortname of the package’s iTunes Connect account (can be empty)</td>
     </tr>
   </tbody>
 </table>

@@ -8,6 +8,7 @@
 
 * [API](#api)
 * [Notification Templates](#notification-templates)
+* [Job Hooks](#job-hooks)
 
 ## API
 
@@ -33,6 +34,7 @@ Represents a Transporter GUI job. Here's an example for a queued, upload job:
 	  },
 	  "result": null,
 	  "exceptions": null,
+	  "execute": null,
 	  "created_at": "2016-11-19T20:01:07.373Z",
 	  "updated_at": "2016-11-19T20:01:07.373Z",
 	  "priority": "normal",
@@ -56,6 +58,7 @@ Here's one for a failed verify job:
 	  },
 	  "result": null,
 	  "exceptions": "Feature is missing a checksum (5011), Playlist already exits for this UPC (3005), Bad chapter timecode (4009), Preorder date must be before available date (4019)",
+ 	  "execute": null,
 	  "created_at": "2016-09-04T00:54:24.205Z",
 	  "updated_at": "2016-09-25T02:48:06.575Z",
 	  "priority": "normal",
@@ -71,6 +74,7 @@ Here's one for a failed verify job:
 * `options` - arguments passed to `iTMSTransporter`, this varies based on the job's type, see Endpoints below
 * `result` - the results of a successful job, this varies based on the job type
 * `exceptions` - why the job failed
+* `execute` - program to execute on job completion (currently only supported for uploads)
 * `disable_notification` - email notification's are enabled/disabled for the job
 
 #### Errors
@@ -275,6 +279,7 @@ And the results:
 			"shortname": ""
 		  },
 		  "result": "Package Summary:\n\n    1 package was uploaded successfully:\n    \t/Users/sshaw/Desktop/WITH_MD.itmsp\n",
+	  	  "execute": null,
 		  "exceptions": null,
 		  "created_at": "2016-01-12T05:29:55.878Z",
 		  "updated_at": "2016-01-12T05:34:54.372Z",
@@ -295,6 +300,7 @@ And the results:
 			"batch": null
 		  },
 		  "result": null,
+	  	  "execute": null,
 		  "exceptions": "option invalid: package; dir 'foo.itmsp' does not exist",
 		  "created_at": "2016-01-13T18:53:40.446Z",
 		  "updated_at": "2016-01-13T05:34:47.825Z",
@@ -346,6 +352,7 @@ All paths must be accessible by the worker process.
 * `disable_notification`: optional, disable email notifications for this job only
 * `rate`: Optional, transfer rate in kbps
 * `batch`: Optional, batch upload, defaults to `false`
+* `execute`: Optional, program to execute after the job completes, must be accessible by the worker process. See [Job Hooks](#job-hooks).
 * `success`: Optional, absolute path of a directory to move package to if the upload succeeds
 * `failure`: Optional, absolute path of a directory to move package to if the upload fails
 * `priority`: Optional, job priority, defaults to `"normal"`. See [Job Priorities](#priorities).
@@ -412,3 +419,22 @@ Variable | Type      | Description
 `email_to` | `Array` | Recipient email addresses
 `email_from` | `String` | Sender's email address
 `email_reply_to` | `String` | Reply to email address (can be `nil`)
+
+## Job Hooks
+
+*Jobs hooks are currently only supported for upload jobs.*
+
+Job hooks allow one to specify a command to be executed when a job completes. Information about the job
+is made available via the following environment variables:
+
+Variable | Description
+---------|------------------------
+`ITMS_JOB_ID` | Job id
+`ITMS_JOB_TARGET` | Job target, varies based on the job type
+`ITMS_JOB_PACKAGE_PATH` | Absolute path to the package, if the job contains one (can be empty)
+`ITMS_JOB_TYPE` | The type of job, currently always `upload`
+`ITMS_JOB_STATE` | Job state, either `success` or `failure`
+`ITMS_JOB_CREATED` | Time the job was created, given in `YYYY-MM-DD HH:MM:SS ±ZONE` format (24 hour clock)
+`ITMS_JOB_COMPLETED` | Time the job finished, given in `YYYY-MM-DD HH:MM:SS ±ZONE` format (24 hour clock)
+`ITMS_ACCOUNT_USERNAME` | Username of the package's iTunes Connect account
+`ITMS_ACCOUNT_SHORTNAME` | Shortname of the package's iTunes Connect account (can be empty)
