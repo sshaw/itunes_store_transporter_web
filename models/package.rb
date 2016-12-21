@@ -37,8 +37,12 @@ class Package < ActiveRecord::Base
 
   def add_status_change_to_history
     # If we changed it from nil there's nothing to add to the history
-    return unless current_status_changed? && !current_status_change[0].nil?
-    status_history.build(:name => current_status_change[0], :time => time_of_last_status_change)
+    if current_status_changed? && !current_status_change[0].nil?
+      status_history.build(:name => current_status_change[0], :time => time_of_last_status_change)
+    # A check can take place but result in the same state, we still need to track this
+    elsif last_status_check_changed? && !last_status_check_change[0].nil? && !current_status.nil?
+      status_history.build(:name => current_status, :time => time_of_last_status_change)
+    end
   end
 
   def time_of_last_status_change

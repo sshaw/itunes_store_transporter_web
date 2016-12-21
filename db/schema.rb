@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 19) do
+ActiveRecord::Schema.define(version: 20) do
 
   create_table "accounts", force: :cascade do |t|
     t.string   "username",             limit: 64,                 null: false
@@ -106,6 +106,7 @@ ActiveRecord::Schema.define(version: 19) do
     t.integer  "account_id"
     t.boolean  "disable_notification",              default: false,    null: false
     t.text     "vendor_ids"
+    t.string   "execute",              limit: 1024
   end
 
   add_index "transporter_jobs", ["account_id"], name: "index_transporter_jobs_on_account_id"

@@ -19,13 +19,34 @@ RSpec.describe Package do
   end
 
   describe "status history" do
-    context "when current_status changes from a non-nil value" do
+    context "when current_status changes from nil" do
+      it "does not add the new status to status_history" do
+        pkg = create(:package, :current_status => nil)
+        expect(pkg.status_history.size).to eq 0
+
+        pkg.update!(:current_status => "Foo")
+        expect(pkg.status_history.size).to eq 0
+      end
+    end
+
+    context "when current_status changes from non-nil" do
       it "adds its old status to status_history" do
         pkg = create(:package, :current_status => "Bar")
         pkg.update!(:current_status => "Foo")
 
         expect(pkg.status_history.size).to eq 1
         expect(pkg.status_history.first.name).to eq "Bar"
+      end
+    end
+
+    context "when last_status_check changes from non-nil but status remains the same" do
+      it "adds the status to status_history" do
+        pkg = create(:package, :current_status => "Foo", :last_status_check => Time.current)
+        pkg.update!(:last_status_check => Time.current)
+
+        expect(pkg.current_status).to eq "Foo"
+        expect(pkg.status_history.size).to eq 1
+        expect(pkg.status_history.first.name).to eq "Foo"
       end
     end
   end
