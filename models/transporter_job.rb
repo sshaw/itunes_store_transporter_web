@@ -14,6 +14,7 @@ class TransporterJob < ActiveRecord::Base
   end
 
   PRIORITY = Hash.new(0).merge!(:high => -1, :normal => 0, :low => 1)
+  NON_DUP_ATTRS = [:exceptions, :job_id, :output_log_file, :result, :state].freeze
 
   # TODO: params in controller
   #attr_protected :state, :target, :job_id
@@ -120,6 +121,12 @@ class TransporterJob < ActiveRecord::Base
     s = "#{type} Job"
     s << ": #{target}" if target.present?
     s
+  end
+
+  def initialize_copy(other)
+    copy = super
+    NON_DUP_ATTRS.each { |name| copy[name] = nil }
+    copy
   end
 
   protected
