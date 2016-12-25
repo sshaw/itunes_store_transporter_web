@@ -24,6 +24,8 @@ namespace :itmsworker do
 
     $0 = t.name
 
+    Delayed::Worker.max_attempts = 5
+
     worker = Delayed::Worker.new(options)
     worker.name = "#{t.name} pid: #$$"
     worker.start
@@ -55,6 +57,26 @@ namespace :itmsworker do
     worker = Delayed::Worker.new(options)
     worker.name = "#{t.name} pid: #$$"
     worker.start
+  end
+
+  task :update_statuses => :environment do
+    last_ran = nil
+    config = TransporterConfig.first_or_initialize
+
+    loop do
+      if config.check_upload_status_at
+        now = Time.current
+        run_at = config.check_upload_status_at.change(:day => now.day, :month => now.month, :year => now.year)
+        if last_ran != run_at && run_at <= now
+          Delayed::Job.enqueue(StatusCheckJob.new)
+          last_ran = run_at
+        end
+      end
+
+      sleep 60
+      # Detect changes to check time
+      config.reload
+    end
   end
 end
 

@@ -1,4 +1,5 @@
 require "itunes/store/transporter/web/search"
+require "itunes/store/transporter/web/package_status"
 
 class Package < ActiveRecord::Base
   include ITunes::Store::Transporter::Web
@@ -11,12 +12,24 @@ class Package < ActiveRecord::Base
   validates :account_id, :presence => true
 
   before_create :set_status
+  before_create { vendor_id.strip! }
   before_update :add_status_change_to_history
 
   def self.search(params)
     Search::Package::Order.new(
       Search::Package::Where.new(self).build(params)
     ).build(params)
+  end
+
+  def self.pending_uploads
+    st = PackageStatus::ON_STORE
+    where(<<-SQL, st, st, 24.hours.ago, 24.hours.ago)
+      current_status != ? or
+      (
+        current_status = ? and
+        (last_upload > ? and last_status_check <= ? or last_status_check is null)
+      )
+    SQL
   end
 
   def to_s
