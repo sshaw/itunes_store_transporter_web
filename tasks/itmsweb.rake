@@ -5,8 +5,27 @@ rule ".html" => ".md" do |t|
   sh "kramdown < #{t.source} > #{t.name}"
 end
 
-namespace :itmsworker do
+task :itmsworker => :environment do
+  def kill_um(signal, ids)
+    puts "Shutting down..."
+    ids.each { |id| Process.kill(signal, id) }
+  rescue Errno::ESRCH
+    # ignore
+  end
 
+  children = []
+  %w[notifications jobs update_statuses].each do |name|
+    children << fork { Rake::Task["itmsworker:#{name}"].invoke }
+  end
+
+  trap("INT") { kill_um("INT", children) }
+  trap("TERM") { kill_um("TERM", children) }
+
+  statuses = Process.waitall
+  exit statuses.all? { |s| s[1].success? } ? 0 : 1
+end
+
+namespace :itmsworker do
   desc "Build standalone worker gem"
   task :build do
     worker = Padrino.root("worker")
@@ -60,6 +79,8 @@ namespace :itmsworker do
   end
 
   task :update_statuses => :environment do
+    $0 = "update_statuses pid: #$$"
+
     last_ran = nil
     config = TransporterConfig.first_or_initialize
 
