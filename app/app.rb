@@ -309,7 +309,6 @@ module ITunes
           end
 
           get :packages do
-            @accounts = Account.all
             @packages = Package.search(params).paginate(paging_options)
             render "packages/index"
           end

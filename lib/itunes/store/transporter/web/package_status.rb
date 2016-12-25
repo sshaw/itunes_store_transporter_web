@@ -18,16 +18,18 @@ module ITunes
           def to_s
             case
             when review?
-              REVIEW
+              REVIEW.dup
             when not_on_store?
-              NOT_ON_STORE
+              NOT_ON_STORE.dup
             when ready?
-              READY
+              READY.dup
             when on_store?
-              ON_STORE
+              ON_STORE.dup
             when @status[:info]
               # Is this correct? Ask P9
-              @status[:info].first[:status]
+              @status[:info].first[:status] || ""
+            else
+              ""
             end
           end
 
@@ -53,26 +55,26 @@ module ITunes
           def review?
             store_status[:not_on_store].any? &&
               video_components.any? &&
-              video_components.all? { |vc| vc[:status] == "In Review" }
+              video_components.all? { |vc| vc[:status] == IN_REVIEW }
           end
 
           def not_on_store?
             store_status[:not_on_store].any? ||
-              video_components.any? { |vc| vc[:status] != "Approved" }
+              video_components.any? { |vc| vc[:status] != APPROVED }
           end
 
           def ready?
             store_status[:not_on_store].none? &&
               store_status[:on_store].none? &&
               store_status[:ready_for_store].any? &&
-              video_components.all? { |vc| vc[:status] == "Approved" }
+              video_components.all? { |vc| vc[:status] == APPROVED }
           end
 
           def on_store?
             store_status[:not_on_store].none? &&
               store_status[:ready_for_store].none? &&
               store_status[:on_store].any? &&
-              video_components.all? { |vc| vc[:status] == "Approved" }
+              video_components.all? { |vc| vc[:status] == APPROVED }
           end
 
         end

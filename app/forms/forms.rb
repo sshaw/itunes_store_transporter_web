@@ -40,7 +40,7 @@ class UploadForm < JobForm
   include Options::Validations::Upload
   include Options::Validations::Package
 
-  validate :check_metadata, :unless => lambda { |form| form.package.blank? }
+  validate :check_metadata, :unless => lambda { |form| form.errors.include?(:package) }
   validate :check_executable, :unless => lambda { |form| form.execute.blank? }
 
   def initialize(options = {})

@@ -86,7 +86,7 @@ module ITunes
                   conditions[:updated_at] = updated_at_query(*params.values_at(:updated_at_from, :updated_at_to))
                 end
 
-                @base_query.where(conditions)
+                @base_query.includes(:account).where(conditions)
               end
 
               private
