@@ -116,13 +116,13 @@ footer {
 
 /* Make Twitter's labels match our states and stauses. */
 /* important */
-.label-not-on-store,
+.label-status-not-on-store,
 .label-failure {
     background-color: #b94a48
 }
 
 /* info */
-.label-review,
+.label-status-review,
 .label-running {
     background-color: #3a87ad;
 }
@@ -132,11 +132,11 @@ footer {
     background-color: #999;
 }
 
-.label-on-store {
+.label-status-on-store {
     background-color: #468847;
 }
 
-.label-ready {
+.label-status-ready {
     background-color: #c77a03;
 }
 

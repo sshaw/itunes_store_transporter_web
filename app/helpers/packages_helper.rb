@@ -7,7 +7,7 @@ module ITunes
         App.helpers do
           def status_label(status)
             return unless status
-            content_tag :span, status, :class => "label label-#{status.parameterize}"
+            content_tag :span, status, :class => "label label-status-#{status.parameterize}"
           end
 
           def status_options
