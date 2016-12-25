@@ -18,15 +18,15 @@ RSpec.describe Package do
     end
 
     [PackageStatus::APPROVED, PackageStatus::IN_REVIEW, PackageStatus::REVIEW,
-     PackageStatus::NOT_ON_STORE, PackageStatus::READY, "Uploaded"].each do |status|
-      it "returns packages with a current_status that's not '#{status}'" do
+     PackageStatus::NOT_ON_STORE, PackageStatus::READY, "Uploaded", nil].each do |status|
+      it "returns packages with a current_status of '#{status}'" do
         pkg = create(:package, :current_status => status)
         expect(described_class.pending_uploads).to eq [pkg]
       end
     end
 
-    context "given a package with a status of #{PackageStatus::ON_STORE}" do
-      context "that has not been recently uploaded and has a last_status_check" do
+    context "given a package with a status of '#{PackageStatus::ON_STORE}'" do
+      context "that has not been uploaded withing 24 hours and has a last_status_check" do
         it "is not returned" do
           create(:package,
                  :current_status => PackageStatus::ON_STORE,
@@ -36,12 +36,12 @@ RSpec.describe Package do
         end
       end
 
-      context "that has been recently uploaded and has a stale last_status_check" do
+      context "that has been uploaded within 24 hours and has a last_status_check older than 24 hours" do
         it "is returned" do
           pkg = create(:package,
                        :current_status => PackageStatus::ON_STORE,
                        :last_status_check => 5.days.ago,
-                       :last_upload => 1.hour.ago)
+                       :last_upload => 23.hours.ago)
           expect(described_class.pending_uploads).to eq [pkg]
         end
       end

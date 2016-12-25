@@ -24,11 +24,8 @@ class Package < ActiveRecord::Base
   def self.pending_uploads
     st = PackageStatus::ON_STORE
     where(<<-SQL, st, st, 24.hours.ago, 24.hours.ago)
-      current_status != ? or
-      (
-        current_status = ? and
-        (last_upload > ? and last_status_check <= ? or last_status_check is null)
-      )
+      current_status is null or current_status != ? or current_status = ? and
+        (last_upload >= ? and last_status_check <= ? or last_status_check is null)
     SQL
   end
 

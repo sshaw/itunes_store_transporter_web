@@ -68,7 +68,8 @@ namespace :itmsworker do
         now = Time.current
         run_at = config.check_upload_status_at.change(:day => now.day, :month => now.month, :year => now.year)
         if last_ran != run_at && run_at <= now
-          Delayed::Job.enqueue(StatusCheckJob.new)
+          # We want this to run before everything
+          Delayed::Job.enqueue(StatusCheckJob.new, :priority => -9999999)
           last_ran = run_at
         end
       end
