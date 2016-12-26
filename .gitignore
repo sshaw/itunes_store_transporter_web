@@ -9,5 +9,5 @@ vendor/gems/*
 .sass-cache/*
 .bundle
 var/**/*
-db/*
+db/*.sqlite3
 config/itmsweb.yml
