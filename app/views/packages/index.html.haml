@@ -35,7 +35,7 @@
         - @packages.each do |pkg|
           %tr
             %td
-              - if pkg.current_status
+              - if pkg.current_status.present?
                 = link_to status_label(pkg.current_status), url(:packages, pkg.id)
               - else
                 &mdash;
