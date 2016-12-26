@@ -6,15 +6,15 @@
   :javascript
 
 .jobs
+  .actions(style="text-align: right; padding-bottom: 4px;")
+    %i.icon-film
+    = link_to "New Package", url("packages/new")
+
   - if @packages.none?
     %p
       No packages found.
 
   - else
-    .actions(style="text-align: right; padding-bottom: 4px;")
-      %i.icon-film
-      = link_to "New Package", url("packages/new")
-
     %table.table
       %thead
         %tr
