@@ -9,7 +9,7 @@ error()
 }
 
 root=$(dirname "$0")
-action=${1:-jobs}
+action=$1
 padrino="${root}/padrino"
 
 if [ ! -x "$padrino" ]; then
@@ -17,10 +17,12 @@ if [ ! -x "$padrino" ]; then
 fi
 
 case "$action" in
-    jobs|notifications) # jobs:check task too?
+    jobs|notifications)
 	"$padrino" rake -c "$root/.." -e production "itmsworker:$action"
         ;;
+    ?*)
+	error "usage: itmsworker [jobs|notifications]"
+	;;
     *)
-        error "usage: itmsworker [jobs|notifications]"
-
+	"$padrino" rake -c "$root/.." -e production "itmsworker"
 esac

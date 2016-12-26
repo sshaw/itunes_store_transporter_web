@@ -81,6 +81,9 @@ namespace :itmsworker do
   task :update_statuses => :environment do
     $0 = "update_statuses pid: #$$"
 
+    trap("INT")  { exit 1 }
+    trap("TERM") { exit 1 }
+
     last_ran = nil
     config = TransporterConfig.first_or_initialize
 
