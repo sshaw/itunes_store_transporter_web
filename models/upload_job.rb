@@ -1,5 +1,13 @@
+require "delayed_job"
+
 class UploadJob < TransporterJob
+  def after(job)
+    return if account.notification.nil?
+    Delayed::Job.enqueue(SendNotificationJob.new(id))
+  end
+
   protected
+
   def typecast_options
     options[:rate]   = options[:rate].to_i if options[:rate] =~ /\A\d+\z/
     options[:delete] = to_bool(options[:delete])

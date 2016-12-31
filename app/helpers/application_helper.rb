@@ -2,6 +2,8 @@ module ITunes
   module Store
     module Transporter
       module Web
+        HELP_PATH = "/docs/help.html".freeze
+
         App.helpers do
           def alert(message, type=:error)
             content_tag :div, :class => "alert alert-#{type}" do
@@ -16,6 +18,10 @@ module ITunes
               end
               html
             end.html_safe
+          end
+
+          def help_path
+            HELP_PATH
           end
         end
       end

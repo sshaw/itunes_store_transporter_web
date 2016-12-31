@@ -3,7 +3,7 @@ source "https://rubygems.org"
 gem "rake"
 gem "sinatra-contrib"
 gem "haml"
-gem "activerecord", :require => "active_record"
+gem "activerecord", "~> 4.2.0", :require => "active_record"
 gem "daemons"
 gem "delayed_job"
 gem "delayed_job_active_record"
@@ -14,8 +14,10 @@ gem "itunes_store_transporter", "~> 0.1.3"
 gem "padrino_bootstrap_forms", "~> 0.1.2", :require => "bootstrap_forms"
 gem "page_number", :gist => "83f7ad7ce9c8f92a833f6d6530a2495c"
 gem "i18n-env-config"
+gem "mail"
+gem "valid_email"
 
-%w(core gen helpers).each do |g|
+%w(core gen helpers mailer).each do |g|
   gem "padrino-" + g, "0.12.6"
 end
 
@@ -33,3 +35,5 @@ group :test, :development do
   gem "rspec"
   gem "sqlite3"
 end
+
+gem "kramdown", :group => :development

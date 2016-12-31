@@ -91,6 +91,10 @@ class TransporterJob < ActiveRecord::Base
     options.delete(:log)
   end
 
+  def queue_name
+    "jobs".freeze
+  end
+
   # job is Delayed::Backend::ActiveRecord::Job
   def enqueue(job)
     queued!

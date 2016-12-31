@@ -1,0 +1,15 @@
+- content_for(:title) do
+  SMTP Settings
+
+%h2
+  SMTP Settings
+
+%p
+  If there are no settings #{link_to "sendmail", "https://en.wikipedia.org/wiki/Sendmail"} will be used.
+
+= form_for @config, url("/notifications/config"), :method => "patch", :class => "form-horizontal" do |f|
+  = f.text_field :smtp_host, :label => "Host"
+  = f.text_field :smtp_port, :label => "Port", :class => "input-small"
+
+  = f.actions do
+    = f.submit "Save"
