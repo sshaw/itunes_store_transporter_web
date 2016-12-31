@@ -30,12 +30,21 @@
                 = format_option_name(option)
               %td
                 = format_option_value(option, @job.options[option])
-
           %tr
             %th
               Priority
             %td
-              &= @job.priority.to_s.titleize
+              = @job.priority.to_s.titleize
+
+          %tr
+            %th
+              Execute
+            %td
+              - if @job.execute?
+                = @job.execute
+              - else
+                &mdash;
+
           %tr
             %th
               Created
@@ -58,7 +67,7 @@
           = link_to content_tag(:i, "", :class => "icon-download-alt") << "Download", url(:job_output, @job.id)
 
         %pre
-          &= @job.output
+          = @job.output
 
       - else
         %p

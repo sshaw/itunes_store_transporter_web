@@ -2,8 +2,8 @@ require "delayed_job"
 
 class UploadJob < TransporterJob
   def after(job)
-    return if account.notification.nil?
-    Delayed::Job.enqueue(SendNotificationJob.new(id))
+    Delayed::Job.enqueue(SendNotificationJob.new(id)) if account.notification
+    Delayed::Job.enqueue(RunExecuteHookJob.new(id)) if execute.present?
   end
 
   protected

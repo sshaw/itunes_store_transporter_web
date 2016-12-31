@@ -21,5 +21,7 @@
   = f.select_priority
   = f.select_account account_options(@accounts)
 
+  = f.file_browser_field :execute, :label => "On completion, execute", :prompt => "Select Program", :data => { :title => "Program to Execute" }
+
   = f.actions do
     = f.submit "Upload"
