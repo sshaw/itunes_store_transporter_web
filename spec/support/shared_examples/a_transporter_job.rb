@@ -16,6 +16,14 @@ shared_examples_for "a transporter job" do
     end
   end
 
+  describe "#dup" do
+    described_class::NON_DUP_ATTRS.each do |name|
+      it "sets #{name} to nil" do
+        expect(job.dup[name]).to be_nil
+      end
+    end
+  end
+
   describe "#to_s" do
     it "contains the job type" do
       expect(job.to_s).to match(/\b#{job.type}\sJob\b/)
