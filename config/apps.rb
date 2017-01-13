@@ -26,6 +26,7 @@
 # override these settings in the subapps as needed.
 #
 Padrino.configure_apps do
+  ActiveRecord::Base.default_timezone = :local
 end
 
 # Mounts the core application for this project
