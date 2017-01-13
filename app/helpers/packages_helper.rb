@@ -11,7 +11,10 @@ module ITunes
           end
 
           def status_options
-            (Search::Package::Where::KNOWN_STATUSES + [Search::Package::Where::STATUS_OTHER]).sort
+            (
+              Search::Package::Where::KNOWN_STATUSES +
+             [Search::Package::Where::STATUS_OTHER, Search::Package::Where::STATUS_NE_ON_STORE]
+            ).sort
           end
         end
       end

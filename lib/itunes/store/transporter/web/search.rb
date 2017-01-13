@@ -15,6 +15,7 @@ module ITunes
           module Package
             class Where
               STATUS_OTHER = "Other".freeze
+              STATUS_NE_ON_STORE = "!= On Store".freeze
               KNOWN_STATUSES = [
                 PackageStatus::NOT_ON_STORE,
                 PackageStatus::ON_STORE,
@@ -30,9 +31,14 @@ module ITunes
                 q = @base_query
 
                 if params[:current_status].present?
-                  q = params[:current_status] == STATUS_OTHER ?
-                        q.where("current_status not in (?)", KNOWN_STATUSES) :
-                        q.where(:current_status => params[:current_status])
+                  q = case params[:current_status]
+                  when STATUS_OTHER
+                    q.where("current_status not in (?)", KNOWN_STATUSES)
+                  when STATUS_NE_ON_STORE
+                    q.where("current_status != ?", PackageStatus::ON_STORE)
+                  else
+                    q.where(:current_status => params[:current_status])
+                  end
                 end
 
                 q.includes(:account)
@@ -43,7 +49,7 @@ module ITunes
               include Util
 
               DEFAULT_ORDER = "updated_at".freeze
-              VALID_COLUMNS = %w[account created_at last_upload last_status_check title vendor_id].freeze
+              VALID_COLUMNS = %w[account created_at current_status last_upload last_status_check title vendor_id].freeze
 
               def initialize(base_query)
                 @base_query = base_query

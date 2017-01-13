@@ -148,11 +148,15 @@ module ITunes
             JOB_TYPE_OPTIONS
           end
 
-          def sort_by(column)
+          def sort_by(column, label = nil)
             current_column, current_dir = params[:order].to_s.split(":")
 
-            text = column.titleize
-            text << " ID" if column.end_with?("_id")
+            if label
+              text = label.titleize
+            else
+              text = column.titleize
+              text << " ID" if column.end_with?("_id")
+            end
 
             dir  = current_dir == "asc" ? "desc" : "asc"
             link = link_to(text, current_path(params.merge(:order => "#{column}:#{dir}")))
