@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/sshaw/itunes_store_transporter.git
-  revision: 9e6733c4b8cc0b184edb745088f9135d7fa5a5b3
+  revision: b78c64be95b95943ad200a39137d148525308082
   branch: status-all
   specs:
     itunes_store_transporter (0.2.0)
