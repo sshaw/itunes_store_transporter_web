@@ -85,21 +85,6 @@ module ITunes
             end
           end
 
-          def account_options(accounts)
-            options = []
-
-            Array(accounts).sort_by { |u| u.username }.group_by(&:username).each do |_, users|
-              users.each do |u|
-                options << [
-                  users.one? ? u.username : sprintf("%s (%s)", u.username, u.shortname),
-                  u.id
-                ]
-              end
-            end
-
-            options
-          end
-
           def current_search_query(accounts)
             terms = []
 

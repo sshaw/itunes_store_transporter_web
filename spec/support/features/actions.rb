@@ -1,6 +1,6 @@
 module FeatureActions
   def select_account(account)
-    select account.username, :from => "Account"
+    select account.alias, :from => "Account"
   end
 
   def select_package(package)

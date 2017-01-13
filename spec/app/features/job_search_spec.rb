@@ -64,7 +64,7 @@ feature "Search", :js do
 
     visit app.url(:jobs)
 
-    search { select found.username, :from => "Account" }
+    search { select found.alias, :from => "Account" }
 
     expect(page).to have_text(%{Search: account "#{found.display_name}"})
     expect(page).to have_selector(".job", :text => found.display_name, :count => 1)
