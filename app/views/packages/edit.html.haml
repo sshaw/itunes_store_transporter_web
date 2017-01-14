@@ -1,0 +1,11 @@
+- content_for(:title) do
+  Edit Package
+
+%h2
+  Edit Package
+
+= form_for @package, url(:packages, :id => @package), :method => "patch", :class => "form-horizontal" do |f|
+  = partial "packages/fields", :object => f, :locals => { :accounts => @accounts }
+
+  = f.actions do
+    = f.submit "Update"

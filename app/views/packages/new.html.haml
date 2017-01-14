@@ -5,9 +5,7 @@
   New Package
 
 = form_for @package, url(:packages), :class => "form-horizontal" do |f|
-  = f.text_field :title
-  = f.text_field :vendor_id
-  = f.select_account account_options(@accounts)
+  = partial "packages/fields", :object => f, :locals => { :accounts => @accounts }
 
   = f.actions do
     = f.submit "Create"

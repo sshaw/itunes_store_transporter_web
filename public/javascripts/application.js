@@ -3,11 +3,11 @@ iTMS.QUEUED = 'queued';
 iTMS.RUNNING = 'running';
 
 iTMS.fileSelected = function(id, file) {
-    var basename = '/', match = file.match(/([^/]+)\/?$/);
+    var basename = '/', match = file.match(/([^/]+)\/?$/), $e = $('#'+id);
     if(match) basename = match[1];
 
-    $('#'+id).html(basename).data('content', file);
-    $('#'+id).popover();
+    $e.html(basename).data('content', file);
+    $e.popover();
     $('#selected_' + id).val(file);
 };
 

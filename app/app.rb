@@ -317,6 +317,11 @@ module ITunes
             render "packages/show"
           end
 
+          get :edit_package, :map => "/packages/:id/edit" do
+            @package = Package.find(params[:id])
+            render "packages/edit"
+          end
+
           post :packages do
             @package = Package.new(params[:package])
             if @package.valid?
@@ -324,8 +329,28 @@ module ITunes
               flash[:success] = "Package created."
               redirect :packages
             else
-              @accounts = Account.all
               render "packages/new"
+            end
+          end
+
+          patch :packages, :with => :id do
+            @package = Package.find(params[:id])
+            if @package.update_attributes(params[:package])
+              flash[:success] = "Package updated."
+              redirect :packages
+            else
+              render "packages/edit"
+            end
+          end
+
+          delete :packages, :with => :id, :provides => [:html, :js] do
+            @package = Package.find(params[:id])
+            @package.destroy
+            if content_type == :js
+              render "packages/delete"
+            else
+              flash[:success] = "Package deleted."
+              redirect :packages
             end
           end
 

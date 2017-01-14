@@ -1,13 +1,18 @@
 - content_for(:title) { @package.to_s }
 
-%h2
-  = @package.to_s
+.page-heading
+  %div(style="float:right;padding-top:6px")
+    = link_to "Edit", url(:edit_package, :id => @package), :class => "btn btn-mini"
+    = link_to "Delete", url(:packages, :id => @package), :class => "btn btn-danger btn-mini", :confirm => "Delete package?", :method => "delete"
 
-%ul.nav.nav-tabs
-  %li.active
-    = link_to "Summary", "#summary", :data => {:toggle => "tab"}
-  %li
-    = link_to "Status History", "#history", :data => {:toggle => "tab"}
+  %h2
+    = @package.to_s
+
+  %ul.nav.nav-tabs
+    %li.active
+      = link_to "Summary", "#summary", :data => {:toggle => "tab"}
+    %li
+      = link_to "Status History", "#history", :data => {:toggle => "tab"}
 
 .tab-content
   #summary.tab-pane.active
