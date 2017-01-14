@@ -7,6 +7,7 @@ module ITunes
         module Search
           module Util
             private
+
             def column_order(column, direction)
               sprintf "%s %s", column, (direction != "asc" ? "desc" : direction)
             end

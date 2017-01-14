@@ -3,7 +3,6 @@
   = form_tag url(:packages), :method => "get", :class => "form-inline" do
     = hidden_field_tag :order, :value => params[:order]
     = select_tag :current_status, :options => status_options, :include_blank => "All", :selected => params[:current_status], :class => "input-medium js-package-filter"
-  :javascript
 
 .jobs
   .actions(style="text-align: right; padding-bottom: 4px;")
