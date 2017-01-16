@@ -1,4 +1,13 @@
 GIT
+  remote: git://github.com/sshaw/itunes_store_transporter.git
+  revision: b78c64be95b95943ad200a39137d148525308082
+  branch: status-all
+  specs:
+    itunes_store_transporter (0.2.0)
+      childprocess (~> 0.3.2)
+      optout (~> 0.0.2)
+
+GIT
   remote: https://gist.github.com/83f7ad7ce9c8f92a833f6d6530a2495c.git
   revision: 8fed2a5341e2ca8e2726e39df29188d4c6619092
   specs:
@@ -57,10 +66,8 @@ GEM
     i18n (0.7.0)
     i18n-env-config (0.0.1)
       i18n (~> 0.5)
-    itunes_store_transporter (0.1.3)
-      childprocess (~> 0.3.2)
-      optout (~> 0.0.2)
     json (1.8.3)
+    kramdown (1.13.1)
     launchy (2.4.3)
       addressable (~> 2.3)
     mail (2.6.4)
@@ -158,6 +165,9 @@ GEM
       thread_safe (~> 0.1)
     url_mount (0.2.1)
       rack
+    valid_email (0.0.13)
+      activemodel
+      mail (~> 2.6.1)
     websocket-driver (0.6.4)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.2)
@@ -169,7 +179,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  activerecord
+  activerecord (~> 4.2.0)
   capybara-screenshot
   coderay
   daemons
@@ -179,10 +189,13 @@ DEPENDENCIES
   factory_girl
   haml
   i18n-env-config
-  itunes_store_transporter (~> 0.1.3)
+  itunes_store_transporter!
+  kramdown
+  mail
   padrino-core (= 0.12.6)
   padrino-gen (= 0.12.6)
   padrino-helpers (= 0.12.6)
+  padrino-mailer (= 0.12.6)
   padrino_bootstrap_forms (~> 0.1.2)
   page_number!
   phantomjs
@@ -195,6 +208,7 @@ DEPENDENCIES
   sinatra-contrib
   sqlite3
   tilt
+  valid_email
   will_paginate (~> 3.0)
 
 BUNDLED WITH

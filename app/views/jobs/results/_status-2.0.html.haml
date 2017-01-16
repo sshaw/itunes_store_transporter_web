@@ -1,7 +1,7 @@
 -# This is for displaying statuses returned from version >= 2.0
 - content_for :results do
   .section
-    %table.table.table-bordered
+    %table.table.table-bordered.job-status
       - [:vendor_id, :apple_id].each do |k|
         - next unless status[k]
         %tr
@@ -15,7 +15,7 @@
     - if status[:content_status].nil?
       %p None
     - else
-      %table.table.table-bordered.table-condensed
+      %table.table.table-bordered.table-condensed.job-status
         - status[:content_status].each do |k, v|
           - next if k == :video_components
 
@@ -38,14 +38,19 @@
       - if status[:content_status][:video_components].nil?
         %p None
       - else
-        - status[:content_status][:video_components].each do |video|
-          %table.table.table-bordered.table-condensed
-            - video.each do |k, v|
-              %tr
-                %th
-                  &= k.to_s.titleize
-                %td
-                  &= k == :locale && v.nil? ? "N/A" : v
+        - status[:content_status][:video_components].group_by { |v| v[:delivered] }.each do |date, videos|
+          %h5
+            Delivered
+            = date
+            - videos.each do |video|
+              %table.table.table-bordered.table-condensed.job-status
+                - video.each do |k, v|
+                  - next if k == :delivered
+                  %tr
+                    %th
+                      &= k.to_s.titleize
+                    %td
+                      &= k == :locale && v.nil? ? "N/A" : v
 
   %h4 Upload Status Info
   .section
@@ -53,7 +58,7 @@
       %p None
     - else
       - status[:info].each_with_index do |stat, i|
-        %table.table.table-bordered.table-condensed
+        %table.table.table-bordered.table-condensed.job-status
           %tr
             %th
               Delivery #
