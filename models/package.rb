@@ -5,7 +5,7 @@ class Package < ActiveRecord::Base
   include ITunes::Store::Transporter::Web
 
   belongs_to :account
-  has_many :status_history, :class_name => "Status"
+  has_many :status_history, :class_name => "Status", :dependent => :destroy
 
   validates :title, :presence => true
   validates :vendor_id, :presence => true, :uniqueness => true

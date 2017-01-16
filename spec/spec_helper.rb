@@ -6,6 +6,7 @@ Dir[File.expand_path(File.dirname(__FILE__) + "/../app/helpers/**/*.rb")].each(&
 $: << File.dirname(__FILE__) + "/support"
 
 require "tmpdir"
+require "fileutils"
 require "logger"
 
 require "capybara/dsl"
@@ -36,7 +37,9 @@ RSpec.configure do |config|
   end
 end
 
-Padrino.logger = ActiveRecord::Base.logger = Logger.new(Padrino.root("log/test.log"))
+log = Padrino.root("log/test.log")
+FileUtils.touch(log) # Create if it doesn't exist
+Padrino.logger = ActiveRecord::Base.logger = Logger.new(log)
 FactoryGirl.find_definitions
 
 Capybara.save_and_open_page_path = "tmp/capybara"
