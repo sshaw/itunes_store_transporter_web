@@ -50,7 +50,7 @@
                     %th
                       &= k.to_s.titleize
                     %td
-                      &= k == :locale && v.nil? ? "N/A" : v
+                      &= v.nil? ? "N/A" : v
 
   %h4 Upload Status Info
   .section

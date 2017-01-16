@@ -60,7 +60,7 @@ module ITunes
 
           def not_on_store?
             store_status[:not_on_store].any? ||
-              video_components.any? { |vc| vc[:status] != APPROVED }
+              video_components.any? { |vc| !vc[:status].nil? && vc[:status] != APPROVED }
           end
 
           def ready?
