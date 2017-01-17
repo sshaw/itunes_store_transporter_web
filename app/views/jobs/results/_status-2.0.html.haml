@@ -38,7 +38,7 @@
       - if status[:content_status][:video_components].nil?
         %p None
       - else
-        - status[:content_status][:video_components].group_by { |v| v[:delivered] }.each do |date, videos|
+        - status[:content_status][:video_components].group_by { |v| v[:delivered].to_s }.sort_by { |date, _| date }.each do |date, videos|
           %h5
             Delivered
             = date
