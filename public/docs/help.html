@@ -4,6 +4,448 @@
 
 <h1 id="itunes-store-transporter-gui---help">iTunes Store Transporter: GUI - Help</h1>
 
+<h2 id="table-of-contents">Table of Contents</h2>
+
+<ul>
+  <li><a href="#api">API</a></li>
+  <li><a href="#notification-templates">Notification Templates</a></li>
+  <li><a href="#job-hooks">Job Hooks</a></li>
+</ul>
+
+<h2 id="api">API</h2>
+
+<p>All responses have a content type of <code>application/json</code>.</p>
+
+<h3 id="response-objects">Response Objects</h3>
+
+<h4 id="job">Job</h4>
+
+<p>Represents a Transporter GUI job. Here’s an example for a queued, upload job:</p>
+
+<pre><code>{
+  "id": 112,
+  "type": "upload"
+  "state": "queued",
+  "options": {
+	"package": "/some/package.itmsp",
+	"delete": false,
+	"username": "fofinha123",
+	"password": "shhhhh!",
+	"shortname": "sshaw",
+	"batch": null
+  },
+  "result": null,
+  "exceptions": null,
+  "execute": null,
+  "created_at": "2016-11-19T20:01:07.373Z",
+  "updated_at": "2016-11-19T20:01:07.373Z",
+  "priority": "normal",
+  "account_id": 12,
+  "disable_notification": false
+}
+</code></pre>
+
+<p>Here’s one for a failed verify job:</p>
+
+<pre><code>{
+  "id": 105,
+  "type": "verify",
+  "state": "failure",
+  "options": {
+	"package": "/Users/sshaw/Desktop/982345323555.itmsp",
+	"batch": true,
+	"verify_assets": false,
+	"username": "user@example.com",
+	"password": "123",
+	"shortname": "shorty"
+  },
+  "result": null,
+  "exceptions": "Feature is missing a checksum (5011), Playlist already exits for this UPC (3005), Bad chapter timecode (4009), Preorder date must be before available date (4019)",
+ 	  "execute": null,
+  "created_at": "2016-09-04T00:54:24.205Z",
+  "updated_at": "2016-09-25T02:48:06.575Z",
+  "priority": "normal",
+  "account_id": 15,
+  "disable_notification": false
+}
+</code></pre>
+
+<h5 id="properties">Properties</h5>
+
+<ul>
+  <li><code>id</code> - job’s id</li>
+  <li><code>type</code> - one of <code>lookup</code>, <code>providers</code>, <code>schema</code>, <code>status</code>, <code>upload</code>, <code>verify</code>, <code>version</code></li>
+  <li><code>state</code> - one of <code>queued</code>, <code>running</code>, <code>success</code>, <code>failure</code></li>
+  <li><code>options</code> - arguments passed to <code>iTMSTransporter</code>, this varies based on the job’s type, see Endpoints below</li>
+  <li><code>result</code> - the results of a successful job, this varies based on the job type</li>
+  <li><code>exceptions</code> - why the job failed</li>
+  <li><code>execute</code> - program to execute on job completion (currently only supported for uploads)</li>
+  <li><code>disable_notification</code> - email notification’s are enabled/disabled for the job</li>
+</ul>
+
+<h4 id="errors">Errors</h4>
+
+<p>Error responses with a non-HTTP 2XX status are considered errors.
+With the exception of a HTTP 422 (see below) error responses contain a single property <code>error</code>,
+whose value contains the error message:</p>
+
+<pre><code>{"error":"Not found"}
+</code></pre>
+
+<p>With HTTP 422 response, each property is a request property and its value is an array that contains
+the reasons why the give property was invalid. For example:</p>
+
+<pre><code>{
+  "account_id": [
+	"unknown"
+  ],
+  "package": [
+	"must end with \".itmsp\""
+  ]
+}
+</code></pre>
+
+<p>The property <code>base</code> (not shown) refers to the request itself and not a specific property.</p>
+
+<h4 id="priorities">Priorities</h4>
+
+<p>Certain jobs accept a priority, this specifies the priority in which they’ll be processed by <code>itmsworker</code>.
+Valid priorities are: <code>normal</code>, <code>high</code>, <code>low</code>, <code>next</code>.</p>
+
+<p>A priority of <code>next</code> will put the job at the front of the queue (well, assuming there isn’t another
+job with <code>next</code> priority in front of it).</p>
+
+<h3 id="endpoints">Endpoints</h3>
+
+<h4 id="job-1">Job</h4>
+
+<p>Retrieve a job by its ID.</p>
+
+<ul>
+  <li>Endpoint: <code>/api/jobs/ID</code></li>
+  <li>Method: <code>GET</code></li>
+</ul>
+
+<p><code>ID</code> must be replaced with a job id from the Transporter GUI.</p>
+
+<h5 id="response">Response</h5>
+
+<p>See <a href="#response-objects">Response Objects</a>.</p>
+
+<h5 id="sample">Sample</h5>
+
+<pre><code>curl -H 'content-type: application/json' 'http://localhost:3000/api/jobs/132'
+</code></pre>
+
+<h4 id="providers">Providers</h4>
+
+<p>Create a job to retrieve the metadata for a previously uploaded package.</p>
+
+<ul>
+  <li>Endpoint: <code>/api/lookup</code></li>
+  <li>Method: <code>POST</code></li>
+</ul>
+
+<h5 id="request">Request</h5>
+
+<ul>
+  <li><code>package_id</code>: The type of identifier used to lookup the metadata, must be <code>vendor_id</code> or <code>apple_id</code></li>
+  <li><code>package_id_value</code>: The identifier</li>
+  <li><code>account_id</code>: The Transporter GUI ID of the account to use to request the package’s</li>
+  <li><code>priority</code>: Optional, job priority, defaults to <code>"normal"</code>. See <a href="#priorities">Job Priorities</a>.</li>
+</ul>
+
+<h5 id="response-1">Response</h5>
+
+<p>See <a href="#response-objects">Response Objects</a>.</p>
+
+<h5 id="sample-1">Sample</h5>
+
+<pre><code>curl -H 'content-type: application/json' -XPOST 'http://localhost:3000/api/lookup' -d '{
+  "package_id": "vendor_id",
+  "package_id_value": "X123999",
+  "account_id": 12
+}'
+</code></pre>
+
+<h4 id="providers-1">Providers</h4>
+
+<p>Create a job that will retrieve a list of providers for which <code>account_id</code> has permission to deliver content.</p>
+
+<ul>
+  <li>Endpoint: <code>/api/providers</code></li>
+  <li>Method: <code>POST</code></li>
+</ul>
+
+<h5 id="request-1">Request</h5>
+
+<ul>
+  <li><code>account_id</code>: The Transporter GUI ID of the account to use to request the package’s</li>
+  <li><code>priority</code>: Optional, job priority, defaults to <code>"normal"</code>. See <a href="#priorities">Job Priorities</a>.</li>
+</ul>
+
+<h5 id="response-2">Response</h5>
+
+<p>See <a href="#response-objects">Response Objects</a>.</p>
+
+<h5 id="sample-2">Sample</h5>
+
+<pre><code>curl -H 'content-type: application/json' -XPOST 'http://localhost:3000/api/providers' -d '{
+  "account_id": 12
+}'
+</code></pre>
+
+<h4 id="schema">Schema</h4>
+
+<p>Create a job to retrieve a metadata schema.</p>
+
+<ul>
+  <li>Endpoint: <code>/api/schema</code></li>
+  <li>Method: <code>POST</code></li>
+</ul>
+
+<h5 id="request-2">Request</h5>
+
+<ul>
+  <li><code>version_name</code>: Type of schema, either <code>film</code> or <code>tv</code>.</li>
+  <li><code>version_number</code>: Schema version</li>
+  <li><code>type</code>: Schema type, either <code>strict</code> or <code>transitional</code></li>
+  <li><code>account_id</code>: The Transporter GUI ID of the account to use to request the package’s status</li>
+  <li><code>priority</code>: Optional, job priority, defaults to <code>"normal"</code>. See <a href="#priorities">Job Priorities</a>.</li>
+</ul>
+
+<h5 id="response-3">Response</h5>
+
+<p>See <a href="#response-objects">Response Objects</a>.</p>
+
+<h4 id="sample-3">Sample</h4>
+
+<pre><code>curl -H 'content-type: application/json' -XPOST 'http://localhost:3000/api/schema' -d '{
+  "version_name": "film",
+  "version_number": "5.9",
+  "type": "strict",
+  "account_id": 12
+}'
+</code></pre>
+
+<h4 id="search">Search</h4>
+
+<p>Job search.</p>
+
+<ul>
+  <li>Endpoint: <code>/api/jobs/search</code></li>
+  <li>Method: <code>GET</code></li>
+</ul>
+
+<h5 id="request-3">Request</h5>
+
+<p>All parameters are optional.</p>
+
+<ul>
+  <li><code>page</code>: Page number to retrieve</li>
+  <li><code>per_page</code>: Number of jobs displayed per page</li>
+  <li><code>account_id</code>: The Transporter GUI ID of the account the job is associated with</li>
+  <li><code>priority</code>: Job priority, see <a href="#priority">Job Priority</a></li>
+  <li><code>target</code>: This varies based on the job’s type. For an upload job this is the package name, for a status job this is the vendor id, etc…</li>
+  <li><code>state</code>: Job’s state, one of: <code>queued</code>, <code>running</code>, <code>success</code>, <code>failure</code></li>
+  <li><code>type</code>: Job type, one of: <code>lookup</code>, <code>providers</code>, <code>schema</code>, <code>status</code>, <code>upload</code>, <code>verify</code></li>
+  <li><code>updated_at_from</code>: Date the package was last updated or, if <code>updated_at_to</code> is given, the start of a date range, given in <code>YYYY-MM-DD</code> format.</li>
+  <li><code>updated_at_to</code>: End date of the date range started by <code>updated_at_from</code>,  given in <code>YYYY-MM-DD</code> format.</li>
+</ul>
+
+<p>Results can be ordered, the order must be given in <code>order=COLUMN:DIR</code> format, where <code>DIR</code> is either <code>asc</code> or <code>desc</code> (ascending or descending)
+and <code>COLUMN</code> must be one of:</p>
+
+<ul>
+  <li><code>account</code></li>
+  <li><code>priority</code></li>
+  <li><code>target</code></li>
+  <li><code>type</code></li>
+  <li><code>state</code></li>
+  <li><code>created_at</code></li>
+  <li><code>updated_at</code></li>
+</ul>
+
+<h5 id="response-4">Response</h5>
+
+<pre><code>{
+  "page": {
+	"number": 1,
+	"size": 2,
+	"count": 14
+  },
+  "jobs": [
+
+  ]
+}
+</code></pre>
+
+<p><code>jobs</code> contains an array of <a href="#job">job objects</a>.</p>
+
+<h5 id="sample-4">Sample</h5>
+
+<pre><code>curl  -XGET 'http://localhost:3000/api/jobs/search?type=upload&amp;updated_at_from=2016-01-01&amp;updated_at_to=2016-01-14'
+</code></pre>
+
+<p>And the results:</p>
+
+<pre><code>{
+  "page": {
+	"number": 1,
+	"size": 10,
+	"count": 1
+  },
+  "jobs": [
+	{
+	  "id": 47,
+	  "state": "success",
+	  "options": {
+		"package": "/Users/sshaw/Desktop/123123123X.itmsp",
+		"batch": false,
+		"rate": "",
+		"transport": "Aspera",
+		"delete": false,
+		"success": "",
+		"failure": "",
+		"username": "sshaw",
+		"password": "s3kreeeeT!",
+		"shortname": ""
+	  },
+	  "result": "Package Summary:\n\n    1 package was uploaded successfully:\n    \t/Users/sshaw/Desktop/WITH_MD.itmsp\n",
+  	  "execute": null,
+	  "exceptions": null,
+	  "created_at": "2016-01-12T05:29:55.878Z",
+	  "updated_at": "2016-01-12T05:34:54.372Z",
+	  "priority": "normal",
+	  "account_id": 1,
+	  "disable_notification": false,
+	  "type": "upload"
+	},
+	{
+	  "id": 20,
+	  "state": "failure",
+	  "options": {
+		"package": "foo.itmsp",
+		"username": "sshaw",
+		"password": "s3kreeeeT!",
+		"shortname": "",
+		"delete": null,
+		"batch": null
+	  },
+	  "result": null,
+  	  "execute": null,
+	  "exceptions": "option invalid: package; dir 'foo.itmsp' does not exist",
+	  "created_at": "2016-01-13T18:53:40.446Z",
+	  "updated_at": "2016-01-13T05:34:47.825Z",
+	  "priority": "normal",
+	  "account_id": 1,
+	  "disable_notification": false,
+	  "type": "upload"
+	}
+  ]
+}
+</code></pre>
+
+<h4 id="status">Status</h4>
+
+<p>Create a job to check an previous upload’s status.</p>
+
+<ul>
+  <li>Endpoint: <code>/api/status</code></li>
+  <li>Method: <code>POST</code></li>
+</ul>
+
+<h5 id="request-4">Request</h5>
+
+<ul>
+  <li><code>vendor_id</code>: ID of the package to perform a status request on</li>
+  <li><code>account_id</code>: The Transporter GUI ID of the account to use to request the package’s status</li>
+  <li><code>priority</code>: Optional, job priority, defaults to <code>"normal"</code>. See <a href="#priorities">Job Priorities</a>.</li>
+</ul>
+
+<h5 id="response-5">Response</h5>
+
+<p>See <a href="#response-objects">Response Objects</a>.</p>
+
+<h5 id="sample-5">Sample</h5>
+
+<pre><code>curl -H 'content-type: application/json' -XPOST 'http://localhost:3000/api/status' -d '{
+  "vendor_id": "X123999",
+  "account_id": 12
+}'
+</code></pre>
+
+<h4 id="upload">Upload</h4>
+
+<p>Create an upload package job.</p>
+
+<ul>
+  <li>Endpoint: <code>/api/upload</code></li>
+  <li>Method: <code>POST</code></li>
+</ul>
+
+<h5 id="request-5">Request</h5>
+
+<p>All paths must be accessible by the worker process.</p>
+
+<ul>
+  <li><code>package</code>: Absolute path of the package to upload</li>
+  <li><code>disable_notification</code>: optional, disable email notifications for this job only</li>
+  <li><code>rate</code>: Optional, transfer rate in kbps</li>
+  <li><code>batch</code>: Optional, batch upload, defaults to <code>false</code></li>
+  <li><code>execute</code>: Optional, program to execute after the job completes, must be accessible by the worker process. See <a href="#job-hooks">Job Hooks</a>.</li>
+  <li><code>success</code>: Optional, absolute path of a directory to move package to if the upload succeeds</li>
+  <li><code>failure</code>: Optional, absolute path of a directory to move package to if the upload fails</li>
+  <li><code>priority</code>: Optional, job priority, defaults to <code>"normal"</code>. See <a href="#priorities">Job Priorities</a>.</li>
+  <li><code>account_id</code>: The Transporter GUI ID of the account to use to upload the package</li>
+  <li><code>delete</code>: Optional, defaults to <code>false</code>:</li>
+  <li><code>transport</code>: Optional, defaults to ITMSTrasnporter’s default</li>
+</ul>
+
+<h5 id="response-6">Response</h5>
+
+<p>See <a href="#response-objects">Response Objects</a>.</p>
+
+<h5 id="sample-6">Sample</h5>
+
+<pre><code>curl -H 'content-type: application/json' -XPOST 'http://localhost:3000/api/upload' -d '{
+  "package": "/path/to/package.itmsp",
+  "account_id": 12,
+  "transport": "Aspera"
+}'
+</code></pre>
+
+<h4 id="verify">Verify</h4>
+
+<p>Create a package verification job.</p>
+
+<ul>
+  <li>Endpoint: <code>/api/verify</code></li>
+  <li>Method: <code>POST</code></li>
+</ul>
+
+<h5 id="request-6">Request</h5>
+
+<ul>
+  <li><code>package</code>: Absolute path of the package to upload, must be accessible by the worker process</li>
+  <li><code>account_id</code>: The Transporter GUI ID of the account to use to request the package’s status</li>
+  <li><code>batch</code>: Optional, batch verification, defaults to <code>false</code></li>
+  <li><code>verify_assets</code>: Optional, verify assets (normally only the metadata is verified), defaults to <code>false</code></li>
+  <li><code>priority</code>: Optional, job priority, defaults to <code>"normal"</code>. See <a href="#priorities">Job Priorities</a>.</li>
+</ul>
+
+<h5 id="response-7">Response</h5>
+
+<p>See <a href="#response-objects">Response Objects</a>.</p>
+
+<h4 id="sample-7">Sample</h4>
+
+<pre><code>curl -H 'content-type: application/json' -XPOST 'http://localhost:3000/api/verify' -d '{
+  "package": "/path/to/package.itmsp",
+  "account_id": 12
+}'
+</code></pre>
+
 <h2 id="notification-templates">Notification Templates</h2>
 
 <p><em>Notifications are currently only supported for upload jobs.</em></p>
@@ -79,6 +521,60 @@ See the below table for the supported variables.</p>
       <td><code>email_reply_to</code></td>
       <td><code>String</code></td>
       <td>Reply to email address (can be <code>nil</code>)</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="job-hooks">Job Hooks</h2>
+
+<p><em>Jobs hooks are currently only supported for upload jobs.</em></p>
+
+<p>Job hooks allow one to specify a command to be executed when a job completes. Information about the job
+is made available via the following environment variables:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Variable</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>ITMS_JOB_ID</code></td>
+      <td>Job id</td>
+    </tr>
+    <tr>
+      <td><code>ITMS_JOB_TARGET</code></td>
+      <td>Job target, varies based on the job type</td>
+    </tr>
+    <tr>
+      <td><code>ITMS_JOB_PACKAGE_PATH</code></td>
+      <td>Absolute path to the package, if the job contains one (can be empty)</td>
+    </tr>
+    <tr>
+      <td><code>ITMS_JOB_TYPE</code></td>
+      <td>The type of job, currently always <code>upload</code></td>
+    </tr>
+    <tr>
+      <td><code>ITMS_JOB_STATE</code></td>
+      <td>Job state, either <code>success</code> or <code>failure</code></td>
+    </tr>
+    <tr>
+      <td><code>ITMS_JOB_CREATED</code></td>
+      <td>Time the job was created, given in <code>YYYY-MM-DD HH:MM:SS ±ZONE</code> format (24 hour clock)</td>
+    </tr>
+    <tr>
+      <td><code>ITMS_JOB_COMPLETED</code></td>
+      <td>Time the job finished, given in <code>YYYY-MM-DD HH:MM:SS ±ZONE</code> format (24 hour clock)</td>
+    </tr>
+    <tr>
+      <td><code>ITMS_ACCOUNT_USERNAME</code></td>
+      <td>Username of the package’s iTunes Connect account</td>
+    </tr>
+    <tr>
+      <td><code>ITMS_ACCOUNT_SHORTNAME</code></td>
+      <td>Shortname of the package’s iTunes Connect account (can be empty)</td>
     </tr>
   </tbody>
 </table>
