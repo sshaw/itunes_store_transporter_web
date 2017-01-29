@@ -1,0 +1,30 @@
+version: "0.2.0b{build}"
+
+environment:
+  rack_env: test
+  matrix:
+    # No Nokogiri support
+    #- RUBY_VERSION: 23-x64
+    - RUBY_VERSION: 22-x64
+    - RUBY_VERSION: 21-x64
+    - RUBY_VERSION: 200-x64
+
+install:
+  # phantomjs gem doesn't support Windows installs: https://github.com/colszowka/phantomjs-gem/pull/77
+  - cinst: phantomjs
+  - refreshenv
+  - set PATH=C:\Ruby%RUBY_VERSION%\bin;%PATH%
+  - set PATH=C:\MinGW\bin;%PATH%
+  - set RAKEOPT=-rdevkit
+  - bundle install
+
+build: off
+
+before_test:
+  - ruby -v
+  - gem -v
+  - bundle -v
+  - bundle exec rake ar:create && bundle exec rake ar:migrate
+
+test_script:
+  - bundle exec rake
