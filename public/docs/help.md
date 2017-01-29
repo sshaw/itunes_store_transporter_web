@@ -9,6 +9,7 @@
 * [API](#api)
 * [Notification Templates](#notification-templates)
 * [Job Hooks](#job-hooks)
+* [More Help](#more-help)
 
 ## API
 
@@ -438,3 +439,9 @@ Variable | Description
 `ITMS_JOB_COMPLETED` | Time the job finished, given in `YYYY-MM-DD HH:MM:SS ±ZONE` format (24 hour clock)
 `ITMS_ACCOUNT_USERNAME` | Username of the package's iTunes Connect account
 `ITMS_ACCOUNT_SHORTNAME` | Shortname of the package's iTunes Connect account (can be empty)
+
+## More Help
+
+If you've encountered a bug please [open an issue](https://github.com/sshaw/itunes_store_transporter_web/issues).
+
+For commercial support email [help@screenstaring.com](mailto:help@screenstaring.com?subject=Transporter%20GUI).
