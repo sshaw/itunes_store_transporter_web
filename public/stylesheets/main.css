@@ -159,6 +159,10 @@ footer {
     padding-bottom: 4px;
 }
 
+table.job-status th {
+    width: 25%;
+}
+
 /* Job listing status labels */
 tr.job td:first-of-type a:hover {
     text-decoration: none;
