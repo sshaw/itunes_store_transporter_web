@@ -42,6 +42,12 @@
     %footer
       %p{:style => "text-align:center"}
         %small
+          = link_to "Help", help_path, :target => "_blank"
+          &#183;
           v#{ITunes::Store::Transporter::Web::VERSION}
+
+          %br
+          Made by
+          = link_to "ScreenStaring", "http://screenstaring.com"
 
     = partial "shared/search_form", :locals => { :accounts => @accounts }

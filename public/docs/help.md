@@ -79,7 +79,7 @@ Here's one for a failed verify job:
 
 #### Errors
 
-Error responses with a non-HTTP 2XX status are considered errors.
+Responses with a non-HTTP 2XX status are considered errors.
 With the exception of a HTTP 422 (see below) error responses contain a single property `error`,
 whose value contains the error message:
 
