@@ -22,7 +22,7 @@
           %th
             Current Status
           %td
-            - if @package.current_status
+            - if @package.current_status.present?
               = status_label(@package.current_status)
             - else
               &mdash;

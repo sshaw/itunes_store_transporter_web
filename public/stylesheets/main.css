@@ -122,7 +122,7 @@ footer {
 }
 
 /* info */
-.label-status-review,
+.label-status-in-review,
 .label-running {
     background-color: #3a87ad;
 }
@@ -136,7 +136,7 @@ footer {
     background-color: #468847;
 }
 
-.label-status-ready {
+.label-status-ready-for-store {
     background-color: #c77a03;
 }
 

@@ -19,9 +19,9 @@ module ITunes
               STATUS_NE_ON_STORE = "!= On Store".freeze
               KNOWN_STATUSES = [
                 PackageStatus::NOT_ON_STORE,
-                PackageStatus::ON_STORE,
-                PackageStatus::READY,
-                PackageStatus::REVIEW
+                PackageStatus::IN_REVIEW,
+                PackageStatus::READY_FOR_STORE,
+                PackageStatus::ON_STORE
               ].freeze
 
               def initialize(base_query)

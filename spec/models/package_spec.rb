@@ -17,8 +17,8 @@ RSpec.describe Package do
       create(:package, :current_status => PackageStatus::ON_STORE, :last_status_check => Time.current)
     end
 
-    [PackageStatus::APPROVED, PackageStatus::IN_REVIEW, PackageStatus::REVIEW,
-     PackageStatus::NOT_ON_STORE, PackageStatus::READY, "Uploaded", nil].each do |status|
+    [PackageStatus::APPROVED, PackageStatus::IN_REVIEW, PackageStatus::NOT_ON_STORE,
+     PackageStatus::READY_FOR_STORE, "Uploaded", nil].each do |status|
       it "returns packages with a current_status of '#{status}'" do
         pkg = create(:package, :current_status => status)
         expect(described_class.pending_uploads).to eq [pkg]

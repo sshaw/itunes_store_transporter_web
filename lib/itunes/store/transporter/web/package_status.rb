@@ -3,13 +3,13 @@ module ITunes
     module Transporter
       module Web
         class PackageStatus
-          APPROVED = "Approved".freeze
-          IN_REVIEW = "In Review".freeze
-
-          REVIEW = "Review".freeze
           NOT_ON_STORE = "Not on Store".freeze
-          READY = "Ready".freeze
+          IN_REVIEW = "In Review".freeze
+          READY_FOR_STORE = "Ready for Store".freeze
           ON_STORE = "On Store".freeze
+
+          APPROVED = "Approved".freeze
+          REJECTED = "Rejected".freeze
 
           def initialize(status)
             @status = status || {}
@@ -17,17 +17,14 @@ module ITunes
 
           def to_s
             case
-            when review?
-              REVIEW.dup
             when not_on_store?
               NOT_ON_STORE.dup
-            when ready?
-              READY.dup
+            when in_review?
+              IN_REVIEW.dup
+            when ready_for_store?
+              READY_FOR_STORE.dup
             when on_store?
               ON_STORE.dup
-            when @status[:info]
-              # Is this correct? Ask P9
-              @status[:info].first[:status] || ""
             else
               ""
             end
@@ -42,7 +39,7 @@ module ITunes
           end
 
           def video_components
-            @video_components ||= content_status[:video_components] || []
+            @video_components ||= (content_status[:video_components] || []).reject { |v| v[:status].nil? }
           end
 
           def store_status
@@ -52,31 +49,26 @@ module ITunes
             @store_status
           end
 
-          def review?
-            store_status[:not_on_store].any? &&
-              video_components.any? &&
-              video_components.all? { |vc| vc[:status] == IN_REVIEW }
-          end
-
           def not_on_store?
             store_status[:not_on_store].any? ||
-              video_components.any? { |vc| !vc[:status].nil? && vc[:status] != APPROVED }
+              video_components.any? { |vc| vc[:status] == REJECTED }
           end
 
-          def ready?
-            store_status[:not_on_store].none? &&
-              store_status[:on_store].none? &&
-              store_status[:ready_for_store].any? &&
+          def in_review?
+            video_components.any? { |vc| vc[:status] == IN_REVIEW }
+          end
+
+          def ready_for_store?
+            store_status[:ready_for_store].any? &&
+              video_components.any? &&
               video_components.all? { |vc| vc[:status] == APPROVED }
           end
 
           def on_store?
-            store_status[:not_on_store].none? &&
-              store_status[:ready_for_store].none? &&
-              store_status[:on_store].any? &&
+            store_status[:on_store].any? &&
+              video_components.any? &&
               video_components.all? { |vc| vc[:status] == APPROVED }
           end
-
         end
       end
     end
