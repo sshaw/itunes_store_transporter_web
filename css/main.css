@@ -55,6 +55,10 @@
     padding: 6px 0 25px;
 }
 
-#news .item {
+.item {
     margin-bottom: 30px;
+}
+
+.footer {
+    margin-bottom: 60px;
 }
