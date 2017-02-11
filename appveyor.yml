@@ -11,10 +11,10 @@ environment:
 
 install:
   # phantomjs gem doesn't support Windows installs: https://github.com/colszowka/phantomjs-gem/pull/77
-  - cinst: phantomjs
-  - refreshenv
+  # Be explicit about the version so we can set the path. Probably a more chocolaty way to do this but...
+  - cinst --version 2.1.1 phantomjs
   - set PATH=C:\Ruby%RUBY_VERSION%\bin;%PATH%
-  - set PATH=C:\MinGW\bin;%PATH%
+  - set PATH=%PATH%;C:\ProgramData\chocolatey\lib\PhantomJS\tools\phantomjs-2.1.1-windows\bin
   - set RAKEOPT=-rdevkit
   - bundle install
 
