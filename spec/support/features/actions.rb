@@ -9,8 +9,9 @@ module FeatureActions
   end
 
   def select_file(path)
-    # Leading element is empty.
-    parts = path.split("/")[1..-1]
+    parts = path.split("/")
+    # Leading element is the volume on Win but empty on *nix
+    parts.shift if parts[0].empty?
 
     # Double click expands, single click selects.
     # We have to sleep after clicking so that double click detection works

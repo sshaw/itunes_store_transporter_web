@@ -1,4 +1,4 @@
-require "rbconfig"
+require "rubygems"
 
 module FsUtil
   extend self
@@ -17,7 +17,7 @@ module FsUtil
   def basename(path)
     return unless path
     # On Windows, treat volume+root as the basename
-    path =~ %r|\A\w:\\\z| ? path : File.basename(path)
+    path =~ %r|\A\w:/\z| ? path : File.basename(path)
   end
 
   private
@@ -44,13 +44,13 @@ module FsUtil
   end
 
   DEFAULT_ROOT_DIRECTORY =
-    if RbConfig::CONFIG["host_os"] !~ /mswin|msys|mingw/i
+    if !Gem.win_platform?
       find("/", :type => "directory")
     else
       require "win32ole"
       drives = []
       fs = ::WIN32OLE.new("Scripting.FileSystemObject")
-      fs.Drives.each { |drive| drives << drive.Path + "\\" }
+      fs.Drives.each { |drive| drives << drive.Path + "/" }
       drives
     end
 end

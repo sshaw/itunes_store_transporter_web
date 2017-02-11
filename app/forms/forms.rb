@@ -1,5 +1,7 @@
 require "ostruct"
 require "options"
+require "rubygems"
+
 
 class JobForm < OpenStruct
   include ActiveModel::Validations
@@ -43,6 +45,7 @@ class UploadForm < JobForm
   private
 
   def check_executable
+    return if Gem.win_platform? # No execute bit here
     errors.add(:execute, "not an executable file") unless File.file?(execute) && File.executable?(execute)
   end
 end
