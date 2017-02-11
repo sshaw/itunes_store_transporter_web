@@ -26,6 +26,9 @@
 # override these settings in the subapps as needed.
 #
 Padrino.configure_apps do
+  I18n.load_path.concat Dir[Padrino.root("app/locale/*.yml")]
+  I18n::Backend::Simple.include(I18n::Backend::Fallbacks)
+
   ActiveRecord::Base.default_timezone = :local
 end
 

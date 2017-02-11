@@ -43,6 +43,8 @@ module ITunes
           end
 
           before do
+            I18n.config = I18n::Env::Config.new
+
             # TODO: try settings with a Proc
             # FIXME: was in configure block, but it doesn't work with AR 4 + ar:create as there's no DB
             if Padrino.env == :development || Padrino.env == :production
