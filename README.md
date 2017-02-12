@@ -1,13 +1,16 @@
-# iTunes::Store::Transporter::Web
+# iTunes Store Transporter: GUI
 
 [![Build Status](https://secure.travis-ci.org/sshaw/itunes_store_transporter_web.svg)](https://secure.travis-ci.org/sshaw/itunes_store_transporter_web)
 [![Windows Build status](https://ci.appveyor.com/api/projects/status/cgv9vi00y0hao3tx?svg=true)](https://ci.appveyor.com/project/sshaw/itunes-store-transporter-web)
 [![Code Climate](https://codeclimate.com/github/sshaw/itunes_store_transporter_web/badges/gpa.svg)](https://codeclimate.com/github/sshaw/itunes_store_transporter_web)
 
-GUI for the iTunes Store’s Transporter (iTMSTransporter)
+GUI for the iTunes Store's Transporter (iTMSTransporter)
 
 * [Installation](#installation)
 * [Configuration](#configuration)
+* [API](https://github.com/sshaw/itunes_store_transporter_web/wiki/API)
+* [Email Notifications](https://github.com/sshaw/itunes_store_transporter_web/wiki/Email-Notification-Templates)
+* [Job Hooks](https://github.com/sshaw/itunes_store_transporter_web/wiki/Job-Hooks)
 * [More Info](#more-info)
 
 ## Overview
@@ -63,9 +66,10 @@ Start the webserver
 
     ./bin/itmsweb start
 
-Start the worker
+Start the workers
 
-    ./bin/itmsworker
+	./bin/itmsworker jobs
+    ./bin/itmsworker notifications
 
 ## Configuration
 
@@ -74,7 +78,7 @@ set in `ROOT/config/itmsweb.yml`.
 
 ### Database
 
-Database configuration is contained within the +database+ section of the configuration file (`ROOT/config/itmsweb.yml`).
+Database configuration is contained within the `database` section of the configuration file (`ROOT/config/itmsweb.yml`).
 It is used by the web server *and* the worker.
 
 By default it will contain the information provided to the setup script. Here's an example:
@@ -117,25 +121,30 @@ By default it will contain the information provided to the setup script. Here's 
 
 Errors are logged to `ROOT/log/production.log`.
 
-### iTMSTransporter Job Queue
+### Worker Processes
 
-Jobs created through the website are added to a job queue. In order for jobs in the queue to be processed a
+There are two worker process:
+
+1. Jobs
+1. Email notifications
+
+Jobs created through the website are added to the jobs queue. In order for jobs in the queue to be processed a
 worker (or many workers) must be running.
+
+If email notifications are configured the notification worker process must be running.
 
 #### Running a worker process
 
-The job queue is managed by [DelayedJob](https://github.com/collectiveidea/delayed_job#readme), so running a worker is just a
-matter or running one of the `DelayedJob` tasks:
+    ./bin/itmsworker TYPE
 
-    ./bin/itmsworker          # start a worker
-    ./bin/itmsworker work     # same as above
-    ./bin/itmsworker workoff  # start a worker & exit when all the jobs are processed
-    ./bin/itmsworker clear    # clear the job queue
+Where `TYPE` is `jobs` or `notifications`.
 
-Set the `MIN_PRIORITY` and/or `MAX_PRIORITY` environment variables to limit the worker to jobs with certain
-priorities (as defined by the website):
+The jobs worker supports the `MIN_PRIORITY` and/or `MAX_PRIORITY` environment variables. These limit the worker to
+jobs with certain priorities.
 
-    MIN_PRIORITY=high ./bin/itmsworker
+    MIN_PRIORITY=high ./bin/itmsworker jobs
+
+A job's priority can be set when the job is submitted.
 
 #### Running a remote worker process
 
@@ -199,7 +208,12 @@ This directory *must* be accessible by the worker *and* website processess.
 ## More Info
 
 * [Website](http://transportergui.com)
+* [Wiki](http://github.com/sshaw/itunes_store_transporter_web/wiki)
 * [Source](http://github.com/sshaw/itunes_store_transporter_web)
-* [Bugs & Feature Requests](http://github.com/sshaw/itunes_store_transporter_web/issues)
+* [Bugs](http://github.com/sshaw/itunes_store_transporter_web/issues)
 * [iTunes::Store::Transporter Gem](http://github.com/sshaw/itunes_store_transporter)
 * [Padrino Web Framework](http://padrinorb.com)
+
+---
+
+Made by [ScreenStaring](http://screenstaring.com). That's what we do.
