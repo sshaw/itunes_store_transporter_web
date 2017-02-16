@@ -112,6 +112,6 @@ bin/itmsworker
 
 Please report any issues at https://github.com/sshaw/itunes_store_transporter_web/issues.
 
-Thanks for using the Transporter GUI.
+Thanks for using the iTunes Store Transporter: GUI.
 http://transportergui.com
 MSG

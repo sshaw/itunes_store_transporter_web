@@ -55,7 +55,7 @@ Ruby portion which will fail if the underlying library is not found.
 
     unzip itunes_store_transporter_web-VERSION.zip
     cd itunes_store_transporter_web-VERSION
-    ruby ./setup.rb
+    ruby ./install.rb
 
 Note that this *does* *not* install the iTunes Store Transporter. If you're on OS X
 you can install the Transporter by [installing Xcode](https://developer.apple.com/xcode/downloads).
