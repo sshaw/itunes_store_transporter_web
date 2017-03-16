@@ -10,9 +10,10 @@ set task=%1
 
 if exist "%BUNDLE_GEMFILE%" (
    set valid=0
-
+   REM TODO: default to jobs!
    if "%task%" == "jobs" set valid=1
    if "%task%" == "notifications" set valid=1
+   if "%task%" == "hooks" set valid=1
    if not "%valid%" == "1" (
      echo usage: itmsworker [jobs^|notifications]
      exit /b 1

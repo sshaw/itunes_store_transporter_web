@@ -16,17 +16,19 @@ namespace :itmsworker do
     sh "cd #{worker} && gem build *.gemspec"
   end
 
-  task :notifications => :environment do |t|
-    options = {
-      :quiet  => false,
-      :queues => %w[notifications]
-    }
+  %w[hooks notifications].each do |name|
+    task name => :environment do |t|
+      options = {
+        :quiet  => false,
+        :queues => [name]
+      }
 
-    $0 = t.name
+      $0 = t.name
 
-    worker = Delayed::Worker.new(options)
-    worker.name = "#{t.name} pid: #$$"
-    worker.start
+      worker = Delayed::Worker.new(options)
+      worker.name = "#{t.name} pid: #$$"
+      worker.start
+    end
   end
 
   task :jobs => :environment do |t|

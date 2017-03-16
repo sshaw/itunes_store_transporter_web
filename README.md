@@ -66,10 +66,9 @@ Start the webserver
 
     ./bin/itmsweb start
 
-Start the workers
+Start the worker
 
-	./bin/itmsworker jobs
-    ./bin/itmsworker notifications
+	./bin/itmsworker
 
 ## Configuration
 
@@ -123,23 +122,23 @@ Errors are logged to `ROOT/log/production.log`.
 
 ### Worker Processes
 
-There are two worker process:
-
-1. Jobs
-1. Email notifications
-
 Jobs created through the website are added to the jobs queue. In order for jobs in the queue to be processed a
-worker (or many workers) must be running.
+worker process (or many workers processes) must be running.
 
-If email notifications are configured the notification worker process must be running.
-
-#### Running a worker process
+The default worker process will run jobs, send email notifications, and execute job hooks.
+Depending on the type of workload you have (for example, a lot of pending jobs or long-running jobs hooks),
+it may be a good idea to start a worker process dedicated to a specific task.
+This can be done by passing a parameter to the `itmsworker` worker command specify the type of jobs it should process:
 
     ./bin/itmsworker TYPE
 
-Where `TYPE` is `jobs` or `notifications`.
+Where `TYPE` is `notifications`, `hooks`, or `jobs`.
 
-The jobs worker supports the `MIN_PRIORITY` and/or `MAX_PRIORITY` environment variables. These limit the worker to
+`jobs` is the default, it will process everything.
+
+#### Job Priority
+
+The default (`jobs`) worker supports the `MIN_PRIORITY` and/or `MAX_PRIORITY` environment variables. These limit the worker to
 jobs with certain priorities.
 
     MIN_PRIORITY=high ./bin/itmsworker jobs
