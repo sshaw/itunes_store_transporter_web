@@ -23,7 +23,7 @@ def upgrade_gemfile(gemfile)
   when "sqlite3"
     gem = '"sqlite3"'
   when "postgresql"
-    gem = "pg"
+    gem = '"pg"'
   else
     failure("your itmsweb.yml contains an unknown or missing database adapter '#{adapter}', dependency upgrade must be done manually")
   end
@@ -69,7 +69,6 @@ install_paths.each do |source, dest|
   FileUtils.cp_r(source, dest)
 end
 
-ENV["PADRINO_ENV"] = "production"
 ENV["BUNDLE_GEMFILE"] = gemfile
 
 Dir.chdir(install_root)
@@ -84,7 +83,7 @@ File.delete(*Dir["bin/*"].reject { |path|
   %w[padrino itmsweb itmsworker].include?(File.basename(path).sub(/\.\w+\Z/, ""))
 })
 
-failure("DB upgrade failed") unless system("ruby bin/padrino rake ar:migrate")
+failure("DB upgrade failed") unless system("ruby bin/padrino rake -e production ar:migrate")
 
 puts(<<SUCCESS)
 ------------------------------
