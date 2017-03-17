@@ -1,8 +1,24 @@
 --------------------
-v0.1.1   2016-XX-XX
+v0.2.0   2017-XX-XX
 --------------------
+Changes:
+* Better formatting for status job results
+* Display times using the local timezone
+* Add .log extention to downloaded logs
+* Upgrade to Padrino 0.12.6
+* Drop support for Ruby 1.8.7
+
+Enhancements:
+* Add an API
+* Add upload job hooks
+* Add upload email notification templates
+* Increase display width
+
 Bug fixes:
+* Fix missing images on search date calendar
+* Fix issues with mysql2 gem version
 * Fix searching by single date (bug #5)
+* Fix status results returning a single component status
 
 --------------------
 v0.1.0   2015-05-14
