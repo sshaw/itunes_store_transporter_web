@@ -33,7 +33,7 @@ end
 
 abort "usage: upgrade CURRENT_INSTALLATION_DIRECTORY" if ARGV.none?
 
-install_root = ARGV.shift
+install_root = File.expand_path(ARGV.shift)
 failure("cannot find the current installation directory #{install_root}") unless File.directory?(install_root)
 
 not_in_root = "missing %s; upgrade must be run in the upgraded version's root directory"

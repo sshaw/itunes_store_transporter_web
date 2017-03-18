@@ -36,6 +36,8 @@ module ITunes
 
           configure :production do
             config_file ITMSWEB_CONFIG
+            # Padrino requires this else it will raise an exception
+            set :delivery_method, :smtp if Gem.win_platform?
           end
 
           configure :test do
