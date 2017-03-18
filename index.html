@@ -46,7 +46,17 @@
         <div class="navbar-inner">
           <ul class="nav pull-right">
             <li><a href="#features">Features</a></li>
-            <li><a href="https://github.com/sshaw/itunes_store_transporter_web#requirements">Docs</a></li>
+            <li class="dropdown-submenu">
+              <a  href="https://github.com/sshaw/itunes_store_transporter_web/wiki">Docs</a>
+
+              <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+                <li><a tabindex="-1" href="https://github.com/sshaw/itunes_store_transporter_web/wiki/Installation-Guides">Instalation</a></li>
+                <li><a tabindex="-1" href="https://github.com/sshaw/itunes_store_transporter_web/wiki/API">API</a></li>
+                <li><a tabindex="-1" href="https://github.com/sshaw/itunes_store_transporter_web/wiki/Email-Notification-Templates">Email Templates</a></li>
+                <li><a tabindex="-1" href="https://github.com/sshaw/itunes_store_transporter_web/wiki/Job-Hooks">Job Hooks</a></li>
+              </ul>
+            </li>
+
             <li><a href="#news">News</a></li>
             <li><a href="#support">Support</a></li>
             <!--li class="download"><a href="http://demo.transportergui.com:3000">Online Demo</a></li-->
@@ -59,7 +69,7 @@
         <p class="lead">The Transporter GUI is the easiest way to deliver and manage your books, music, TV shows, movies, and apps on the iTunes Store.</p>
         <!-- p><a href="http://demo.transportergui.com:3000">Try it</a>, it's free.</p-->
         <p><a href="https://github.com/sshaw/itunes_store_transporter_web/archive/v0.1.0.zip" class="btn btn-primary btn-large download">Download The Transporter GUI</a></p>
-        <p><small class="muted">For Mac, Windows and Linux</small></p>
+        <p><small class="muted">For macOS, Windows and Linux</small></p>
       </div>
 
       <hr/>
@@ -92,6 +102,61 @@
 
         <hr/>
         <div class="row text-center">
+          <h3>Easily Track Current and Past Jobs</h3>
+          <div class="summary">
+	    <p>Search and sort jobs by date, account, Transporter mode, status and more.</p>
+          </div>
+          <!-- <p class="lead"></p> -->
+          <ul class="thumbnails">
+            <li class="span4">
+              <div class="thumbnail">
+                <a href="images/job-queue.png"><img src="images/job-queue-small.png" alt=""/></a>
+              </div>
+            </li>
+            <li class="span4">
+              <div class="thumbnail">
+                <a href="images/search-dialog.png"><img src="images/search-dialog-small.png" alt=""/></a>
+              </div>
+            </li>
+            <li class="span4">
+              <div class="thumbnail">
+                <a href="images/search.png"><img src="images/search-small.png" alt=""/></a>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <div class="row text-center">
+          <h3>Automate Your Digital Workflow</h3>
+          <div class="summary">
+	    <p>
+              Use <a href="https://github.com/sshaw/itunes_store_transporter_web/wiki/API">the API</a> to submit and monitor your jobs,
+              <a href="https://github.com/sshaw/itunes_store_transporter_web/wiki/Job-Hooks">job hooks</a> to exectue custom tasks, and
+              <a href="https://github.com/sshaw/itunes_store_transporter_web/wiki/Email-Notification-Templates">emails with customizable templates</a>
+              to keep your team up to date.
+            </p>
+          </div>
+          <ul class="thumbnails">
+            <li class="span4">
+              <div class="thumbnail">
+                <a href="images/api.png"><img src="images/api-small.png"/></a>
+              </div>
+            </li>
+            <li class="span4">
+              <div class="thumbnail">
+                <a href="images/job-hook.png"><img src="images/job-hook-small.png"/></a>
+              </div>
+            </li>
+            <li class="span4">
+              <div class="thumbnail">
+                <a href="images/email-template.png"><img src="images/email-template-small.png"/></a>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <hr/>
+        <div class="row text-center">
           <h3>All Transporter Activity and Output Are Saved</h3>
           <div class="summary">
 	    <p>From uploads to metadata retrieval and package status, everything is tracked, stored and easily accessible.
@@ -113,31 +178,6 @@
             <li class="span4">
               <div class="thumbnail">
                 <a href="images/status-job-results.png"><img src="images/status-job-results-small.png" alt=""/></a>
-              </div>
-            </li>
-          </ul>
-        </div>
-
-        <div class="row text-center">
-          <h3>Easily Track Current and Past Jobs</h3>
-          <div class="summary">
-	    <p>Search and sort jobs by date, account, Transporter mode, status and more.</p>
-          </div>
-          <!-- <p class="lead"></p> -->
-          <ul class="thumbnails">
-            <li class="span4">
-              <div class="thumbnail">
-                <a href="images/job-queue.png"><img src="images/job-queue-small.png" alt=""/></a>
-              </div>
-            </li>
-            <li class="span4">
-              <div class="thumbnail">
-                <a href="images/search-dialog.png"><img src="images/search-dialog-small.png" alt=""/></a>
-              </div>
-            </li>
-            <li class="span4">
-              <div class="thumbnail">
-                <a href="images/search.png"><img src="images/search-small.png" alt=""/></a>
               </div>
             </li>
           </ul>
