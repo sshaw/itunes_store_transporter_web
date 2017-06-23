@@ -60,6 +60,25 @@ class UploadForm < JobForm
 
   private
 
+  def get_vendor_id(doc)
+    e = doc.get_elements("//video/vendor_id").first
+    return e.text.strip if e
+
+    e = doc.get_elements("//assets").first
+    return e.attribute("vendor_id").to_s.strip if e && e.attribute("vendor_id")
+  end
+
+  def get_title(doc)
+    e = doc.get_elements("//video/title").first
+    return e.text.strip if e
+
+    vid = get_vendor_id(doc)
+    return unless vid
+
+    pkg = Package.select(:title).find_by(:vendor_id => vid)
+    return pkg.title if pkg
+  end
+
   def check_executable
     errors.add(:execute, "not an executable file") unless File.file?(execute) && File.executable?(execute)
   end
@@ -98,21 +117,21 @@ class UploadForm < JobForm
       return false
     end
 
-    e = doc.get_elements("//video/vendor_id").first
-    unless e
+    vid = get_vendor_id(doc)
+    unless vid
       errors.add(:base, "Metadata missing vendor_id in #{File.basename(pkg)}")
       return false
     end
 
-    @vendor_ids << e.text.strip
+    @vendor_ids << vid
 
-    e = doc.get_elements("//video/title").first
-    unless e
+    title = get_title(doc)
+    unless title
       errors.add(:base, "Metadata missing title in #{File.basename(pkg)}")
       return false
     end
 
-    @titles << e.text.strip
+    @titles << title
   end
 end
 
