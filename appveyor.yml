@@ -1,4 +1,4 @@
-version: "0.2.0b{build}"
+version: "0.2.1b{build}"
 
 environment:
   rack_env: test
