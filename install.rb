@@ -70,7 +70,8 @@ def prompt_for_config
 
     i = gets
     exit unless i # EOF
-    abort "Unknown choice '#{i.chomp}'" unless i =~ /\A\d+\Z/ && $supported_drivers[pos = i.to_i]
+    abort "Unknown choice '#{i.chomp}'" unless i =~ /\A\d+\Z/ && $supported_drivers[pos = i.to_i - 1]
+    $config[:db_driver] = $supported_drivers[pos]
   end
 
   unless $config[:db_host]
@@ -81,7 +82,7 @@ def prompt_for_config
     $config[:db_host] = host.chomp if host =~ /\w/
   end
 
-  %w[username password].each do |opt|
+  %w[user password].each do |opt|
     key = :"db_#{opt}"
     next if $config[key]
 
@@ -101,7 +102,7 @@ def install
     "name" => $config[:db_name],
     "adapter" => db_driver.adapter,
     "host" => $config[:db_host] || "localhost",
-    "username" => $config[:db_user],
+    "username" => $config[:db_usermae],
     "password" => $config[:db_password],
   }
 
