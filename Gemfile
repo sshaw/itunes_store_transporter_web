@@ -2,7 +2,7 @@ source "https://rubygems.org"
 
 gem "rake"
 gem "sinatra-contrib"
-gem "haml"
+gem "haml", "4.0.7"
 gem "activerecord", "~> 4.2.0", :require => "active_record"
 gem "daemons"
 gem "delayed_job"

@@ -176,7 +176,7 @@ DEPENDENCIES
   delayed_job
   delayed_job_active_record
   factory_girl
-  haml
+  haml (= 4.0.7)
   i18n-env-config
   itunes_store_transporter (~> 0.2.0)
   kramdown
