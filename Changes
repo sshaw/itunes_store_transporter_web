@@ -1,4 +1,15 @@
 --------------------
+v0.2.1   2017-12-01
+--------------------
+Changes:
+* Upgrade to ActiveRecord 4.2.10
+* Lock HAML dependency to 4.X
+
+Enhancements:
+* Add command line arguments to install.rb
+* Ruby 2.4 support
+
+--------------------
 v0.2.0   2017-03-18
 --------------------
 Changes:
