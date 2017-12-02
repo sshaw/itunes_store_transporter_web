@@ -2,7 +2,7 @@
 
 [![Build Status](https://secure.travis-ci.org/sshaw/itunes_store_transporter_web.svg)](https://secure.travis-ci.org/sshaw/itunes_store_transporter_web)
 [![Windows Build status](https://ci.appveyor.com/api/projects/status/cgv9vi00y0hao3tx?svg=true)](https://ci.appveyor.com/project/sshaw/itunes-store-transporter-web)
-[![Code Climate](https://codeclimate.com/github/sshaw/itunes_store_transporter_web/badges/gpa.svg)](https://codeclimate.com/github/sshaw/itunes_store_transporter_web)
+[![Maintainability](https://api.codeclimate.com/v1/badges/5bd1ae31776ceb7977f0/maintainability)](https://codeclimate.com/github/sshaw/itunes_store_transporter_web/maintainability)
 
 GUI for the iTunes Store's Transporter (iTMSTransporter)
 

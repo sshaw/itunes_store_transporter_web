@@ -168,7 +168,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  activerecord (~> 4.2.0)
+  activerecord (~> 4.2)
   capybara-screenshot
   coderay
   daemons
