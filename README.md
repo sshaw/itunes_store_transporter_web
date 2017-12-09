@@ -215,4 +215,4 @@ This directory *must* be accessible by the worker *and* website processess.
 
 ---
 
-Made by [ScreenStaring](http://screenstaring.com). That's what we do.
+Made by [ScreenStaring](http://screenstaring.com)

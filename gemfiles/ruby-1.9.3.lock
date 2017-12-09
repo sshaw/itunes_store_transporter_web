@@ -190,7 +190,7 @@ DEPENDENCIES
   phantomjs
   poltergeist
   public_suffix (~> 1.4.6)
-  rack-test
+  rack-test (= 0.6.3)
   rake
   rspec
   shoulda-matchers (= 2.8.0)

@@ -189,7 +189,7 @@ DEPENDENCIES
   page_number (~> 0.1.0)
   phantomjs
   poltergeist
-  rack-test
+  rack-test (= 0.6.3)
   rake
   rspec
   shoulda-matchers (~> 3.1.1)

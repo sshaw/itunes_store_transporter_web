@@ -23,7 +23,7 @@ end
 
 group :test do
   gem "shoulda-matchers", "~> 3.1.1"
-  gem "rack-test", :require => "rack/test"
+  gem "rack-test", "0.6.3", :require => "rack/test"
   gem "database_cleaner"
   gem "capybara-screenshot"
   gem "poltergeist"
