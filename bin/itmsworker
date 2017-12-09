@@ -13,7 +13,7 @@ action=${1:-jobs}
 padrino="${root}/padrino"
 
 if [ ! -x "$padrino" ]; then
-    error "$padrino is missing, please run the install script first: ruby setup.rb"
+    error "$padrino is missing, please run the install script first: ruby install.rb"
 fi
 
 case "$action" in

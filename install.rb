@@ -106,7 +106,7 @@ def install
     "password" => $config[:db_password],
   }
 
-  if db_config[:adapter] == "sqlite3"
+  if db_config["adapter"] == "sqlite3"
     path = "#{ROOT}/db"
     Dir.mkdir(path) unless File.directory?(path)
     db_config["name"] = "#{path}/#{$config[:db_name]}}.sqlite3"

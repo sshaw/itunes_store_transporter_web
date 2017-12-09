@@ -25,7 +25,7 @@ root=${0%bin*}
 
 padrino="${root}/bin/padrino"
 if [ ! -x "$padrino" ]; then
-    error "$padrino is missing, please run the install script first: ruby setup.rb"
+    error "$padrino is missing, please run the install script first: ruby install.rb"
 fi
 
 command="$1"; shift
