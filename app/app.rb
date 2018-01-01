@@ -22,8 +22,9 @@ module ITunes
 
           ### Our config
           enable :allow_select_transporter_path
-          set :output_log_directory, Padrino.root("var/lib/output")
-          set :file_browser_root_directory, FsUtil::DEFAULT_ROOT_DIRECTORY
+          set :output_log_directory, ENV["ITMS_OUTPUT_LOG_DIRECTORY"] || Padrino.root("var/lib/output")
+          set :file_browser_root_directory, ENV["ITMS_FILE_BROWSER_ROOT_DIRECTORY"] ?
+                                              ENV["ITMS_FILE_BROWSER_ROOT_DIRECTORY"].split(":") : FsUtil::DEFAULT_ROOT_DIRECTORY
           ###
 
           error ActiveRecord::RecordNotFound do
@@ -36,7 +37,8 @@ module ITunes
 
           configure :production do
             config_file ITMSWEB_CONFIG
-            # Padrino requires this else it will raise an exception
+            disable :allow_select_transporter_path if %w[false 0].include?(ENV["ITMS_ALLOW_SELECT_TRANSPORTER_PATH"])
+            # Padrino requires this else it will raise an
             set :delivery_method, :smtp if Gem.win_platform?
           end
 

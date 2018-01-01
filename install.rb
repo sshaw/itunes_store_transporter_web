@@ -46,6 +46,10 @@ parser = OptionParser.new do |opts|
     $config[:prompt] = prompt
   end
 
+  opts.on "--[no-]config", "Do not create a config file" do |config|
+    $config[:config] = config
+  end
+
   opts.on "--db-driver=NAME", $supported_drivers.map { |d| d.name.downcase }, "DB driver" do |name|
     $config[:db_driver] = $supported_drivers.find { |d| d.name.downcase == name }
   end
@@ -106,20 +110,24 @@ def install
     "password" => $config[:db_password],
   }
 
-  if db_config["adapter"] == "sqlite3"
+  sqlite = db_config["adapter"] == "sqlite3"
+  if sqlite
     path = "#{ROOT}/db"
     Dir.mkdir(path) unless File.directory?(path)
     db_config["name"] = "#{path}/#{$config[:db_name]}}.sqlite3"
     db_config["timeout"] = 5000
   end
 
-  File.open("#{ROOT}/config/itmsweb.yml", "w") do |io|
-    io.puts YAML.dump("database" => db_config)
+  unless $config[:config]
+    File.open("#{ROOT}/config/itmsweb.yml", "w") do |io|
+      io.puts YAML.dump("database" => db_config)
+    end
   end
 
   gemfile = "#{ROOT}/Gemfile.#{RUBY_PLATFORM}"
   FileUtils.cp("#{ROOT}/Gemfile", gemfile)
-  File.open(gemfile, "a") { |io| io.puts db_driver.to_gem }
+  # SQLite is in the Gemfile by default
+  File.open(gemfile, "a") { |io| io.puts db_driver.to_gem } unless sqlite
 
   ENV["BUNDLE_GEMFILE"] = gemfile
 

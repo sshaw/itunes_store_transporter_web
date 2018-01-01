@@ -1,8 +1,13 @@
 --------------------
-v0.2.2   2017-12-09
+v0.2.2   2018-01-XX
 --------------------
 Bug fixes:
 * Fix path to SQLite DB file
+* Fix duplicate sqlite3 entry in the Gemfile
+
+Enhancements:
+* Support for environment varuable configuration
+* Add the --no-config option to install.rb
 
 --------------------
 v0.2.1   2017-12-01

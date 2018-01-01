@@ -1,3 +1,16 @@
+def load_config
+  config = YAML.load_file(ITMSWEB_CONFIG)
+  db = config["database"]
+  raise "missing or invalid database setting" unless Hash === db
+  db.keys.each { |key| db[key.to_sym] = db.delete(key) } # Padrino rake tasks require Symbols
+  db[:database] = db.delete(:name) # We make the config better for user, but have to fix it for AR
+  db
+rescue => e
+  msg = "failed to load config file #{ITMSWEB_CONFIG}: #{e}"
+  logger.fatal(msg)
+  abort msg
+end
+
 ActiveRecord::Base.configurations[:development] = {
   :adapter => 'sqlite3',
   :database => Padrino.root('db', 'itunes_store_transporter_web_development.db')
@@ -9,19 +22,7 @@ ActiveRecord::Base.configurations[:test] = {
 }
 
 if Padrino.env == :production
-  begin
-    config = YAML.load_file(ITMSWEB_CONFIG)
-    db = config["database"]
-    raise "missing or invalid database setting" unless Hash === db
-    db.keys.each { |key| db[key.to_sym] = db.delete(key) } # Padrino rake tasks require Symbols
-    db[:database] = db.delete(:name) # We make the config better for user, but have to fix it for AR
-  rescue => e
-    msg = "failed to load config file #{ITMSWEB_CONFIG}: #{e}"
-    logger.fatal(msg)
-    abort msg
-  end
-
-  ActiveRecord::Base.configurations[:production] = db
+  ActiveRecord::Base.configurations[:production] = ENV["ITMS_DATABASE_URL"] ? ENV["ITMS_DATABASE_URL"] : load_config
 end
 
 # Setup our logger

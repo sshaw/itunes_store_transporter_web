@@ -43,7 +43,7 @@ GUI and workflow automation for the iTunes Store's Transporter (iTMSTransporter)
 
 ## Requirements
 
-* Ruby >= 1.9
+* Ruby >= 1.9 and < 2.5
 * [iTunes Store Transporter](http://www.apple.com/itunes/sellcontent)
 * A database driver
 
@@ -57,7 +57,9 @@ Ruby portion which will fail if the underlying library is not found.
     cd itunes_store_transporter_web-VERSION
     ruby ./install.rb
 
-Note that this *does* *not* install the iTunes Store Transporter. If you're on OS X
+For installation options see `ruby ./install.rb --help`.
+
+Note that running `install.rb` *does* *not* install the iTunes Store Transporter. If you're on OS X
 you can install the Transporter by [installing Xcode](https://developer.apple.com/xcode/downloads).
 Otherwise, you'll have to [create an iTunes Connect account](http://www.apple.com/itunes/working-itunes/sell-content/)
 and install it yourself.
@@ -77,15 +79,21 @@ See [Running on Windows](https://github.com/sshaw/itunes_store_transporter#runni
 
 ## Configuration
 
-In this section `ROOT` refers to the directory containing the website. All configuration options are
-set in `ROOT/config/itmsweb.yml`.
+In this section `ROOT` refers to the directory containing the website.
+
+Configuration options can be set in `ROOT/config/itmsweb.yml` or via
+environment variables. Environment variables have precedence over values in the config file.
+
+The environment variable examples assume an `sh`-like shell on GNU/Linux.
 
 ### Database
+
+#### Config File
 
 Database configuration is contained within the `database` section of the configuration file (`ROOT/config/itmsweb.yml`).
 It is used by the web server *and* the worker.
 
-By default it will contain the information provided to the setup script. Here's an example:
+By default it will contain the information provided to the install script. Here's an example:
 
     # itmsweb.yml
 
@@ -95,6 +103,17 @@ By default it will contain the information provided to the setup script. Here's 
       host: db.example.com
       username: sshaw
       password: ______Weee!@$%
+
+#### Environment Variable
+
+Set `ITMS_DATABASE_URL` to the appropriate connection string.
+
+Example:
+
+    # SQLite
+    export ITMS_DATABASE_URL=sqlite3:path/to/database?timeout=5000
+    # MySQL
+    export ITMS_DATABASE_URL=mysql2://username:password@hostname/database
 
 ### Webserver
 
@@ -162,6 +181,10 @@ The file browser's root directory defaults to the root directory of the machine 
 server (that's `"/"`, not the web server's document root). On Windows the machine's volumes (`C:`, `D:`, etc...) will be
 used instead.
 
+Note that all directories *must* be accessable by the worker process.
+
+##### Config File
+
 This can be changed by setting `file_browser_root_directory` to the path of the desired root directory.
 A list of root directories can also be used
 
@@ -175,12 +198,23 @@ A list of root directories can also be used
       - /mnt/nas01
       - /mnt/nas02
 
-Note that all directories *must* be accessable by the worker process.
+##### Environment Variable
+
+Set `ITMS_FILE_BROWSER_ROOT_DIRECTORY` to the desired directory. Multiple directories can be separated by a colon (`:`).
+
+Example:
+
+    export ITMS_FILE_BROWSER_ROOT_DIRECTORY=/some/root/directory
+    # Use multiple roots
+    export ITMS_FILE_BROWSER_ROOT_DIRECTORY=/root/one:/root/two
+
+##### A Note on Multiple Directories
 
 There is a difference between using a single root directory and using a set of directories: if you use a single root directory
 the file browser will deault to displaying *all* the files under that directory.
 If multiple root directories are used the browser will default to displaying the names
 of these directories, *not* their contents.
+
 
 #### Preventing users from changing the Transporter path
 
@@ -188,26 +222,42 @@ By default the `iTMSTransporter` path can be set by visiting the config page. Fo
 setups it might be desirable to prevent users from changing it. This can be done by setting the `allow_select_transporter_path`
 option to `false`. This will prevent the config page from displaying the `iTMSTransporter` path dialog.
 
+It's best to set this option *after* setting the `iTMSTransporter` path, as there is currently
+no concept of users and roles so when this is set to `false` *no one* will be able to change the path.
+
+##### Config File
+
     # itmsweb.yml
 
     allow_select_transporter_path: false
     # other options...
 
-It's best to set this option *after* setting the `iTMSTransporter` path, as there is currently
-no concept of users and roles so when this is set to `false` *no* *one* will be able to change the path.
+##### Environment Variable
+
+Set `ITMS_ALLOW_SELECT_TRANSPORTER_PATH` to `"false"` to disable.
 
 #### iTMSTransporter output logs
 
 Everytime a worker process runs `iTMSTransporter` its output is saved and made available through the website.
 By default the output logs are saved in `ROOT/var/lib/output`. This location can be changed by setting the `output_log_directory`
-option to the desired directory:
+option to the desired directory.
+
+This directory *must* be accessible by the worker *and* website processes.
+
+##### Config File
 
     # itmsweb.yml
 
     output_log_directory: /mnt/log/itunes
     # other options...
 
-This directory *must* be accessible by the worker *and* website processess.
+##### Environment Variable
+
+Set `ITMS_OUTPUT_LOG_DIRECTORY` to the desired directory.
+
+Example:
+
+    export ITMS_OUTPUT_LOG_DIRECTORY=/some/directory
 
 ## More Info
 
