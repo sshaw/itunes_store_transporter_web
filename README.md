@@ -4,7 +4,7 @@
 [![Windows Build status](https://ci.appveyor.com/api/projects/status/cgv9vi00y0hao3tx?svg=true)](https://ci.appveyor.com/project/sshaw/itunes-store-transporter-web)
 [![Maintainability](https://api.codeclimate.com/v1/badges/5bd1ae31776ceb7977f0/maintainability)](https://codeclimate.com/github/sshaw/itunes_store_transporter_web/maintainability)
 
-GUI for the iTunes Store's Transporter (iTMSTransporter)
+GUI and workflow automation for the iTunes Store's Transporter (iTMSTransporter)
 
 * [Installation](#installation)
 * [Configuration](#configuration)
@@ -69,6 +69,11 @@ Start the webserver
 Start the worker
 
 	./bin/itmsworker
+
+### Windows Users
+
+Windows users must make a small modification to Apple's `iTMSTransporter.BAT` script.
+See [Running on Windows](https://github.com/sshaw/itunes_store_transporter#running-on-windows).
 
 ## Configuration
 
