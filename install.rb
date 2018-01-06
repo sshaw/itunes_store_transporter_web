@@ -110,8 +110,7 @@ def install
     "password" => $config[:db_password],
   }
 
-  sqlite = db_config["adapter"] == "sqlite3"
-  if sqlite
+  if db_config["adapter"] == "sqlite3"
     path = "#{ROOT}/db"
     Dir.mkdir(path) unless File.directory?(path)
     db_config["name"] = "#{path}/#{$config[:db_name]}}.sqlite3"
@@ -127,7 +126,7 @@ def install
   gemfile = "#{ROOT}/Gemfile.#{RUBY_PLATFORM}"
   FileUtils.cp("#{ROOT}/Gemfile", gemfile)
   # SQLite is in the Gemfile by default
-  File.open(gemfile, "a") { |io| io.puts db_driver.to_gem } unless sqlite
+  File.open(gemfile, "a") { |io| io.puts db_driver.to_gem }
 
   ENV["BUNDLE_GEMFILE"] = gemfile
 
