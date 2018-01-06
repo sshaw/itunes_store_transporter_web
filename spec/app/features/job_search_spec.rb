@@ -73,8 +73,9 @@ feature "Search", :js do
 
   describe "searching by date" do
     before do
-      @start_date = 10.days.ago
-      @end_date = @start_date + 2.days
+      # Use these dates as there's no chance of ambiguity on the calendar widget
+      @start_date = "2017-12-10".to_time
+      @end_date = "2017-12-12".to_time
 
       @found = [ create(:status_job),  create(:status_job) ]
       @found[0].update_column(:updated_at, @start_date)
@@ -203,8 +204,8 @@ feature "Search", :js do
 
   def pick_date(field, date)
     find_field(field).trigger("focus")
-    find(".ui-datepicker-month").select(date.strftime("%b"))
     find(".ui-datepicker-year").select(date.year)
+    find(".ui-datepicker-month").select(date.strftime("%b"))
     click_on date.day
   end
 end
