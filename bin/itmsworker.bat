@@ -20,7 +20,7 @@ if exist "%BUNDLE_GEMFILE%" (
      exit /b 1
   )
 
-  ruby "%root%padrino" rake -c "%root%.." -e production jobs:!task!
+  ruby "%root%padrino" rake -c "%root%.." -e production itmsworker:!task!
 ) else (
   echo Missing file %BUNDLE_GEMFILE%
   echo You must run: ruby setup.rb

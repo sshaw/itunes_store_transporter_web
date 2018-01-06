@@ -1,9 +1,9 @@
 --------------------
-v0.2.2   2018-01-XX
+v0.2.2   2018-01-06
 --------------------
 Bug fixes:
 * Fix path to SQLite DB file
-* Fix duplicate sqlite3 entry in the Gemfile
+* Fix task namespace in itmsworker.bat
 
 Enhancements:
 * Support for environment varuable configuration
