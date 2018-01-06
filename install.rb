@@ -3,7 +3,7 @@ require "fileutils"
 require "yaml"
 require "optparse"
 
-abort "Ruby >= 1.9 is required, you're running #{RUBY_VERSION}" if RUBY_VERSION < "1.9"
+abort "Ruby >= 1.9 and < 2.5 is required, you're running #{RUBY_VERSION}" if RUBY_VERSION < "1.9" || RUBY_VERSION >= "2.5.0"
 
 DBNAME = "itmsweb"
 RAKE = "ruby bin/padrino rake -e production"
@@ -171,7 +171,7 @@ Thanks for using the iTunes Store Transporter: GUI.
 http://transportergui.com
 
 Made by ScreenStaring
-http://ScreenStaring.com
+http://screenstaring.com
 ---
 
 MSG
