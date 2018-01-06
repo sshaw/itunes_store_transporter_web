@@ -7,7 +7,7 @@ Bug fixes:
 
 Enhancements:
 * Support for environment variable configuration
-* Add several command-line options to install.rb
+* Add --no-config option to install.rb
 
 --------------------
 v0.2.1   2017-12-01
