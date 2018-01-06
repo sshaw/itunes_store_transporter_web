@@ -6,8 +6,8 @@ Bug fixes:
 * Fix task namespace in itmsworker.bat
 
 Enhancements:
-* Support for environment varuable configuration
-* Add the --no-config option to install.rb
+* Support for environment variable configuration
+* Add several command-line options to install.rb
 
 --------------------
 v0.2.1   2017-12-01
