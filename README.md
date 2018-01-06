@@ -74,7 +74,7 @@ Start the worker
 
 ### Windows Users
 
-Windows users must make a small modification to Apple's `iTMSTransporter.BAT` script.
+Windows users must make a small modification to Apple's `iTMSTransporter.CMD` script.
 See [Running on Windows](https://github.com/sshaw/itunes_store_transporter#running-on-windows).
 
 ## Configuration
