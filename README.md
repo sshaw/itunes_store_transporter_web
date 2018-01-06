@@ -59,7 +59,7 @@ Ruby portion which will fail if the underlying library is not found.
 
 For installation options see `ruby ./install.rb --help`.
 
-Note that running `install.rb` *does* *not* install the iTunes Store Transporter. If you're on OS X
+Note that running `install.rb` *does* *not* install the iTunes Store Transporter (`iTMSTransporter`). If you're on OS X
 you can install the Transporter by [installing Xcode](https://developer.apple.com/xcode/downloads).
 Otherwise, you'll have to [create an iTunes Connect account](http://www.apple.com/itunes/working-itunes/sell-content/)
 and install it yourself.
