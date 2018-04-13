@@ -2,7 +2,6 @@ require "ostruct"
 require "options"
 require "rubygems"
 
-
 class JobForm < OpenStruct
   include ActiveModel::Validations
 
@@ -16,7 +15,8 @@ class JobForm < OpenStruct
     if @account
       options[:username]  = @account.username
       options[:password]  = @account.password
-      options[:shortname] = @account.shortname
+      options[:shortname] = @account.shortname if @account.shortname.present?
+      options[:itc_provider] =  @account.itc_provider if @account.itc_provider.present?
     end
 
     data = { :options => options, :account_id => account_id, :execute => execute }
@@ -63,7 +63,7 @@ class SchemaForm < JobForm
   def marshal_dump
     data = super
     data[:options].except!(:version_name, :version_number)
-    data[:options][:version] = [version_name, version_number].compact.join('')
+    data[:options][:version] = [version_name, version_number].compact.join("")
     data
   end
 end
@@ -85,4 +85,10 @@ class StatusForm < JobForm
   validates_presence_of :vendor_id, :message => "ID can't be blank"
 end
 
-class ProvidersForm < JobForm; end
+class ProvidersForm < JobForm
+  def marshal_dump
+    data = super
+    data[:options].except!(:itc_provider, :shortname)
+    data
+  end
+end

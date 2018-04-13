@@ -1,3 +1,12 @@
+GIT
+  remote: git://github.com/sshaw/itunes_store_transporter.git
+  revision: b950b368e218ac9f9e172502ffb7d3270356f262
+  branch: itc_provider
+  specs:
+    itunes_store_transporter (0.2.0)
+      childprocess (~> 0.3.2)
+      optout (~> 0.0.2)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -42,7 +51,7 @@ GEM
     diff-lcs (1.2.5)
     factory_girl (4.7.0)
       activesupport (>= 3.0.0)
-    ffi (1.9.17)
+    ffi (1.9.23)
     haml (4.0.7)
       tilt
     http_router (0.11.2)
@@ -52,9 +61,6 @@ GEM
       concurrent-ruby (~> 1.0)
     i18n-env-config (0.0.1)
       i18n (~> 0.5)
-    itunes_store_transporter (0.2.0)
-      childprocess (~> 0.3.2)
-      optout (~> 0.0.2)
     kramdown (1.13.0)
     launchy (2.4.3)
       addressable (~> 2.3)
@@ -178,7 +184,7 @@ DEPENDENCIES
   factory_girl
   haml (= 4.0.7)
   i18n-env-config
-  itunes_store_transporter (~> 0.2.0)
+  itunes_store_transporter!
   kramdown
   mail
   padrino-core (= 0.12.6)
@@ -200,4 +206,4 @@ DEPENDENCIES
   will_paginate (~> 3.0)
 
 BUNDLED WITH
-   1.12.3
+   1.15.4

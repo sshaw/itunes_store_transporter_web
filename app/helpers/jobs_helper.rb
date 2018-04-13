@@ -70,7 +70,8 @@ module ITunes
             Array(accounts).sort_by { |u| u.username }.group_by(&:username).each do |_, users|
               users.each do |u|
                 options << [
-                  users.one? ? u.username : sprintf("%s (%s)", u.username, u.shortname),
+                  users.one? || (u.itc_provider.blank? && u.shortname.blank?) ?
+                    u.username : sprintf("%s (%s)", u.username, u.shortname.presence || u.itc_provider.presence),
                   u.id
                 ]
               end

@@ -11,16 +11,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20) do
+ActiveRecord::Schema.define(version: 21) do
 
   create_table "accounts", force: :cascade do |t|
-    t.string   "username",   limit: 64, null: false
-    t.string   "password",   limit: 64, null: false
-    t.string   "shortname",  limit: 64
-    t.datetime "created_at",            null: false
-    t.datetime "updated_at",            null: false
+    t.string   "username",     limit: 64, null: false
+    t.string   "password",     limit: 64, null: false
+    t.string   "shortname",    limit: 64
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+    t.string   "alias",        limit: 32
+    t.string   "itc_provider", limit: 64
   end
 
+  add_index "accounts", ["alias"], name: "index_accounts_on_alias", unique: true
   add_index "accounts", ["username", "shortname"], name: "index_accounts_on_username_and_shortname", unique: true
 
   create_table "config", force: :cascade do |t|

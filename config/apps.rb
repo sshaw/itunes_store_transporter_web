@@ -30,6 +30,10 @@ Padrino.configure_apps do
   I18n::Backend::Simple.include(I18n::Backend::Fallbacks)
 
   ActiveRecord::Base.default_timezone = :local
+
+  ActiveSupport::Inflector.inflections do |i|
+    i.acronym "ITC"
+  end
 end
 
 # Mounts the core application for this project
