@@ -454,6 +454,18 @@ and <code>COLUMN</code> must be one of:</p>
 <p>The subject and message fields of notifications can contain <a href="https://en.wikipedia.org/wiki/ERuby">ERB</a>.
 See the below table for the supported variables.</p>
 
+<p>The variables <strong>are not</strong> Ruby instance variables, so you must not prefix them with the <code>@</code>.</p>
+
+<p>I.e., do this:
+<code>erb
+Job number: &lt;%= job_id %&gt;
+</code></p>
+
+<p>Not this:
+<code>erb
+Job number: &lt;%= @job_id %&gt;
+</code></p>
+
 <table>
   <thead>
     <tr>
@@ -509,6 +521,11 @@ See the below table for the supported variables.</p>
       <td>Shortname of the package’s iTunes Connect account (can be <code>nil</code>)</td>
     </tr>
     <tr>
+      <td><code>account_itc_provider</code></td>
+      <td><code>String</code></td>
+      <td>iTunes Connect provider name of the package’s iTunes Connect account (can be <code>nil</code>)</td>
+    </tr>
+    <tr>
       <td><code>email_to</code></td>
       <td><code>Array</code></td>
       <td>Recipient email addresses</td>
@@ -530,8 +547,8 @@ See the below table for the supported variables.</p>
 
 <p><em>Jobs hooks are currently only supported for upload jobs.</em></p>
 
-<p>Job hooks allow one to specify a command to be executed when a job completes. Information about the job
-is made available via the following environment variables:</p>
+<p>Job hooks allow one to specify a command to be executed when a job completes.
+Information about the job is made available via the following environment variables:</p>
 
 <table>
   <thead>
@@ -575,13 +592,23 @@ is made available via the following environment variables:</p>
     </tr>
     <tr>
       <td><code>ITMS_ACCOUNT_SHORTNAME</code></td>
-      <td>Shortname of the package’s iTunes Connect account (can be empty)</td>
+      <td>Shortname (encoding house user) of the package’s iTunes Connect account (can be empty)</td>
+    </tr>
+    <tr>
+      <td><code>ITMS_ACCOUNT_ITC_PROVIDER</code></td>
+      <td>iTunes Connect provider name (can be empty)</td>
     </tr>
   </tbody>
 </table>
+
+<p>Job hooks with a non-zero exit code are considered an error.</p>
 
 <h2 id="more-help">More Help</h2>
 
 <p>If you’ve encountered a bug please <a href="https://github.com/sshaw/itunes_store_transporter_web/issues">open an issue</a>.</p>
 
 <p>For commercial support email <a href="mailto:help@screenstaring.com?subject=Transporter%20GUI">help@screenstaring.com</a>.</p>
+
+<hr />
+
+<p>Made by <a href="http://screenstaring.com">ScreenStaring</a></p>

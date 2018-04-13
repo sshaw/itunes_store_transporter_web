@@ -5,7 +5,7 @@ RSpec.describe Template do
   describe "#render" do
     before :all do
       notice = build(:notification, :to => "a@b.com, b@c.com", :from => "a@b.com", :reply_to => "foo@a.com")
-      account = create(:account, :username => "sshaw", :shortname => "fofinho", :notification => notice)
+      account = create(:account, :username => "sshaw", :shortname => "fofinho", :itc_provider => "blah", :notification => notice)
       @job = create(:upload_job, :options => { :package => "/a/b.itmsp" }, :account => account)
       @template = Template.new(@job)
     end
@@ -59,6 +59,10 @@ RSpec.describe Template do
 
       it "interpolates 'account_shortname'" do
         expect(@template.render("<%= account_shortname %>")).to eq "fofinho"
+      end
+
+      it "interpolates 'account_itc_provider'" do
+        expect(@template.render("<%= account_itc_provider %>")).to eq "blah"
       end
     end
 

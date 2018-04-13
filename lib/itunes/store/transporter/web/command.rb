@@ -14,6 +14,7 @@ module ITunes
               "ITMS_JOB_COMPLETED" => job.updated_at.to_s,
               "ITMS_JOB_TYPE" => job.type.downcase,
               "ITMS_JOB_TARGET" => job.target,
+              "ITMS_ACCOUNT_ITC_PROVIDER" => job.options[:itc_provider],
               "ITMS_ACCOUNT_USERNAME" => job.options[:username],
               "ITMS_ACCOUNT_SHORTNAME" => job.options[:shortname]
             }

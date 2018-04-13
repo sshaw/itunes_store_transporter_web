@@ -12,6 +12,7 @@ class Template
       :job_completed => job.updated_at,
       :job_type => job.type.downcase,
       :job_target => job.target,
+      :account_itc_provider => job.options[:itc_provider],
       :account_username => job.options[:username],
       :account_shortname => job.options[:shortname],
       :email_to => nil,

@@ -34,6 +34,7 @@ feature "Configuration", :js do
     fill_in "Username", :with => "sshaw"
     fill_in "Password", :with => "what_it_iz!@#"
     fill_in "Shortname", :with => "galinha"
+    fill_in "ITC Provider", :with => "fofinha"
 
     click_on "Create"
 
@@ -43,6 +44,7 @@ feature "Configuration", :js do
 
     expect(page).to have_text("sshaw")
     expect(page).to have_text("galinha")
+    expect(page).to have_text("fofinha")
     expect(page).to_not have_text("what_it_iz!@#")
   end
 
@@ -55,6 +57,7 @@ feature "Configuration", :js do
     fill_in "Username", :with => @account.username << "X"
     fill_in "Password", :with => "foo"
     fill_in "Shortname", :with => @account.shortname << "X"
+    fill_in "ITC Provider", :with => @account.itc_provider << "X"
     click_on "Update"
 
     expect(page).to have_text("Account updated")
@@ -64,6 +67,7 @@ feature "Configuration", :js do
     within_account @account do
       expect(page).to have_text(@account.username)
       expect(page).to have_text(@account.shortname)
+      expect(page).to have_text(@account.itc_provider)
       expect(page).to_not have_text(@account.password)
     end
   end

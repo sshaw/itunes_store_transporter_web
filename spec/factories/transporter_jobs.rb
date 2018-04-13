@@ -4,6 +4,7 @@ FactoryGirl.define do
     after :build do |job|
       job.options[:username] ||=  job.account.username
       job.options[:shortname] ||= job.account.shortname
+      job.options[:itc_provider] ||= job.account.itc_provider
       job.options[:password] ||= job.account.password
     end
   end

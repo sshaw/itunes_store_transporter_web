@@ -11,14 +11,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20) do
+ActiveRecord::Schema.define(version: 21) do
 
   create_table "accounts", force: :cascade do |t|
-    t.string   "username",   limit: 64, null: false
-    t.string   "password",   limit: 64, null: false
-    t.string   "shortname",  limit: 64
-    t.datetime "created_at",            null: false
-    t.datetime "updated_at",            null: false
+    t.string   "username",     limit: 64, null: false
+    t.string   "password",     limit: 64, null: false
+    t.string   "shortname",    limit: 64
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "itc_provider", limit: 64
   end
 
   add_index "accounts", ["username", "shortname"], name: "index_accounts_on_username_and_shortname", unique: true
@@ -28,26 +29,26 @@ ActiveRecord::Schema.define(version: 20) do
     t.string  "password",             limit: 64
     t.string  "shortname",            limit: 64
     t.string  "transport",            limit: 16
-    t.string  "path",                 limit: 255
+    t.string  "path"
     t.integer "rate"
-    t.string  "output_log_directory", limit: 255
-    t.string  "jvm",                  limit: 255
-    t.string  "smtp_host",            limit: 255
+    t.string  "output_log_directory"
+    t.string  "jvm"
+    t.string  "smtp_host"
     t.integer "smtp_port"
   end
 
   create_table "delayed_jobs", force: :cascade do |t|
-    t.integer  "priority",               default: 0
-    t.integer  "attempts",               default: 0
+    t.integer  "priority",   default: 0
+    t.integer  "attempts",   default: 0
     t.text     "handler"
     t.text     "last_error"
     t.datetime "run_at"
     t.datetime "locked_at"
     t.datetime "failed_at"
-    t.string   "locked_by",  limit: 255
-    t.string   "queue",      limit: 255
-    t.datetime "created_at",                         null: false
-    t.datetime "updated_at",                         null: false
+    t.string   "locked_by"
+    t.string   "queue"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "notifications", force: :cascade do |t|
@@ -69,13 +70,13 @@ ActiveRecord::Schema.define(version: 20) do
     t.string   "options",         limit: 1024
     t.text     "result"
     t.text     "exceptions"
-    t.string   "output_log_file", limit: 255
+    t.string   "output_log_file"
     t.string   "type",            limit: 32
-    t.datetime "created_at",                                      null: false
-    t.datetime "updated_at",                                      null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.integer  "job_id"
     t.string   "priority",        limit: 10,   default: "normal", null: false
-    t.string   "target",          limit: 255
+    t.string   "target"
     t.integer  "account_id"
     t.string   "execute",         limit: 1024
   end

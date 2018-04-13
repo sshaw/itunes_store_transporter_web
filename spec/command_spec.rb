@@ -5,6 +5,7 @@ RSpec.describe ITunes::Store::Transporter::Web::Command do
     options = {
       :package => "/a/package.itmsp",
       :shortname => "sshaw",
+      :itc_provider => "blah",
       :username => "SomeUsername"
     }
 
@@ -64,6 +65,11 @@ RSpec.describe ITunes::Store::Transporter::Web::Command do
     it "sets the ITMS_ACCOUNT_SHORTNAME environment variable" do
       expect(@command.execute(env("ITMS_ACCOUNT_SHORTNAME"))).to eq "sshaw"
       expect(ENV["ITMS_ACCOUNT_SHORTNAME"]).to be_nil
+    end
+
+    it "sets the ITMS_ACCOUNT_ITC_PROVIDER environment variable" do
+      expect(@command.execute(env("ITMS_ACCOUNT_ITC_PROVIDER"))).to eq "blah"
+      expect(ENV["ITMS_ACCOUNT_ITC_PROVIDER"]).to be_nil
     end
 
     context "when the command exits non-zero" do

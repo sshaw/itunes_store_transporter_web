@@ -406,6 +406,18 @@ See [Response Objects](#response-objects).
 The subject and message fields of notifications can contain [ERB](https://en.wikipedia.org/wiki/ERuby).
 See the below table for the supported variables.
 
+The variables **are not** Ruby instance variables, so you must not prefix them with the `@`.
+
+I.e., do this:
+```erb
+Job number: <%= job_id %>
+```
+
+Not this:
+```erb
+Job number: <%= @job_id %>
+```
+
 Variable | Type      | Description
 ---------|-----------|----------------
 `job_id` | `String` | Job id
@@ -417,6 +429,7 @@ Variable | Type      | Description
 `job_completed` | `Time` | Time the job finished
 `account_username` | `String` | Username of the package's iTunes Connect account
 `account_shortname` | `String` | Shortname of the package's iTunes Connect account (can be `nil`)
+`account_itc_provider` | `String` | iTunes Connect provider name of the package's iTunes Connect account (can be `nil`)
 `email_to` | `Array` | Recipient email addresses
 `email_from` | `String` | Sender's email address
 `email_reply_to` | `String` | Reply to email address (can be `nil`)
@@ -425,8 +438,8 @@ Variable | Type      | Description
 
 *Jobs hooks are currently only supported for upload jobs.*
 
-Job hooks allow one to specify a command to be executed when a job completes. Information about the job
-is made available via the following environment variables:
+Job hooks allow one to specify a command to be executed when a job completes.
+Information about the job is made available via the following environment variables:
 
 Variable | Description
 ---------|------------------------
@@ -438,10 +451,17 @@ Variable | Description
 `ITMS_JOB_CREATED` | Time the job was created, given in `YYYY-MM-DD HH:MM:SS ±ZONE` format (24 hour clock)
 `ITMS_JOB_COMPLETED` | Time the job finished, given in `YYYY-MM-DD HH:MM:SS ±ZONE` format (24 hour clock)
 `ITMS_ACCOUNT_USERNAME` | Username of the package's iTunes Connect account
-`ITMS_ACCOUNT_SHORTNAME` | Shortname of the package's iTunes Connect account (can be empty)
+`ITMS_ACCOUNT_SHORTNAME` | Shortname (encoding house user) of the package's iTunes Connect account (can be empty)
+`ITMS_ACCOUNT_ITC_PROVIDER` | iTunes Connect provider name (can be empty)
+
+Job hooks with a non-zero exit code are considered an error.
 
 ## More Help
 
 If you've encountered a bug please [open an issue](https://github.com/sshaw/itunes_store_transporter_web/issues).
 
 For commercial support email [help@screenstaring.com](mailto:help@screenstaring.com?subject=Transporter%20GUI).
+
+---
+
+Made by [ScreenStaring](http://screenstaring.com)
