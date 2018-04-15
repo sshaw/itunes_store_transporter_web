@@ -68,7 +68,13 @@ ActiveRecord::Schema.define(version: 21) do
   create_table "transporter_jobs", force: :cascade do |t|
     t.string   "state",           limit: 16
     t.string   "options",         limit: 1024
-    t.text     "result"
+
+    if ActiveRecord::Base.connection_config[:adapter] == "mysql2"
+      t.column :result, "longtext"
+    else
+      t.text "result"
+    end
+
     t.text     "exceptions"
     t.string   "output_log_file"
     t.string   "type",            limit: 32
