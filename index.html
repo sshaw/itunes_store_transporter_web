@@ -68,7 +68,7 @@
         <h2>Simplify Your iTunes Workflow</h2>
         <p class="lead">The Transporter GUI is the easiest way to deliver and manage your books, music, TV shows, movies, and apps on the iTunes Store.</p>
         <!-- p><a href="http://demo.transportergui.com:3000">Try it</a>, it's free.</p-->
-        <p><a href="https://github.com/sshaw/itunes_store_transporter_web/archive/v0.2.2.zip" class="btn btn-primary btn-large download">Download iTunes Store Transporter: GUI</a></p>
+        <p><a href="https://github.com/sshaw/itunes_store_transporter_web/archive/v0.2.3.zip" class="btn btn-primary btn-large download">Download iTunes Store Transporter: GUI</a></p>
         <p><small class="muted">For macOS, Windows and Linux</small></p>
       </div>
 
@@ -189,7 +189,20 @@
       <div id="news" class="row">
 	<h3 class="text-center">News</h3>
 	<div class="item">
-            <h4>iTunes Store Transporter: GUI v0.2.2 Released <small>2017-01-06</small></h4>
+            <h4>iTunes Store Transporter: GUI v0.2.3 &amp; iTunes::Store::Transporter v0.2.1 Released <small>2018-04-15</small></h4>
+            <h5>Bug fixes</h5>
+            <ul>
+                <li>Use <code>longtext</code> type on MySQL for <code>transporter_jobs.result</code> column</li>
+            </ul>
+            <h5>Enhancements</h5>
+            <ul>
+                <li>Support for <code>iTMSTransporter</code>'s itc_provider option</li>
+            </ul>
+            <p><b><a href="https://github.com/sshaw/itunes_store_transporter_web/archive/v0.2.3.zip" class="download">Download <code>v0.2.3</code></a></b></p>
+        </div>
+
+	<div class="item">
+            <h4>iTunes Store Transporter: GUI v0.2.2 Released <small>2018-01-06</small></h4>
             <h5>Bug fixes</h5>
             <ul>
                 <li>Fix path to SQLite DB file (only affected v0.2.1 installs)</li>
@@ -222,7 +235,7 @@
           <p>This release has been sponsored by <a href="http://press9.de">press9 media solutions berlin</a>. Thanks press9!</p>
           <h5>Enhancements</h5>
           <ul>
-            <li>Support for statusAll mode</li>
+           <li>Support for statusAll mode</li>
             <li>Status command XML parser</li>
           </ul>
           <p>Browse the full release notes <a href="https://github.com/sshaw/itunes_store_transporter/releases/tag/v0.2.0">here</a>.</p>
