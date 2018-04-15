@@ -1,6 +1,9 @@
 --------------------
-v0.2.3  2018-04-14
+v0.2.3  2018-04-15
 --------------------
+Bug fixes:
+* Use longtext on MySQL for transporter_jobs.result column (bug #9)
+
 Enhancements:
 * Support for iTMSTransporter's itc_provider option
 
