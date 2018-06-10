@@ -9,11 +9,15 @@ rvm:
   - 2.2
   - 2.3
   - 2.4
+  - 2.5
 
 before_install:
   - gem update bundler
 
 matrix:
+  allow_failures:
+    - rvm: 2.5
+
   include:
     - rvm: 1.9.3
       gemfile: gemfiles/ruby-1.9.3
