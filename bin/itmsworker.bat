@@ -15,7 +15,8 @@ if exist "%BUNDLE_GEMFILE%" (
    if "%task%" == "jobs" set valid=1
    if "%task%" == "notifications" set valid=1
    if "%task%" == "hooks" set valid=1
-   if not "%valid%" == "1" (
+
+   if not "!valid!" == "1" (
      echo usage: itmsworker [jobs^|hooks^|notifications]
      exit /b 1
   )
