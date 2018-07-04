@@ -78,6 +78,8 @@ def prompt_for_config
     $config[:db_driver] = $supported_drivers[pos]
   end
 
+  return if $config[:db_driver].name == "SQLite"
+
   unless $config[:db_host]
     print "Database host [localhost]: "
     host = gets
