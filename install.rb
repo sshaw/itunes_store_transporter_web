@@ -139,7 +139,7 @@ def install
     # Just look up gem?
     Gem.bin_path "bundler", "bundle"
   rescue Gem::GemNotFoundException => e
-    commands.unshift "gem install bundler"
+    commands.unshift "gem install bundler --no-rdoc"
   end
 
   commands.each do |cmd|
