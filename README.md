@@ -48,10 +48,14 @@ GUI and workflow automation for the iTunes Store's Transporter (iTMSTransporter)
 * A database driver
 
 In most cases the database driver must be compiled against an underlying database library.
-**You must install the underlying library yourself**. The installer will only attempt to install the
+**You must [install the underlying library](https://github.com/sshaw/itunes_store_transporter_web/wiki/Installation-Guides#system-dependencies) yourself**.
+The [installation script](#installation) will only attempt to install the
 Ruby portion which will fail if the underlying library is not found.
 
 ## Installation
+
+System specific instructions can be found [here](https://github.com/sshaw/itunes_store_transporter_web/wiki/Installation-Guides).
+Otherwise:
 
     unzip itunes_store_transporter_web-VERSION.zip
     cd itunes_store_transporter_web-VERSION
