@@ -27,12 +27,12 @@ $config = {
 }
 
 $supported_drivers = [
+  DBDependency.new("SQLite", "sqlite3"),
   DBDependency.new("MySQL", "mysql2", nil, "~> 0.3.18"),
-  DBDependency.new("PostgreSQL", "postgresql", "pg"),
-  DBDependency.new("SQLite", "sqlite3")
+  DBDependency.new("PostgreSQL", "postgresql", "pg")
 ]
 
-$default_driver = $supported_drivers[2]
+$default_driver = $supported_drivers[0]
 
 parser = OptionParser.new do |opts|
   opts.banner = "usage: #{File.basename($0)} [--db-driver=name] [--db-user=name] [--db-password=name] [--db-host=name] [--no-prompt]"
