@@ -18,9 +18,5 @@ matrix:
   allow_failures:
     - rvm: 2.5
 
-  include:
-    - rvm: 1.9.3
-      gemfile: gemfiles/ruby-1.9.3
-
 notifications:
   email: false

@@ -26,7 +26,7 @@ RSpec.describe "Running the install script" do
       @resulting_config = @resulting_config["database"] || {}
     end
 
-    it "writes the right db name to the config file" do
+    it "writes the correct db name to the config file" do
       expect(@resulting_config["name"]).to match(%r{/itmsweb.sqlite3\z})
     end
 
