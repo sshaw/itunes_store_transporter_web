@@ -108,7 +108,7 @@ def install
     "name" => $config[:db_name],
     "adapter" => db_driver.adapter,
     "host" => $config[:db_host] || "localhost",
-    "username" => $config[:db_username],
+    "username" => $config[:db_user],
     "password" => $config[:db_password],
   }
 
