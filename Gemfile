@@ -22,7 +22,9 @@ gem "valid_email"
 end
 
 group :test do
-  gem "shoulda-matchers", "~> 3.1.1"
+  # Check needed for install (ruby install.rb) on 1.9.3
+  # But for 1.9.3 testing see gemfiles directory
+  gem "shoulda-matchers", RUBY_VERSION == "1.9.3" ? "2.8.0" : "~> 3.1.1"
   gem "rack-test", "0.6.3", :require => "rack/test"
   gem "database_cleaner"
   gem "capybara-screenshot"
