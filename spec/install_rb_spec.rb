@@ -15,7 +15,7 @@ RSpec.describe "Running the install script" do
     FileUtils.rm_rf(@tmpdir)
   end
 
-  describe "command-line arguments" do
+  context "given command-line arguments" do
     before :all do
       Bundler.with_clean_env do
         ruby = RbConfig::CONFIG["RUBY_INSTALL_NAME"]
@@ -24,6 +24,10 @@ RSpec.describe "Running the install script" do
 
       @resulting_config = YAML.load_file("#@tmpdir/config/itmsweb.yml")
       @resulting_config = @resulting_config["database"] || {}
+    end
+
+    it "writes the right db name to the config file" do
+      expect(@resulting_config["name"]).to match(%r{/itmsweb.sqlite3\z})
     end
 
     it "allows one to set the db driver" do

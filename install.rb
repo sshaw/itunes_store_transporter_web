@@ -115,7 +115,7 @@ def install
   if db_config["adapter"] == "sqlite3"
     path = "#{ROOT}/db"
     Dir.mkdir(path) unless File.directory?(path)
-    db_config["name"] = "#{path}/#{$config[:db_name]}}.sqlite3"
+    db_config["name"] = "#{path}/#{$config[:db_name]}.sqlite3"
     db_config["timeout"] = 5000
   end
 
