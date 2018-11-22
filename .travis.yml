@@ -12,7 +12,6 @@ rvm:
   - 2.5
 
 before_install:
-  - sudo apt-get install sqlite3
   - gem update bundler
 
 matrix:
