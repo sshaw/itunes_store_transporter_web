@@ -133,13 +133,13 @@ def install
   ENV["BUNDLE_GEMFILE"] = gemfile
 
   # TODO: update these in 0.2.0 to use new Bundler options
-  commands = ["bundle install --path vendor/bundle --without=test development --binstubs",
+  commands = ["bundle _1.13.7_ install --path vendor/bundle --without=test development --binstubs",
               "#{RAKE} ar:setup"]
   begin
     # Just look up gem?
-    Gem.bin_path "bundler", "bundle"
+    Gem.bin_path "bundler", "bundle", "1.13.7"
   rescue Gem::GemNotFoundException => e
-    commands.unshift "gem install bundler --no-rdoc"
+    commands.unshift "gem install bundler -v 1.13.7 --no-rdoc"
   end
 
   commands.each do |cmd|
