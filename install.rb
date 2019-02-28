@@ -27,7 +27,7 @@ $config = {
 }
 
 $supported_drivers = [
-  DBDependency.new("SQLite", "sqlite3"),
+  DBDependency.new("SQLite", "sqlite3", nil, "~> 1.3.0"),
   DBDependency.new("MySQL", "mysql2", nil, "~> 0.3.18"),
   DBDependency.new("PostgreSQL", "postgresql", "pg")
 ]
