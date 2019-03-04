@@ -194,7 +194,7 @@ DEPENDENCIES
   rspec
   shoulda-matchers (~> 3.1.1)
   sinatra-contrib
-  sqlite3
+  sqlite3 (~> 1.3.0)
   tilt
   valid_email
   will_paginate (~> 3.0)
