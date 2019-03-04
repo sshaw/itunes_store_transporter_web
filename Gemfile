@@ -36,7 +36,7 @@ end
 group :test, :development do
   gem "factory_girl"
   gem "rspec"
-  gem "sqlite3"
+  gem "sqlite3", "~> 1.3.0"
 end
 
 gem "kramdown", :group => :development
