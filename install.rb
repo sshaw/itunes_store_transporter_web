@@ -133,7 +133,7 @@ def install
   ENV["BUNDLE_GEMFILE"] = gemfile
 
   commands = [
-    "gem install bundler -v 1.16.4",
+    "gem install bundler -v 1.16.4 --no-rdoc",
     # TODO: update these in 0.2.0 to use new Bundler options
     "bundle _1.16.4_ install --path vendor/bundle --without=test development --binstubs",
     "#{RAKE} ar:setup"
