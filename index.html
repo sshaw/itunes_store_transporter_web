@@ -35,6 +35,10 @@
 	      var version = this.getAttribute('href').split('/').pop().replace(/\.\w+$/, '');
 	      ga('send', 'event', 'release', 'download', version);
 	  });
+
+          $('a.docker').click(function() {
+              ga('send', 'event', 'release', 'download', 'docker');
+          });
       });
     </script>
     <meta name="description" content="Simplify Your iTunes Workflow. The Transporter GUI is the easiest way to deliver and manage your books, music, TV shows, movies, and apps on the iTunes Store.">
@@ -70,6 +74,14 @@
         <!-- p><a href="http://demo.transportergui.com:3000">Try it</a>, it's free.</p-->
         <p><a href="https://github.com/sshaw/itunes_store_transporter_web/archive/v0.2.8.zip" class="btn btn-primary btn-large download">Download iTunes Store Transporter: GUI</a></p>
         <p><small class="muted">For macOS, Windows and Linux</small></p>
+        <p>
+          <small>
+            <b>
+              Use Docker? Checkout
+              <a class="docker" href="https://cloud.docker.com/u/screenstaring/repository/docker/screenstaring/itunes-store-transporter-gui">our Docker images</a>
+            </b>
+          </small>
+        </p>
       </div>
 
       <hr/>
@@ -188,6 +200,13 @@
 
       <div id="news" class="row">
 	<h3 class="text-center">News</h3>
+	<div class="item">
+          <h4>iTunes Store Transporter: GUI is Now Available via Docker <small>2019-09-28</small></h4>
+          <p>
+            Checkout <a href="https://cloud.docker.com/u/screenstaring/repository/docker/screenstaring/itunes-store-transporter-gui">the images on Docker Hub</a>.
+          </p>
+        </div>
+
 	<div class="item">
             <h4>iTunes Store Transporter: GUI v0.2.3 &amp; iTunes::Store::Transporter v0.2.1 Released <small>2018-04-15</small></h4>
             <h5>Bug fixes</h5>
